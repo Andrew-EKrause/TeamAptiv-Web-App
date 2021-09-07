@@ -1,0 +1,28 @@
+/*  
+ * DESCRIPTION...
+ *
+ * Author: Andrew Krause
+ * Date: TBD
+ *
+ */
+
+/******************************* TAG SELECTORS *******************************/
+
+/* Format content within the body tag of the HTML structure */
+body {
+    margin: 0;
+    text-align: center;
+    font-family: 'Merriweather', serif; /* WILL HAVE TO ADD GOOGLE FONTS TO HTML */
+    background-color: #0ce3bb;
+}
+
+/******************************* CLASS SELECTORS *******************************/
+
+/* Add color to the text for the main heading on the main webpage */
+.main-title {
+    color:blue;
+}
+
+/******************************* ID SELECTORS *******************************/
+
+/* NONE CURRENTLY */
