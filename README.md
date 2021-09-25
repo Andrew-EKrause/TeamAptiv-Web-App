@@ -16,7 +16,7 @@ This web application was designed for a nonprofit organization as part of an ass
 - EJS
 - MongoDB
 - Draw.io (Flowcharts, UML Diagrams): https://app.diagrams.net/
-- Atlassian (Jira Software, Trello, BitBucket)
+- Atlassian (Jira Software, Trello, BitBucket): https://www.atlassian.com/
 - Heroku: https://www.heroku.com/
 - Udemy: https://www.udemy.com/
 - MDN Web Docs: https://developer.mozilla.org/en-US/
