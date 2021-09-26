@@ -14,7 +14,11 @@ body {
     margin: 0;
     text-align: center;
     font-family: 'Merriweather', serif; 
-    background-color: #037dc4;  
+    
+    /* Commenting out in development because it hurts my eyes */
+    /* background-color: #037dc4;   */
+
+    background-color: #8a92a6;
 
     min-height: 100vh;
     display: flex;
@@ -45,9 +49,13 @@ ul {
 /******************************* ID SELECTORS *******************************/
 
 #navbar-section {
-    background-color: #f36e23;
+    /* Commenting out in development because it hurts my eyes */
+    /* background-color: #f36e23; */
+    background-color: #f5a67e;
 }
 
 #footer-section {
-    background-color: #f36e23;
+    /* Commenting out in development because it hurts my eyes */
+    /* background-color: #f36e23; */
+    background-color: #f5a67e;
 }
