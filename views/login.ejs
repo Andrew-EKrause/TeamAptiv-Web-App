@@ -1,0 +1,35 @@
+<!-- 
+    DESCRIPTION GOES HERE...
+    ...
+    Author: Andrew Krause, Riley Radle, Anthony Musbach, Zach Gephart
+    Date: TBD
+    ...
+-->
+
+<%- include('partials/login-register_header.ejs') %>
+
+        <!-- Section for the body -->
+        <section class="container border">
+            <!-- This is where the html form will go -->
+            <!-- This is just a placeholder -->
+            <form action="Specifies where to send the form-data when a form is submitted" method="get">
+                <div>
+                    <div>
+                        <input type="text" placeholder="Username">
+                    </div>
+                    <div>
+                        <input type="text" placeholder="Password">
+                    </div>
+                    <button class="btn btn-dark">Login</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Back button -->
+        <form action="/register" method="POST">
+            <div>
+                <button type="submit" class="btn btn-outline-light">Back</button>
+            </div>
+        </form>
+
+<%- include('partials/footer.ejs') %>

@@ -1,0 +1,36 @@
+{
+  "name": "cs341-aptiv-web_app",
+  "version": "1.0.0",
+  "description": "A server backend for the Aptiv Web Application.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Krause2023/CS341-Web-App.git"
+  },
+  "author": "Andrew Krause, Riley Radle, Anthony Musbach, Zach Gephart",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Krause2023/CS341-Web-App/issues"
+  },
+  "homepage": "https://github.com/Krause2023/CS341-Web-App#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "lodash": "^4.17.21",
+    "md5": "^2.3.0",
+    "mongoose": "^6.0.8",
+    "mongoose-encryption": "^2.1.1",
+    "mongoose-findorcreate": "^3.0.0",
+    "passport": "^0.5.0",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^6.1.0"
+  }
+}

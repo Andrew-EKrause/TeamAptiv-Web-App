@@ -1,0 +1,75 @@
+/*  
+ * DESCRIPTION...
+ *
+ * Authors: Andrew Krause (the commentor), Riley Radle (the artist), 
+ * Anthony Musbach (the cat from alice in wonderland when he smiles), Zach Gephart (Dr. big ass)
+ * Date: TBD
+ *
+ */
+
+/******************************* TYPE SELECTORS *******************************/
+
+/* Format content within the body tag of the HTML structure */
+body {
+    margin: 0;
+    text-align: center;
+    font-family: 'Merriweather', serif; 
+    
+    /* Commenting out in development because it hurts my eyes */
+    /* background-color: #037dc4;   */
+
+    background-color: #8a92a6;
+
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+footer {
+    margin-top: auto;
+}
+
+/* Get rid of the default styling for lists */
+/* Potentially delete later */
+ul {
+    list-style: none;
+    padding: 0px;
+}
+
+/******************************* CLASS SELECTORS *******************************/
+
+/* Style the "Team Aptiv" text. Set hover state below. */
+.aptiv-font-size {
+    font-size: 3rem;
+    color: white;
+}
+
+.aptiv-font-size:hover {
+    color: white;
+    text-decoration: none;
+  }
+
+/* Set font size of the navbar links. */
+.navbar-links-font-size {
+    font-size: 1.5rem;
+    color: white;
+}
+
+/* Add style to the login page styles (other title content). */
+.login-register-text-alignemnt {
+    color: white;
+}
+
+/******************************* ID SELECTORS *******************************/
+
+#header-section {
+    /* Commenting out in development because it hurts my eyes */
+    /* background-color: #f36e23; */
+    background-color: #f5a67e;
+}
+
+#footer-section {
+    /* Commenting out in development because it hurts my eyes */
+    /* background-color: #f36e23; */
+    background-color: #f5a67e;
+}

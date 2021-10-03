@@ -1,0 +1,23 @@
+<!-- 
+    DESCRIPTION GOES HERE...
+    ...
+    Author: Andrew Krause, Riley Radle, Anthony Musbach, Zach Gephart
+    Date: TBD
+    ...
+-->
+
+<%- include('partials/home_header.ejs') %>
+
+        <!-- Section for the picture on the webpage -->
+        <section class="home-picture">
+            <h1>Connecting you with your community</h1>
+            <!-- Create a form to process when user clicks "Find Events" button -->
+            <form action="/home" method="POST">
+                <div>
+                    <button type="submit" class="btn btn-light">Find Events</button>
+                </div>
+            </form>
+        </section>
+
+<%- include('partials/footer.ejs') %>
+        

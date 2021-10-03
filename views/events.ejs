@@ -1,0 +1,77 @@
+<!-- 
+    DESCRIPTION GOES HERE...
+    ...
+    Author: Andrew Krause, Riley Radle, Anthony Musbach, Zach Gephart
+    Date: TBD
+    ...
+-->
+
+<%- include('partials/find-events_header.ejs') %>
+
+        <!-- This is where the list of programs/events will go -->
+        <!-- For now this is just placeholder -->
+        <section>
+            <!-- Start of program 1 -->
+            <p>
+                <a class="btn btn-dark" data-bs-toggle="collapse" href="#collapseExample1" role="button"
+                    aria-expanded="false" aria-controls="collapseExample1">
+                    This is a program
+                </a>
+            </p>
+            <!-- Event list for program 1 -->
+            <div class="collapse" id="collapseExample1">
+                <div class="card card-body">
+                    <ul>
+                        <a href="specific_event.html"><li>Event name</li></a>
+                        <a href="specific_event.html"><li>Event name</li></a>
+                        <a href="specific_event.html"><li>Event name</li></a>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Start of program 2 -->
+            <p>
+                <a class="btn btn-dark" data-bs-toggle="collapse" href="#collapseExample2" role="button"
+                    aria-expanded="false" aria-controls="collapseExample2">
+                    This is a program
+                </a>
+            </p>
+
+            <!-- Event list for program 2 -->
+            <div class="collapse" id="collapseExample2">
+                <div class="card card-body">
+                    <ul>
+                        <a href="specific_event.html"><li>Event name</li></a>
+                        <a href="specific_event.html"><li>Event name</li></a>
+                        <a href="specific_event.html"><li>Event name</li></a>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Start of program 3 -->
+            <p>
+                <a class="btn btn-dark" data-bs-toggle="collapse" href="#collapseExample3" role="button"
+                    aria-expanded="false" aria-controls="collapseExample3">
+                    This is a program
+                </a>
+            </p>
+            <!-- Event list for program 3 -->
+            <div class="collapse" id="collapseExample3">
+                <div class="card card-body">
+                    <ul>
+                        <a href="specific_event.html"><li>Event name</li></a>
+                        <a href="specific_event.html"><li>Event name</li></a>
+                        <a href="specific_event.html"><li>Event name</li></a>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Back button -->
+        <form action="/register" method="POST">
+            <div>
+                <button type="submit" class="btn btn-outline-light">Back</button>
+            </div>
+        </form>
+
+ <%- include('partials/footer.ejs') %>
