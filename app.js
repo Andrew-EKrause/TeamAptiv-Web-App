@@ -47,7 +47,7 @@ app.use(express.urlencoded({extended: true}));
 
 
 
-/* SECTION: USER, PROGRAM, AND EVENTS DATABASE VIA MONGOOSE AND MONGODB */
+/* SECTION: USER, PROGRAM, AND EVENTS FOR DATABASE VIA MONGOOSE AND MONGODB */
 
 // Set up a connection to the database using mongoose.
 mongoose.connect("mongodb://localhost:27017/aptivDB", {useNewUrlParser: true, useUnifiedTopology: true});
@@ -61,6 +61,7 @@ const userSchema = new mongoose.Schema({
     email: String,
     password: String,
     googleId: String,
+    userEvents: [{type: mongoose.Schema.Types.ObjectId, ref: 'Event'}]
 });
 
 // Create a mongoose schema for the programs in the database.
@@ -68,7 +69,7 @@ const programSchema = new mongoose.Schema({
     id: Number, // -->  May not need this
     programName: String,
     programDescription: String,
-    event: {eventName: String, eventDate: {type: Date, default: Date.now}, eventTime: Number, eventProgram: String} // --> May need to change this later.
+    programEvents: [{type: mongoose.Schema.Types.ObjectId, ref: 'Event'}] // --> Reference to the event model. Can be many events.
 });
 
 // Create a mongoose schema for the events in the database.
@@ -77,13 +78,13 @@ const eventSchema = new mongoose.Schema({
     eventName: String,
     eventDate: {type : Date, default: Date.now }, // --> Will need to change this later.
     eventTime: Number,
-    eventProgram: String, // --> Worry about how to link this to a program later.
+    eventProgram: {type: mongoose.Schema.Types.ObjectId, ref: 'Program'} // --> Each unique event is only associated with one program.
 });
 
 // Create mongoose models based on the above schemas.
-const User = new mongoose.model("User", userSchema);
-const Program = new mongoose.model("Programs", programSchema);
-const Event = new mongoose.model("Events", eventSchema);
+const UserModel = new mongoose.model("User", userSchema);
+const ProgramModel = new mongoose.model("Program", programSchema);
+const EventModel = new mongoose.model("Event", eventSchema);
 
 // // Set up passport-local-mongoose configurations.
 // passport.use(User.creatStrategy());
