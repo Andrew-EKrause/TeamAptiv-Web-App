@@ -23,7 +23,7 @@ const mongoose = require("mongoose");
 const session = require('express-session');
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
-const GoogleStrategy = require("passport-google-oauth20").Strategy; // --> OAuth is used with Google. Maybe delete this if you find a more simple security system.
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const findOrCreate = require("mongoose-findorcreate"); // --> If code directly above does not work, run this code.
 
 // Create web app using express and set view engine to EJS
@@ -34,16 +34,16 @@ app.set('view engine', 'ejs');
 // Use the body parser within the express module.
 app.use(express.urlencoded({extended: true}));
 
-// // The code for SESSIONS is set up here.
-// app.use(session({
-//     secret: "Blah blah get later",
-//     resave: false,
-//     saveUninitialized: false
-// }))
+// The code for SESSIONS is set up here.
+app.use(session({
+    secret: "Confidential information.",
+    resave: false,
+    saveUninitialized: false
+}));
 
-// // Initialize the passport package. Use passport in the session.
-// app.use(passport.initialize());
-// app.use(passport.session());
+// Initialize the passport package. Use passport in the session.
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 
@@ -51,18 +51,21 @@ app.use(express.urlencoded({extended: true}));
 
 // Set up a connection to the database using mongoose.
 mongoose.connect("mongodb://localhost:27017/aptivDB", {useNewUrlParser: true, useUnifiedTopology: true});
-//mongoose.set('useCreateIndex', true);
+// mongoose.set('useCreateIndex', true); --> DEPRECATED
 
 // Create a mongoose schema (blueprint) for the users in the database.
 const userSchema = new mongoose.Schema({
-    id: Number, // --> May not need this
-    firstName: String,
-    lastName: String,
+    // id: Number, // --> May not need this
+    // firstName: String,
+    // lastName: String,
     email: String,
     password: String,
     googleId: String,
     userEvents: [{type: mongoose.Schema.Types.ObjectId, ref: 'Event'}]
 });
+
+// Create a plugin for the user Schema.
+userSchema.plugin(passportLocalMongoose);
 
 // Create a mongoose schema for the programs in the database.
 const programSchema = new mongoose.Schema({
@@ -86,20 +89,14 @@ const UserModel = new mongoose.model("User", userSchema);
 const ProgramModel = new mongoose.model("Program", programSchema);
 const EventModel = new mongoose.model("Event", eventSchema);
 
-// // Set up passport-local-mongoose configurations.
-// passport.use(User.creatStrategy());
+// Set up passport-local-mongoose configurations.
+passport.use(UserModel.createStrategy());
 
-// // Serialize the user.
-// passport.serializeUser(function(user, done){
-//     done(null, user.id);
-// });
+// Serialize the user.
+passport.serializeUser(UserModel.serializeUser());
 
-// // Deserialize user.
-// passport.deserializeUser(function(id, done){
-//     User.findById(id, function(err, user){
-//         done(err, user);
-//     });
-// });
+// Deserialize user.
+passport.deserializeUser(UserModel.deserializeUser());
 
 // // Implement the verify callback function as well as other features
 // // for the Google OAuth package.
@@ -163,12 +160,19 @@ app.get("/register", function(req, res){
 });
 
 // Create a route for viewing the user profile page for Aptiv.
+// Check if the user is authenticated. If not, redirect to login.
 app.get("/user_profile", function(req, res){
-    //if(req.isAuthenticated()) {
-        res.render("user_profile")
-    //} else {
-        //res.redirect("/login")
-    //}
+    if(req.isAuthenticated()) {
+        res.render("user_profile");
+    } else {
+        res.redirect("/login");
+    }
+});
+
+// Create a route for the user to logout of their account.
+app.get("/logout", function(req, res){
+    req.logout();
+    res.redirect("/");
 });
 
 // // Create a route for viewing the events page.
@@ -230,7 +234,7 @@ app.get("/user_profile", function(req, res){
 // ...
 
 // Create a post request for when user clicks the "Back" button.
-app.post("/register", function(req, res){
+app.post("/back", function(req, res){
     res.render("home");
 });
 
@@ -239,7 +243,51 @@ app.post("/home", function(req, res){
     res.render("events");
 });
 
+// Create a post request for when user clicks the "Register" button.
+app.post("/register", function(req, res){
 
+    // Obtain the user information and, if no errors, redirect new user to profile page.
+    UserModel.register({fname: req.body.fname, lname: req.body.lname, username: req.body.username}, req.body.password, function(err, user){
+        if(err) {
+            console.log(err);
+            res.redirect("/register");
+        } else {
+            passport.authenticate("local")(req, res, function(){
+                res.redirect("/user_profile");
+            });
+        }
+    });
+});
+
+// Create a post request for when the user clicks the "Login" button.
+app.post("/login", function(req, res){
+    
+    // Enable the user to login. 
+    const user = new UserModel({
+        fname: req.body.fname, // --> MAY NOT NEED THIS
+        lname: req.body.lname, // --> MAY NOT NEED THIS
+        username: req.body.username,
+        password: req.body.password
+    });
+
+    // Check if the user is in our database. Check if user has entered correct credentials.
+    req.login(user, function(err){
+        if(err) {
+            console.log(err);
+            res.redirect("/home"); // --> REDIRECT TO A LOGIN PAGE THAT HAS A MESSAGE THAT TELLS THE USER THEIR LOGIN FAILED
+        } else {
+            passport.authenticate("local")(req, res, function(){
+                res.redirect("/user_profile");
+            });
+        }
+    });
+});
+
+// Create a post request for when the user clicks the "Logout" button.
+app.post("/logout", function(req, res){
+    req.logout();
+    res.redirect("/");
+});
 
 /* SECTION OF CODE TO LISTEN FOR SERVER REQUESTS */
 

@@ -8,28 +8,53 @@
 
 <%- include('partials/login-register_header.ejs') %>
 
-        <!-- Section for the body -->
-        <section class="container border">
-            <!-- This is where the html form will go -->
-            <!-- This is just a placeholder -->
-            <form action="Specifies where to send the form-data when a form is submitted" method="get">
-                <div>
-                    <div>
-                        <input type="text" placeholder="Username">
+    <div class="container mt-5">
+    
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="card">
+                    <div class="card-body">
+        
+                        <!-- Makes POST request to the /login route -->
+                        <form action="/login" method="POST">
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" name="username">
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" name="password">
+                            </div>
+                            <button type="submit" class="btn btn-dark">Login</button>
+                        </form>
+        
                     </div>
-                    <div>
-                        <input type="text" placeholder="Password">
-                    </div>
-                    <button class="btn btn-dark">Login</button>
                 </div>
-            </form>
-        </section>
-
-        <!-- Back button -->
-        <form action="/register" method="POST">
-            <div>
-                <button type="submit" class="btn btn-outline-light">Back</button>
             </div>
-        </form>
+    
+            <div class="col-sm-4">
+                <div class="card social-block">
+                    <div class="card-body">
+                        <a class="btn btn-block btn-social btn-google" href="/auth/google" role="button">
+                            <i class="fab fa-google"></i>
+                            Sign In with Google
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Back button -->
+                <div class="card social-block">
+                    <div class="card-body">
+                        <form action="/back" method="POST">
+                            <div>
+                                <button type="submit" class="btn btn-outline-dark btn-lg">Back</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+    </div>
 
 <%- include('partials/footer.ejs') %>
