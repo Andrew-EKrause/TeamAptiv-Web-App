@@ -45,6 +45,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// ============================================================================================================
 
 
 /* SECTION: USER, PROGRAM, AND EVENTS FOR DATABASE VIA MONGOOSE AND MONGODB */
@@ -115,18 +116,27 @@ passport.deserializeUser(UserModel.deserializeUser());
 //     }
 // ));
 
+// ============================================================================================================
 
 
-/* SECTION OF CODE FOR GETTING INFORMATION FROM OUR SERVER (GET) */
+/* SECTION: GET INFORMATION FROM SERVER (GET) */
 
-// Add code here. Involves rendering the home screen, 
+// Default route, which is the home page.
 app.get("/", function(req, res){
-    res.render("home");
+
+    // Render the home page and determine if user is undefined.
+    res.render("home", {
+        user: req.user
+    });
 });
 
-// Render the home screen when the user clicks "Team Aptiv"
+// Route to render the home page when the user clicks "Team Aptiv".
 app.get("/home", function(req, res){
-    res.render("home");
+
+    // Render the home page and determine if user is undefined.
+    res.render("home", {
+        user: req.user
+    });
 });
 
 // // Create a route that the 'Sign Up with Google' button will direct us to.
@@ -163,7 +173,11 @@ app.get("/register", function(req, res){
 // Check if the user is authenticated. If not, redirect to login.
 app.get("/user_profile", function(req, res){
     if(req.isAuthenticated()) {
-        res.render("user_profile");
+
+        // Render the user profile page and determine if user is undefined.
+        res.render("user_profile", {
+            user: req.user
+        });
     } else {
         res.redirect("/login");
     }
@@ -226,16 +240,21 @@ app.get("/logout", function(req, res){
 //     res.redirect("/");
 // });
 
+// ============================================================================================================
 
 
-/* SECTION OF CODE FOR PROCESSING REQUESTS MADE TO OUR SERVER (POST) */
+/* SECTION: PROCESS REQUESTS MADE TO SERVER (POST) */
 
 // Add code here. Inovles button presses, creating new events, logging in, etc.
 // ...
 
 // Create a post request for when user clicks the "Back" button.
 app.post("/back", function(req, res){
-    res.render("home");
+
+    // Render the home page and determine if user is undefined.
+    res.render("home", {
+        user: req.user
+    });
 });
 
 // Create a post request for when user clicks the "Find Events" button.
@@ -270,11 +289,11 @@ app.post("/login", function(req, res){
         password: req.body.password
     });
 
-    // Check if the user is in our database. Check if user has entered correct credentials.
-    req.login(user, function(err){
-        if(err) {
+    // Check if the user is in our database. Check if user has entered the correct credentials.
+    req.login(user, function(err){ // --> NEED TO CREATE A CASE TO HANDLE WHEN USER ENTERS IN INCORRECT INFO.
+        if(err) {                   // --> NEED TO CREATE A MESSAGE FOR THE USER WHEN THEY LOG OUT OF THEIR ACCOUNT.
             console.log(err);
-            res.redirect("/home"); // --> REDIRECT TO A LOGIN PAGE THAT HAS A MESSAGE THAT TELLS THE USER THEIR LOGIN FAILED
+            res.redirect("/home"); // --> REDIRECT TO A LOGIN PAGE THAT HAS A MESSAGE THAT TELLS THE USER THEIR LOGIN FAILED.
         } else {
             passport.authenticate("local")(req, res, function(){
                 res.redirect("/user_profile");
@@ -289,7 +308,10 @@ app.post("/logout", function(req, res){
     res.redirect("/");
 });
 
-/* SECTION OF CODE TO LISTEN FOR SERVER REQUESTS */
+// ============================================================================================================
+
+
+/* SECTION: LISTEN FOR SERVER REQUESTS */
 
 // Begin listening for server requests on port 3000.
 app.listen(3000, function(){

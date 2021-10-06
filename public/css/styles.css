@@ -45,7 +45,7 @@ ul {
 }
 
 .aptiv-font-size:hover {
-    color: white;
+    color: #8992a6;
     text-decoration: none;
   }
 
@@ -58,6 +58,11 @@ ul {
 /* Add style to the login page styles (other title content). */
 .login-register-text-alignemnt {
     color: white;
+}
+
+/* Float the text to the left for the login and register screens. */
+.form-horizontal .control-label {
+    float: left;
 }
 
 /******************************* ID SELECTORS *******************************/

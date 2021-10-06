@@ -8,61 +8,63 @@
 
 <%- include('partials/login-register_header.ejs') %>
 
-    <div class="container mt-5">
+    <div class="container mt-5 mb-5">
 
-        <div class="row">
-            <div class="col-sm-8">
+        <div class="row register-page-format">
+            <div class="col-sm-6 mx-auto">
                 <div class="card">
                     <div class="card-body">
 
                         <!-- Makes a POST request to the /register route -->
-                        <form action="/register" method="POST">
+                        <form class="form-horizontal" action="/register" method="POST">
                             <div class="form-group">
-                                <label for="fname">First Name</label>
-                                <input type="fname" class="form-control" name="firstname">
+                                <label class="control-label" for="fname">First Name</label>
+                                <input type="fname" class="form-control" name="firstname" required>
                             </div>
                             <div class="form-group">
-                                <label for="lname">Last Name</label>
-                                <input type="lname" class="form-control" name="lastname">
+                                <label class="control-label" for="lname">Last Name</label>
+                                <input type="lname" class="form-control" name="lastname" required>
                             </div>
                             <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" name="username">
+                                <label class="control-label" for="email">Email</label>
+                                <input type="email" class="form-control" name="username" required>
                             </div>
                             <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" class="form-control" name="password">
+                                <label class="control-label" for="password">Password</label>
+                                <input type="password" class="form-control" name="password" required>
                             </div>
                             <button type="submit" class="btn btn-dark">Register</button>
                         </form>
 
-                    </div>
-                </div>
-            </div>
+                        <p>Or<p>
 
-            <div class="col-sm-4">
-                <div class="card social-block">
-                    <div class="card-body">
-                        <a class="btn btn-block btn-social btn-google" href="/auth/google" role="button">
-                            <i class="fab fa-google"></i>
-                            Sign Up with Google
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Back button -->
-                <div class="card social-block">
-                    <div class="card-body">
-                        <form action="/back" method="POST">
-                            <div>
-                                <button type="submit" class="btn btn-outline-dark btn-lg">Back</button>
+                        <!-- Authentication sign up with Google -->
+                        <div class="card social-block">
+                            <div class="card-body">
+                                <a class="btn btn-block btn-social btn-google" href="/auth/google" role="button">
+                                    <i class="fab fa-google"></i>
+                                    Sign Up with Google
+                                </a>
                             </div>
-                        </form>
+                        </div>
+
                     </div>
+
+                    <!-- Add a link to login if the user already has an account -->
+                    <p>Already have an account? <a class="" href="/login">Login Here</a></p>
                 </div>
             </div>
-
         </div>
+
+        <!-- Back button -->
+        <div class="container mt-4">
+            <form action="/back" method="POST">
+                <div>
+                    <button type="submit" class="btn btn-outline-light"><i class="fas fa-arrow-left"></i> Back</button>
+                </div>
+            </form>
+        </div>
+        
     </div>
 
 <%- include('partials/footer.ejs') %>
