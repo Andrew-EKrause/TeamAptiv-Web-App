@@ -52,25 +52,23 @@ app.use(passport.session());
 
 // Set up a connection to the database using mongoose.
 mongoose.connect("mongodb://localhost:27017/aptivDB", {useNewUrlParser: true, useUnifiedTopology: true});
-// mongoose.set('useCreateIndex', true); --> DEPRECATED
+//mongoose.set('useCreateIndex', true); //--> DEPRECATED
 
 // Create a mongoose schema (blueprint) for the users in the database.
 const userSchema = new mongoose.Schema({
-    // id: Number, // --> May not need this
-    // firstName: String,
-    // lastName: String,
+    userID: Number, // --> May not need this
+    firstName: String,
+    lastName: String,
     email: String,
     password: String,
     googleId: String,
+    status: String,
     userEvents: [{type: mongoose.Schema.Types.ObjectId, ref: 'Event'}]
 });
 
-// Create a plugin for the user Schema.
-userSchema.plugin(passportLocalMongoose);
-
 // Create a mongoose schema for the programs in the database.
 const programSchema = new mongoose.Schema({
-    id: Number, // -->  May not need this
+    programID: Number, // -->  May not need this
     programName: String,
     programDescription: String,
     programEvents: [{type: mongoose.Schema.Types.ObjectId, ref: 'Event'}] // --> Reference to the event model. Can be many events.
@@ -78,12 +76,17 @@ const programSchema = new mongoose.Schema({
 
 // Create a mongoose schema for the events in the database.
 const eventSchema = new mongoose.Schema({
-    id: Number, // --> May not need this
+    eventID: Number, // --> May not need this
     eventName: String,
     eventDate: {type : Date, default: Date.now }, // --> Will need to change this later.
     eventTime: Number,
     eventProgram: {type: mongoose.Schema.Types.ObjectId, ref: 'Program'} // --> Each unique event is only associated with one program.
 });
+
+// Create a plugin for the user Schema. Also create
+// a plugin for the findOrCreate function.
+userSchema.plugin(passportLocalMongoose);
+userSchema.plugin(findOrCreate);
 
 // Create mongoose models based on the above schemas.
 const UserModel = new mongoose.model("User", userSchema);
@@ -94,27 +97,33 @@ const EventModel = new mongoose.model("Event", eventSchema);
 passport.use(UserModel.createStrategy());
 
 // Serialize the user.
-passport.serializeUser(UserModel.serializeUser());
+passport.serializeUser(function(user, done){
+    done(null, user.id);
+});
 
 // Deserialize user.
-passport.deserializeUser(UserModel.deserializeUser());
+passport.deserializeUser(function(id, done){
+    UserModel.findById(id, function(err, user){
+        done(err, user);
+    });
+});
 
-// // Implement the verify callback function as well as other features
-// // for the Google OAuth package.
-// passport.use(new GoogleStrategy({
-//     clinetID: process.env.CLIENT_ID, // --> May need to change
-//     clientSecret: process.env.CLIENT_SECRET, // --> May need to change
-//     callbackURL: "http://localhost:3000/auth/google/secrets", // --> May need to change
-//     userProfileURL: "https//www.googleapis.com/oauth2/v3/userinfo" // --> May need to change
-//     },
-//     function(accessToken, refreshToken, profile, cb) {
-//         console.log(profile);
+// Implement the verify callback function as well as other features
+// for the Google OAuth package, which is applied to the Aptiv path.
+passport.use(new GoogleStrategy({
+    clientID: process.env.CLIENT_ID, 
+    clientSecret: process.env.CLIENT_SECRET, 
+    callbackURL: "http://localhost:3000/auth/google/team-aptiv", 
+    // userProfileURL: "https//www.googleapis.com/oauth2/v3/userinfo" // <-- If deprecation, update this.
+    },
+    function(accessToken, refreshToken, profile, cb) {
+        // console.log(profile); // <-- Comment this out when done testing.
 
-//         User.findOrCreate({ googleId: profile.id }, function (err, user) {
-//             return cb(err, user);
-//         });
-//     }
-// ));
+        UserModel.findOrCreate({ googleId: profile.id }, function (err, user) {
+            return cb(err, user);
+        });
+    }
+));
 
 // ============================================================================================================
 
@@ -139,20 +148,20 @@ app.get("/home", function(req, res){
     });
 });
 
-// // Create a route that the 'Sign Up with Google' button will direct us to.
-// app.get("/auth/google",
+// Create a route that the 'Sign Up with Google' button will direct us to.
+app.get("/auth/google",
 
-//     // Initiate authentication with Google.
-//     passport.authenticate("google", { scope: ["profile"] })
-// );
+    // Initiate authentication with Google.
+    passport.authenticate("google", {scope: ["profile"]})
+);
 
-// // Add the Google redirect route. --> FOR USER PROFILE PAGE AS WELL
-// app.get("/auth/google/secrets",
-//     passport.authenticate("google", { failureRedirect: "/login" }),
-//     function(req, res) {
-//         // Successful authentication, redirect to user profile page.
-//         res.redirect("/user_profile");
-//     });
+// Add the Google redirect route. --> FOR USER PROFILE PAGE AS WELL
+app.get("/auth/google/team-aptiv",
+    passport.authenticate("google", { failureRedirect: "/login" }),
+    function(req, res) {
+        // Successful authentication, redirect to user profile page.
+        res.redirect("/user_profile");
+    });
 
 // Create a route for viewing the events page for Aptiv.
 app.get("/events", function(req, res){

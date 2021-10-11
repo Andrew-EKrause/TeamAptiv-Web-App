@@ -15,10 +15,9 @@ body {
     text-align: center;
     font-family: 'Merriweather', serif; 
     
-    /* Commenting out in development because it hurts my eyes */
     /* background-color: #037dc4;   */
-
-    background-color: #8a92a6;
+    /* background-color: #8a92a6; */
+    background-color: #91C788;
 
     min-height: 100vh;
     display: flex;
@@ -38,26 +37,33 @@ ul {
 
 /******************************* CLASS SELECTORS *******************************/
 
+/* Set navbar text color. */
+.navbar-dark .navbar-brand {
+    color: #DDFFBC;
+}
+
 /* Style the "Team Aptiv" text. Set hover state below. */
 .aptiv-font-size {
     font-size: 3rem;
-    color: white;
+    color: #DDFFBC;
 }
 
 .aptiv-font-size:hover {
-    color: #8992a6;
+    /* color: #8992a6; */
+    /* color: #037dc4; */
+    color: #91C788;
     text-decoration: none;
   }
 
 /* Set font size of the navbar links. */
 .navbar-links-font-size {
     font-size: 1.5rem;
-    color: white;
+    color: #DDFFBC;
 }
 
 /* Add style to the login page styles (other title content). */
 .login-register-text-alignemnt {
-    color: white;
+    color: #DDFFBC;
 }
 
 /* Float the text to the left for the login and register screens. */
@@ -65,16 +71,26 @@ ul {
     float: left;
 }
 
+/* Make the login/register font larger. */
+.login-register-font {
+    font-size: x-large;
+}
+
+.white-text {
+    color: #DDFFBC;
+}
+
 /******************************* ID SELECTORS *******************************/
 
 #header-section {
-    /* Commenting out in development because it hurts my eyes */
     /* background-color: #f36e23; */
-    background-color: #f5a67e;
+    /* background-color: #f5a67e; */
+    background-color: #52734D;
 }
 
 #footer-section {
     /* Commenting out in development because it hurts my eyes */
     /* background-color: #f36e23; */
-    background-color: #f5a67e;
+    /* background-color: #f5a67e; */
+    background-color: #52734D;
 }

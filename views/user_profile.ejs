@@ -77,18 +77,22 @@
             </section>
         </div>
 
-        <!-- Back button -->
-        <form action="/back" method="POST">
-            <div>
-                <button type="submit" class="btn btn-outline-light">Back</button>
-            </div>
-        </form>
+         <!-- Back button -->
+         <div class="container mt-4">
+            <form action="/back" method="POST">
+                <div>
+                    <button type="submit" class="btn btn-lg btn-outline-light"><i class="fas fa-arrow-left"></i> Back</button>
+                </div>
+            </form>
+        </div>
 
         <!-- Logout button -->
-        <form action="/logout" method="POST">
-            <div>
-                <button type="submit" class="btn btn-outline-dark">Logout</button>
-            </div>
-        </form>
+        <div class="mt-4 mb-4">
+            <form action="/logout" method="POST">
+                <div>
+                    <button type="submit" class="btn btn-lg btn-outline-dark">Logout</button>
+                </div>
+            </form>
+        </div>
 
 <%- include('partials/footer.ejs') %>
