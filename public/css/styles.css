@@ -42,6 +42,11 @@ ul {
     color: #DDFFBC;
 }
 
+/* Set the hover state so that there no effects. */
+.navbar-dark .navbar-brand:hover {
+    color: #DDFFBC;
+}
+
 /* Style the "Team Aptiv" text. Set hover state below. */
 .aptiv-font-size {
     font-size: 3rem;
@@ -52,7 +57,7 @@ ul {
     /* color: #8992a6; */
     /* color: #037dc4; */
     color: #91C788;
-    text-decoration: none;
+    /* text-decoration: none; */
   }
 
 /* Set font size of the navbar links. */
