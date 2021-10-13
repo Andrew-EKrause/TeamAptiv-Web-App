@@ -14,9 +14,7 @@ body {
     margin: 0;
     text-align: center;
     font-family: 'Merriweather', serif; 
-    
-    /* background-color: #037dc4;   */
-    /* background-color: #8a92a6; */
+
     background-color: #91C788;
 
     min-height: 100vh;
@@ -24,6 +22,7 @@ body {
     flex-direction: column;
 }
 
+/* Align footer with bottom of page. */
 footer {
     margin-top: auto;
 }
@@ -47,17 +46,35 @@ ul {
     color: #DDFFBC;
 }
 
+/* Set the color of the navbar link. */
+.navbar-dark .navbar-nav .nav-link {
+    color: #DDFFBC;
+}
+
+/* Set the hover state so that there are different color effects. */
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: #91C788;
+}
+
+/* Set the color of the hamburger menu outline. */
+.navbar-dark .navbar-toggler {
+    color: #DDFFBC;
+}
+
+/* Set the color of the hamburger menu icon. */
+.navbar-dark .navbar-toggler-icon {
+    color: #DDFFBC;
+}
+
 /* Style the "Team Aptiv" text. Set hover state below. */
 .aptiv-font-size {
     font-size: 3rem;
     color: #DDFFBC;
 }
 
+/* Set the hover state for the aptiv font. */
 .aptiv-font-size:hover {
-    /* color: #8992a6; */
-    /* color: #037dc4; */
     color: #91C788;
-    /* text-decoration: none; */
   }
 
 /* Set font size of the navbar links. */
@@ -81,21 +98,52 @@ ul {
     font-size: x-large;
 }
 
+/* Change the text that is whiter to a greener color. */
 .white-text {
     color: #DDFFBC;
 }
 
+/* Add style to the two inline buttons in user profile. */
+.btn-group.special {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+
+/* Set positioning of buttons in user profile. */
+.special .btn {
+    flex: 1;
+    flex-basis: 100%;
+    /*width: 30rem;*/
+    height: 2.75rem;
+    border-radius: 0%;
+}
+
 /******************************* ID SELECTORS *******************************/
 
+/* Add color to header section of page. */
 #header-section {
     /* background-color: #f36e23; */
     /* background-color: #f5a67e; */
     background-color: #52734D;
 }
 
+/* Add color to footer section of page. */
 #footer-section {
     /* Commenting out in development because it hurts my eyes */
     /* background-color: #f36e23; */
     /* background-color: #f5a67e; */
     background-color: #52734D;
 }
+
+/* Format profile picture for user profile. */
+#profileImage {
+    width: 6rem;
+    overflow: hidden;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    border-radius: 50%;
+}
+

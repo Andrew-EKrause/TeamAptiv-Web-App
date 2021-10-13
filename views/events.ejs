@@ -8,9 +8,20 @@
 
 <%- include('partials/find-events_header.ejs') %>
 
+    <!-- Show the format for logged in, which is a button to the user profile -->
+    <% if(typeof user != 'undefined') { %>
+        <div class="container mt-4">
+            <form action="/see_profile" method="POST">
+                <div>
+                    <button type="submit" class="btn btn-outline-dark"> Go to My Profile</button>
+                </div>
+            </form>
+        </div>
+    <% } %>
+
     <!-- This is where the list of programs/events will go -->
     <!-- For now this is just placeholder -->
-    <div class="container mt-5 mb-5">
+    <div class="container mt-4 mb-4">
         <section>
             <!-- Start of program 1 -->
             <p>

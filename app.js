@@ -64,6 +64,7 @@ const userSchema = new mongoose.Schema({
     userID: String, // --> May not need this
     firstName: String,
     lastName: String,
+    picture: String,
     username: String, // <-- USED FOR GOOGLE OAUTH; this is your EMAIL ADDRESS! FIGURE OUT HOW TO GET IT
     password: String,
     googleId: String,
@@ -130,7 +131,7 @@ passport.use(new GoogleStrategy({
     function(accessToken, refreshToken, profile, cb) {
         console.log(profile); // <-- Comment this out when done testing.
                                                                                                     // --> USERNAME NEEDS TO BE THE EMAIL ADDRESS!
-        UserModel.findOrCreate({ googleId: profile.id, firstName: profile.name.givenName, lastName: profile.name.familyName, username: profile.id}, function (err, user) {
+        UserModel.findOrCreate({ googleId: profile.id, firstName: profile.name.givenName, lastName: profile.name.familyName, picture: profile._json.picture, username: profile.id}, function (err, user) {
             return cb(err, user);
         });
     }
@@ -176,7 +177,9 @@ app.get("/auth/google/team-aptiv",
 
 // Create a route for viewing the events page for Aptiv.
 app.get("/events", function(req, res){
-    res.render("events");
+    res.render("events", {
+        user: req.user
+    });
 });
 
 // Create a route for viewing the login page for Aptiv.
@@ -283,7 +286,9 @@ app.post("/back", function(req, res){
 
 // Create a post request for when user clicks the "Find Events" button.
 app.post("/home", function(req, res){
-    res.render("events");
+    res.render("events", {
+        user: req.user
+    });
 });
 
 // Create a post request for when user clicks the "Register" button.
@@ -335,6 +340,12 @@ app.post("/login", function(req, res){
             });
         }
     });
+});
+
+// Take the user to their profile page when they
+// click the button on the "events" page.
+app.post("/see_profile", function(req, res){
+    res.redirect("/user_profile")
 });
 
 
