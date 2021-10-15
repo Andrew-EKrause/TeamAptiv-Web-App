@@ -15,7 +15,7 @@ require('dotenv').config();
 
 // Require packages for the server that were installed.
 const express = require("express");
-const flash = require('connect-flash'); // --> MAY NOT NEED THIS
+const flash = require("connect-flash"); // --> MAY NOT NEED THIS
 const ejs = require("ejs");
 const _ = require("lodash");
 const mongoose = require("mongoose");
@@ -44,7 +44,8 @@ app.use(session({
     saveUninitialized: false
 }));
 
-// Use the flash module.
+// Use the flash module to transmit messages 
+// to the user as well as the developers.
 app.use(flash());
 
 // Initialize the passport package. Use passport in the session.
@@ -68,7 +69,7 @@ const userSchema = new mongoose.Schema({
     username: String, // <-- USED FOR GOOGLE OAUTH; this is your EMAIL ADDRESS! FIGURE OUT HOW TO GET IT
     password: String,
     googleId: String,
-    //status: String, // <-- NEED TO SET STATUS; worry about this later!!!
+    //status: String, // <-- NEED TO SET STATUS; worry about this later!!! Figure out how to set default!
     userEvents: [{type: mongoose.Schema.Types.ObjectId, ref: 'Event'}]
 });
 
@@ -115,7 +116,7 @@ passport.serializeUser(function(user, done){
 // Deserialize user.
 passport.deserializeUser(function(id, done){
     UserModel.findById(id, function(err, user){
-        //done(err, user);
+        //done(err, user); // --> Potential alternative
         done(null, user);
     });
 });
@@ -126,10 +127,10 @@ passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID, 
     clientSecret: process.env.CLIENT_SECRET, 
     callbackURL: "http://localhost:3000/auth/google/team-aptiv", 
-    //profileFields: ['id', 'displayName', 'email']
+    //profileFields: ['id', 'displayName', 'email'] // --> DON'T THINK YOU NEED THIS!!!
     },
     function(accessToken, refreshToken, profile, cb) {
-        console.log(profile); // <-- Comment this out when done testing.
+        // console.log(profile); // <-- Comment this out unless testing.
                                                                                                     // --> USERNAME NEEDS TO BE THE EMAIL ADDRESS!
         UserModel.findOrCreate({ googleId: profile.id, firstName: profile.name.givenName, lastName: profile.name.familyName, picture: profile._json.picture, username: profile.id}, function (err, user) {
             return cb(err, user);
@@ -144,25 +145,18 @@ passport.use(new GoogleStrategy({
 
 // Default route, which is the home page.
 app.get("/", function(req, res){
-    req.flash('message', 'Success!!')
     // Render the home page and determine if user is undefined.
-    res.render("home", {
-        user: req.user
-    });
+    res.render("home", { user: req.user });
 });
 
 // Route to render the home page when the user clicks "Team Aptiv".
 app.get("/home", function(req, res){
-
     // Render the home page and determine if user is undefined.
-    res.render("home", {
-        user: req.user
-    });
+    res.render("home", { user: req.user });
 });
 
 // Create a route that the 'Sign Up with Google' button will direct us to.
 app.get("/auth/google",
-
     // Initiate authentication with Google.
     passport.authenticate("google", {scope: ["profile"]})
 );
@@ -173,34 +167,29 @@ app.get("/auth/google/team-aptiv",
     function(req, res) {
         // Successful authentication, redirect to user profile page.
         res.redirect("/user_profile");
-    });
+});
 
 // Create a route for viewing the events page for Aptiv.
 app.get("/events", function(req, res){
-    res.render("events", {
-        user: req.user
-    });
+    res.render("events", { user: req.user });
 });
 
 // Create a route for viewing the login page for Aptiv.
-app.get("/login", function(req, res){
-    res.render("login");
+// This page accounts for incorret user input.
+app.get("/login", function(req, res, next){
+
+    // Create a constant for errors. Use a flash
+    // message to notify the user that their login 
+    // failed if they have attempted to login and 
+    // have entered the wrong info.
+    const errors = req.flash().error || [];
+    res.render("login", { errors });
 });
 
-
-
-// --> Try implementing flash methods
-// app.get('/login', function(req,res) {
-// res.render('login', {message: req.flash('message')});
-// });
-
-// <%= message %>
-
-
-
-// Create a route for viewing the register page.
+// Create a route for viewing the register page. If the account already
+// exists, alert the user that they cannot use that account as their own.
 app.get("/register", function(req, res){
-    res.render("register");
+    res.render("register", {alreadyCreated: req.flash("alreadyCreated")});
 });
 
 // Create a route for viewing the user profile page for Aptiv.
@@ -217,10 +206,10 @@ app.get("/user_profile", function(req, res){
     }
 });
 
-// Create a route for the user to logout of their account.
+// Create a route for the user to logout of their account. <-- EVEN NEED THIS???
 app.get("/logout", function(req, res){
     req.logout();
-    res.redirect("/");
+    res.redirect("/login");
 });
 
 // // Create a route for viewing the events page.
@@ -228,7 +217,7 @@ app.get("/logout", function(req, res){
 
 //     // Go through database and find all program, with events attached to them,
 //     // and publish them on the Aptiv website.
-//     User.find({"program": {$ne: null}}, function(err, foundPrograms){
+//     ProgramModel.find({"program": {$ne: null}}, function(err, foundPrograms){
 
 //         // If there are errors, log the errors. Otherwise, if programs
 //         // were found in the database with events (created by admin user),
@@ -275,71 +264,69 @@ app.get("/logout", function(req, res){
 // Add code here. Inovles button presses, creating new events, logging in, etc.
 // ...
 
-// Create a post request for when user clicks the "Back" button.
+// Create a post request for when user clicks any "Back" button.
 app.post("/back", function(req, res){
 
     // Render the home page and determine if user is undefined.
-    res.render("home", {
-        user: req.user
-    });
+    res.render("home", { user: req.user });
 });
 
 // Create a post request for when user clicks the "Find Events" button.
 app.post("/home", function(req, res){
-    res.render("events", {
-        user: req.user
-    });
+    res.render("events", { user: req.user });
 });
 
 // Create a post request for when user clicks the "Register" button.
 app.post("/register", function(req, res){
-
+    
     // Create a new user ID for the developers to use and track. // <-- MAYBE!!!
     user_ID = mongoose.Types.ObjectId();
 
-    // Create a new instance of the user schema 
-    // to pass into the register method.
-    const newUser = new UserModel({
-        userID: user_ID,
-        firstName: req.body.fname,
-        lastName: req.body.lname,
-        username: req.body.username
-      });
+    // Check if the username being used to register a new account
+    // already exists in the database for the Team Aptiv site.
+    UserModel.countDocuments({username: req.body.username}, function (err, count){ 
+        
+        // If the count is greater than zero, the user already exists.
+        // Otherwise, create a new user and add that user to the database.
+        if(count > 0) {
 
-    // Obtain the user information and, if no errors, redirect new user to profile page.
-    // User info such as first and last name obtained by storing it in an object, newUser.
-    UserModel.register(newUser, req.body.password, function(err, user){
-        if(err) {
-            console.log(err);
+            req.flash("alreadyCreated", "Username already exists");
             res.redirect("/register");
+            return;
+
         } else {
-            passport.authenticate("local")(req, res, function(){
-                res.redirect("/user_profile");
+
+            // Create a new instance of the user schema 
+            // to pass into the register method.
+            const newUser = new UserModel({
+                userID: user_ID,
+                firstName: req.body.fname,
+                lastName: req.body.lname,
+                username: req.body.username
+            });
+
+            // Obtain the user information and, if no errors, redirect new user to profile page.
+            // User info such as first and last name obtained by storing it in an object, newUser.
+            UserModel.register(newUser, req.body.password, function(err, user){
+                if(err) {
+                    console.log(err);
+                    res.redirect("/register");
+                } else {
+                    passport.authenticate("local")(req, res, function(){
+                        res.redirect("/user_profile");
+                    });
+                }
             });
         }
     });
 });
 
 // Create a post request for when the user clicks the "Login" button.
-app.post("/login", function(req, res){
-    
-    // Enable the user to login. 
-    const userLogin = new UserModel({
-        username: req.body.username,
-        password: req.body.password
-    });
-            // CHECK IF YOU CAN SET IT UP SO THAT IT ONLY CHECKS IF USERNAME AND PASSWORDS EXIST IN DATABASE FOR THAT USER???
-    // Check if the user is in our database. Check if user has entered the correct credentials.
-    req.login(userLogin, function(err){ // --> NEED TO CREATE A CASE TO HANDLE WHEN USER ENTERS IN INCORRECT INFO.
-        if(err) {                   // --> NEED TO CREATE A MESSAGE FOR THE USER WHEN THEY LOG OUT OF THEIR ACCOUNT.
-            console.log(err);
-            res.redirect("/home"); // --> REDIRECT TO A LOGIN PAGE THAT HAS A MESSAGE THAT TELLS THE USER THEIR LOGIN FAILED.
-        } else {
-            passport.authenticate("local")(req, res, function(){
-                res.redirect("/user_profile");
-            });
-        }
-    });
+app.post("/login", passport.authenticate("local", {
+    failureFlash: true,
+    failureRedirect: "/login",
+}), (req, res, next) => {
+    res.redirect("/user_profile");
 });
 
 // Take the user to their profile page when they
@@ -348,49 +335,9 @@ app.post("/see_profile", function(req, res){
     res.redirect("/user_profile")
 });
 
-
-
-// // --> Check if user entered correct information.
-// app.post('/login',
-//   passport.authenticate('local', { successRedirect: '/',
-//                                    failureRedirect: '/login',
-//                                    failureFlash: true })
-// );
-
-// // --> Check if user entered correct information.
-// passport.use(new LocalStrategy(
-//   function(username, password, done) {
-//     UserModel.findOne({ username: username }, function (err, user) {
-//       if (err) { return done(err); }
-//       if (!user) {
-//         return done(null, false, { message: 'Incorrect username.' });
-//       }
-//       if (!user.validPassword(password)) {
-//         return done(null, false, { message: 'Incorrect password.' });
-//       }
-//       return done(null, user);
-//     });
-//   }
-// ));
-
-// // --> Check if user entered correct information.
-// app.get('/login', function(req, res, next) {
-//     passport.authenticate('local', function(err, user, info) {
-//       if (err) { return next(err); }
-//       if (!user) { return res.status(401).send({"ok": false}); }
-//       req.logIn(user, function(err) {
-//         if (err) { return next(err); }
-//         return return res.send({"ok": true});
-//       });
-//     })(req, res, next);
-//   });
-
-
-  
 // Create a post request for when the user clicks the "Logout" button.
 app.post("/logout", function(req, res){
-    req.logout();
-    res.redirect("/");
+    res.redirect("/login");
 });
 
 // ============================================================================================================

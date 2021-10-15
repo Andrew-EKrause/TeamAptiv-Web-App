@@ -1,8 +1,7 @@
-/*  
+/*
  * DESCRIPTION...
  *
- * Authors: Andrew Krause (the commentor), Riley Radle (the artist), 
- * Anthony Musbach (the cat from alice in wonderland when he smiles), Zach Gephart (Dr. big ass)
+ * Authors: Andrew Krause, Riley Radle, Anthony Musbach, Zach Gephart
  * Date: TBD
  *
  */
@@ -119,20 +118,37 @@ ul {
     border-radius: 0%;
 }
 
+/* Style incorrect login with redish color. */
+.incorrect-input {
+    color: red;
+}
+
+/* Style confirmation message with greenish color. */
+.confirmation {
+    color: green;
+}
+
+/* Fade the error message in and out. */
+.elementToFadeInAndOut {
+    opacity: 1;
+    animation: fade 0.75s linear;
+}
+
+/* Key frames fade. */
+@keyframes fade {
+  0%,100% { opacity: 0 }
+  100% { opacity: 1 } 
+}
+
 /******************************* ID SELECTORS *******************************/
 
 /* Add color to header section of page. */
 #header-section {
-    /* background-color: #f36e23; */
-    /* background-color: #f5a67e; */
     background-color: #52734D;
 }
 
 /* Add color to footer section of page. */
 #footer-section {
-    /* Commenting out in development because it hurts my eyes */
-    /* background-color: #f36e23; */
-    /* background-color: #f5a67e; */
     background-color: #52734D;
 }
 
@@ -146,4 +162,3 @@ ul {
     -o-border-radius: 50%;
     border-radius: 50%;
 }
-

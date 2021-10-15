@@ -8,6 +8,18 @@
 
 <%- include('partials/login-register_header.ejs') %>
 
+    <!-- 
+        Include EJS to display any error messages to the user if
+        they attempt to register with a username that already exists.
+    -->
+    <% if(alreadyCreated.length > 0) { %>
+        <div class="card">
+            <div class="card-body elementToFadeInAndOut">
+                <h1 class="incorrect-input"><%= alreadyCreated %></h1>
+            </div>
+        </div>
+    <% } %>
+
     <div class="container mt-5 mb-5">
 
         <div class="row register-page-format">
