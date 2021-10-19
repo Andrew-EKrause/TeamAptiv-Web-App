@@ -29,6 +29,9 @@ const LocalStrategy = require("passport-local");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const findOrCreate = require("mongoose-findorcreate");
 
+// Create a string for the current ADMIN username.
+const ADMIN_NAME = "$ADMIN$@ACCOUNT-2023";
+
 // Create web app using express and set view engine to EJS
 const app = express();
 app.use(express.static("public"));
@@ -69,7 +72,10 @@ const userSchema = new mongoose.Schema({
     username: String, // <-- USED FOR GOOGLE OAUTH; this is your EMAIL ADDRESS! FIGURE OUT HOW TO GET IT
     password: String,
     googleId: String,
-    //status: String, // <-- NEED TO SET STATUS; worry about this later!!! Figure out how to set default!
+    role: {
+        type: [String],
+        default: ["Volunteer"] // <-- NEED TO SET STATUS; worry about this later!!! Figure out how to set default!
+    },
     userEvents: [{type: mongoose.Schema.Types.ObjectId, ref: 'Event'}]
 });
 
@@ -132,7 +138,7 @@ passport.use(new GoogleStrategy({
     function(accessToken, refreshToken, profile, cb) {
         // console.log(profile); // <-- Comment this out unless testing.
                                                                                                     // --> USERNAME NEEDS TO BE THE EMAIL ADDRESS!
-        UserModel.findOrCreate({ googleId: profile.id, firstName: profile.name.givenName, lastName: profile.name.familyName, picture: profile._json.picture, username: profile.id}, function (err, user) {
+        UserModel.findOrCreate({ googleId: profile.id, firstName: profile.name.givenName, lastName: profile.name.familyName, picture: profile._json.picture, username: profile.username}, function (err, user) {
             return cb(err, user);
         });
     }
@@ -195,12 +201,22 @@ app.get("/register", function(req, res){
 // Create a route for viewing the user profile page for Aptiv.
 // Check if the user is authenticated. If not, redirect to login.
 app.get("/user_profile", function(req, res){
-    if(req.isAuthenticated()) {
+
+    // Create an object to store the user information in an object.
+    const user = req.user
+
+    if(req.isAuthenticated() && user.username == ADMIN_NAME) {
+
+        // Render the user profile page and determine if user is undefined.
+        res.redirect("/admin_profile");
+        
+    } else if(req.isAuthenticated()) {
 
         // Render the user profile page and determine if user is undefined.
         res.render("user_profile", {
             user: req.user
         });
+
     } else {
         res.redirect("/login");
     }
@@ -210,6 +226,42 @@ app.get("/user_profile", function(req, res){
 app.get("/logout", function(req, res){
     req.logout();
     res.redirect("/login");
+});
+
+// -------------------------------------- ADMIN SECTION (GET) -----------------------------------------------
+
+// Create a route for the admin profile. For this route, include some
+// layers of security so that the user cannot access the Admin profile
+// unless they are the admin.
+app.get("/admin_profile", function(req, res){
+
+    // console.log("In admin profile route"); // --> Debugging statement
+    // console.log("State of admin name: " + user.username); // --> Debugging statement
+
+    // Create an object to store the user information in an object.
+    const user = req.user
+
+    // If the user is authenticated AND their status is set to
+    // "Admin", then they can access the admin profile page.
+    if(req.isAuthenticated() && user.username == ADMIN_NAME) {
+
+        // Render the admin profile page and determine if the user is undefined.
+        res.render("admin_profile", {
+            user: req.user
+        });
+
+        // Otherwise, if the user is authenticated, redirect them to
+        // their profile page and flash an error message.
+    } else if (req.isAuthenticated()) {
+        // req.flash("permissionDenied", "You cannot access this page");
+        res.redirect("/user_profile");
+        
+        // If the user is not authenticated, redirect them to the
+        // login page and flash an error message.
+    } else {
+        // req.flash("permissionDenied", "You cannot access this page");
+        res.redirect("/login");
+    }
 });
 
 // // Create a route for viewing the events page.
@@ -272,11 +324,14 @@ app.post("/back", function(req, res){
 });
 
 // Create a post request for when user clicks the "Find Events" button.
-app.post("/home", function(req, res){
+app.post("/find_events", function(req, res){
     res.render("events", { user: req.user });
 });
 
 // Create a post request for when user clicks the "Register" button.
+// This route will determine whether the user registering for an account
+// is a regular user or an ADMIN. The route also determines if accounts
+// already exist.
 app.post("/register", function(req, res){
     
     // Create a new user ID for the developers to use and track. // <-- MAYBE!!!
@@ -290,33 +345,63 @@ app.post("/register", function(req, res){
         // Otherwise, create a new user and add that user to the database.
         if(count > 0) {
 
-            req.flash("alreadyCreated", "Username already exists");
+            req.flash("alreadyCreated", "Cannot use that account");
             res.redirect("/register");
             return;
 
         } else {
 
-            // Create a new instance of the user schema 
-            // to pass into the register method.
-            const newUser = new UserModel({
-                userID: user_ID,
-                firstName: req.body.fname,
-                lastName: req.body.lname,
-                username: req.body.username
-            });
+            // Check if the user registering is the ADMIN. If the user regisering is the ADMIN,
+            // create their account and redirect them to their unique ADMIN profile page.
+            if(req.body.username == ADMIN_NAME) {
 
-            // Obtain the user information and, if no errors, redirect new user to profile page.
-            // User info such as first and last name obtained by storing it in an object, newUser.
-            UserModel.register(newUser, req.body.password, function(err, user){
-                if(err) {
-                    console.log(err);
-                    res.redirect("/register");
-                } else {
-                    passport.authenticate("local")(req, res, function(){
-                        res.redirect("/user_profile");
-                    });
-                }
-            });
+                // Create a new instance of the user schema 
+                // specifically for the ADMIN.
+                const adminUser = new UserModel({
+                    userID: user_ID,
+                    firstName: req.body.fname,
+                    lastName: req.body.lname,
+                    username: req.body.username,
+                    role: "ADMIN"
+                });
+
+                // Obtain the ADMIN user information and, if no errors, redirect ADMIN to their page.
+                // User info such as first and last name obtained by storing it in an object, adminUser.
+                UserModel.register(adminUser, req.body.password, function(err, user){
+                    if(err) {
+                        console.log(err);
+                        res.redirect("/register");
+                    } else {
+                        passport.authenticate("local")(req, res, function(){
+                            res.redirect("/admin_profile");
+                            console.log("Current state: " + req.body.username)
+                        });
+                    }
+                });
+            } else {
+
+                // Create a new instance of the user schema 
+                // to pass into the register method.
+                const newUser = new UserModel({
+                    userID: user_ID,
+                    firstName: req.body.fname,
+                    lastName: req.body.lname,
+                    username: req.body.username
+                });
+
+                // Obtain the user information and, if no errors, redirect new user to profile page.
+                // User info such as first and last name obtained by storing it in an object, newUser.
+                UserModel.register(newUser, req.body.password, function(err, user){
+                    if(err) {
+                        console.log(err);
+                        res.redirect("/register");
+                    } else {
+                        passport.authenticate("local")(req, res, function(){
+                            res.redirect("/user_profile");
+                        });
+                    }
+                });
+            }
         }
     });
 });
@@ -326,7 +411,16 @@ app.post("/login", passport.authenticate("local", {
     failureFlash: true,
     failureRedirect: "/login",
 }), (req, res, next) => {
-    res.redirect("/user_profile");
+
+    // Create an object to store the user information in an object.
+    const user = req.user
+    console.log(user.username)
+
+    if(user.username == ADMIN_NAME) { // <-- THIS MAY BE WRONG
+        res.redirect("/admin_profile");
+    } else {
+        res.redirect("/user_profile");
+    }
 });
 
 // Take the user to their profile page when they
@@ -337,8 +431,12 @@ app.post("/see_profile", function(req, res){
 
 // Create a post request for when the user clicks the "Logout" button.
 app.post("/logout", function(req, res){
+    req.logout();
     res.redirect("/login");
 });
+
+// -------------------------------------- ADMIN SECTION (POST) -----------------------------------------------
+
 
 // ============================================================================================================
 

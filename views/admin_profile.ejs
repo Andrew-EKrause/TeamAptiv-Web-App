@@ -6,7 +6,7 @@
     ...
 -->
 
-<%- include('partials/user-profile_header.ejs') %>
+<%- include('partials/admin-profile_header.ejs') %>
 
     <!-- Create a card for showing the user data -->
     <div class="container mt-5 mb-5">
@@ -15,7 +15,7 @@
                 <div class="card">
                     <div class="card-body">
 
-                        <!-- Display user profile picture; if user did -->
+                        <!-- Display ADMIN profile picture; if user did -->
                         <!-- not use OAuth to sign or does not have picture, -->
                         <!-- use default profile image -->
                         <form action="/user_profile" method="post">
@@ -24,9 +24,9 @@
                             </div>
                         </form>
 
-                        <!-- Display user name and status -->
+                        <!-- Display ADMIN name and ADMIN status -->
                         <h1>Welcome,&nbsp;<%= user.firstName %>.</h1>
-                        <h3>Status: Volunteer</h3>
+                        <h3>Status: Admin</h3>
 
                         <!-- Create a div for two inline buttons in the user profile -->
                         <div class="mt-4 mb-4 btn-group d-flex special" role="group" aria-label="...">
@@ -36,6 +36,24 @@
                                 <form action="/find_events" method="POST">
                                     <div class="inner">
                                         <button type="submit" class="btn btn-outline-dark btn-block w-100">View Different Events</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Add a button to create a new PROGRAM !!!-->
+                            <div>
+                                <form action="" method="POST">
+                                    <div class="inner">
+                                        <button type="submit" class="btn btn-outline-dark btn-block w-100">Create New Program</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Add a button to create a new EVENT !!!-->
+                            <div>
+                                <form action="" method="POST">
+                                    <div class="inner">
+                                        <button type="submit" class="btn btn-outline-dark btn-block w-100">Create New Event</button>
                                     </div>
                                 </form>
                             </div>

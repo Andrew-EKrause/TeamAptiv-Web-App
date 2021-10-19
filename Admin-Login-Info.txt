@@ -1,0 +1,8 @@
+Admin User Login Information
+-------------------------------
+First Name: ADMIN
+Last Name: ADMIN
+
+Username: $ADMIN$@ACCOUNT-2023
+Password: ManageALL2025$!
+-------------------------------
