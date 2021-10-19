@@ -6,6 +6,12 @@
  *
  */
 
+ /* For future in case of a needed revert */
+ /* background-color: #91C788; body*/
+ /* background-color: #52734D; header section*/
+
+
+
 /******************************* TYPE SELECTORS *******************************/
 
 /* Format content within the body tag of the HTML structure */
@@ -13,9 +19,7 @@ body {
     margin: 0;
     text-align: center;
     font-family: 'Merriweather', serif; 
-
-    background-color: #91C788;
-
+    background-color: #e7e8ea;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -37,54 +41,54 @@ ul {
 
 /* Set navbar text color. */
 .navbar-dark .navbar-brand {
-    color: #DDFFBC;
+    color: #e7e8ea;
 }
 
 /* Set the hover state so that there no effects. */
 .navbar-dark .navbar-brand:hover {
-    color: #DDFFBC;
+    color: #aba597;
 }
 
 /* Set the color of the navbar link. */
 .navbar-dark .navbar-nav .nav-link {
-    color: #DDFFBC;
+    color: #e7e8ea;
 }
 
 /* Set the hover state so that there are different color effects. */
 .navbar-dark .navbar-nav .nav-link:hover {
-    color: #91C788;
+    color: #aba597;
 }
 
 /* Set the color of the hamburger menu outline. */
 .navbar-dark .navbar-toggler {
-    color: #DDFFBC;
+    color: #e7e8ea;
 }
 
 /* Set the color of the hamburger menu icon. */
 .navbar-dark .navbar-toggler-icon {
-    color: #DDFFBC;
+    color: #e7e8ea;
 }
 
 /* Style the "Team Aptiv" text. Set hover state below. */
 .aptiv-font-size {
     font-size: 3rem;
-    color: #DDFFBC;
+    color: #e7e8ea;
 }
 
 /* Set the hover state for the aptiv font. */
 .aptiv-font-size:hover {
-    color: #91C788;
+    color: #aba597;
   }
 
 /* Set font size of the navbar links. */
 .navbar-links-font-size {
     font-size: 1.5rem;
-    color: #DDFFBC;
+    color: #e7e8ea;
 }
 
 /* Add style to the login page styles (other title content). */
 .login-register-text-alignemnt {
-    color: #DDFFBC;
+    color: #e7e8ea;
 }
 
 /* Float the text to the left for the login and register screens. */
@@ -99,7 +103,11 @@ ul {
 
 /* Change the text that is whiter to a greener color. */
 .white-text {
-    color: #DDFFBC;
+    color: #e7e8ea;
+}
+
+.black-text {
+    color: #182139;
 }
 
 /* Add style to the two inline buttons in user profile. */
@@ -140,16 +148,61 @@ ul {
   100% { opacity: 1 } 
 }
 
-/******************************* ID SELECTORS *******************************/
+/* ===== Riley's Styles ===== */
+
+.attribution-text:hover {
+    color: black;
+}
+
+.btn-dark {
+    background-color: #182139;
+    border-color: #182139;
+    color: #e7e8ea
+}
+
+.btn-dark:hover {
+    background-color: #e7e8ea;
+    color: #182139;
+}
+
+.btn-outline-dark {
+    color: #182139;
+    border-color: #182139;
+}
+
+.btn-outline-dark:hover {
+    background-color: #182139;
+    color: #e7e8ea;
+}
+
+.card {
+    background-color: #f5f5f5;
+}
+
+.card-body {
+    padding: 5em;
+}
+
+.card-text {
+    color: #aba597;
+}
+
+.form-control {
+    background-color: #f5f5f5;
+    border: none;
+    border-bottom: 1px solid lightgray;
+}
+
+/* ===== ID SELECTORS ===== */
 
 /* Add color to header section of page. */
 #header-section {
-    background-color: #52734D;
+    background-color: #182139;
 }
 
 /* Add color to footer section of page. */
 #footer-section {
-    background-color: #52734D;
+    background-color: #182139;
 }
 
 /* Format profile picture for user profile. */
@@ -161,4 +214,21 @@ ul {
     -ms-border-radius: 50%;
     -o-border-radius: 50%;
     border-radius: 50%;
+}
+
+/******************************* FILE SPECIFIC STYLING *******************************/
+
+/* ===== Home Page ===== */
+
+.home-picture > h1 {
+    font-size: 5rem;
+}
+
+
+/* ===== User Profile Page ===== */
+
+.profile-event-list > li {
+    margin-top: 1em; 
+    background-color: #182139;
+    color: #e7e8ea
 }
