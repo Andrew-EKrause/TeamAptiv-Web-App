@@ -46,7 +46,7 @@ ul {
 
 /* Set the hover state so that there no effects. */
 .navbar-dark .navbar-brand:hover {
-    color: #aba597;
+    color: #f7c35e;
 }
 
 /* Set the color of the navbar link. */
@@ -56,7 +56,7 @@ ul {
 
 /* Set the hover state so that there are different color effects. */
 .navbar-dark .navbar-nav .nav-link:hover {
-    color: #aba597;
+    color: #f7c35e;
 }
 
 /* Set the color of the hamburger menu outline. */
@@ -77,7 +77,7 @@ ul {
 
 /* Set the hover state for the aptiv font. */
 .aptiv-font-size:hover {
-    color: #aba597;
+    color: #f7c35e;
   }
 
 /* Set font size of the navbar links. */
@@ -154,14 +154,19 @@ ul {
     color: black;
 }
 
+.btn {
+    border-radius: 1.5em;
+    width: 30%;
+}
+
 .btn-dark {
     background-color: #182139;
     border-color: #182139;
-    color: #e7e8ea
+    color: #f5f5f5
 }
 
 .btn-dark:hover {
-    background-color: #e7e8ea;
+    background-color: transparent;
     color: #182139;
 }
 
@@ -179,18 +184,25 @@ ul {
     background-color: #f5f5f5;
 }
 
-.card-body {
-    padding: 5em;
+.card {
+    /* padding: 5em; */
+    color: #aba597;
 }
 
-.card-text {
-    color: #aba597;
+.form-group {
+    padding: .5em;
 }
 
 .form-control {
     background-color: #f5f5f5;
+    color: #797575;
     border: none;
     border-bottom: 1px solid lightgray;
+}
+
+.form-control:focus {
+    background-color: #f5f5f5;
+    color: #797575;
 }
 
 /* ===== ID SELECTORS ===== */
@@ -224,6 +236,10 @@ ul {
     font-size: 5rem;
 }
 
+.home-picture button {
+    width: 20%;
+    font-size: 1.5em;
+}
 
 /* ===== User Profile Page ===== */
 
@@ -232,3 +248,31 @@ ul {
     background-color: #182139;
     color: #e7e8ea
 }
+
+/* ===== Login/Register Pages ===== */
+
+.reference-link {
+    color: #aba597;
+}
+
+.reference-link:hover {
+    color: #f7c35e;
+}
+
+.google-link {
+    text-decoration: none;
+    color: #182139;
+}
+
+.google-link:hover {
+    color:#182139;
+    text-decoration: underline;
+}
+
+.google-link > i {
+    border: 1px solid #f7c35e;
+    border-radius: 50%;
+    padding: .25em;
+    color: #f7c35e;
+}
+
