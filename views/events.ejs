@@ -6,10 +6,10 @@
     ...
 -->
 
-<%- include('partials/find-events_header.ejs') %>
+<%- include('partials/home_header.ejs') %>
 
     <!-- Show the format for logged in, which is a button to the user profile -->
-    <% if(typeof user != 'undefined') { %>
+    <!-- <% if(typeof user != 'undefined') { %>
         <div class="container mt-4">
             <form action="/see_profile" method="POST">
                 <div>
@@ -17,76 +17,38 @@
                 </div>
             </form>
         </div>
-    <% } %>
+    <% } %> -->
 
     <!-- This is where the list of programs/events will go -->
     <!-- For now this is just placeholder -->
     <div class="container mt-4 mb-4">
+        <header>
+            <h1>Find Community Events</h1>
+            <small>Volunteer | Donate</small>
+            <hr>
+        </header>
+
+        <!-- Loop through the database and display the events -->
         <section>
-            <!-- Start of program 1 -->
-            <p>
-                <a class="btn btn-dark" data-bs-toggle="collapse" href="#collapseExample1" role="button"
-                    aria-expanded="false" aria-controls="collapseExample1">
-                    This is a program
-                </a>
-            </p>
-            <!-- Event list for program 1 -->
-            <div class="collapse" id="collapseExample1">
-                <div class="card card-body">
-                    <ul>
-                        <a href="specific_event.html"><li>Event name</li></a>
-                        <a href="specific_event.html"><li>Event name</li></a>
-                        <a href="specific_event.html"><li>Event name</li></a>
-                    </ul>
-                </div>
+            <div class="event">
+                <h2>Event 1</h2>
             </div>
-
-            <!-- Start of program 2 -->
-            <p>
-                <a class="btn btn-dark" data-bs-toggle="collapse" href="#collapseExample2" role="button"
-                    aria-expanded="false" aria-controls="collapseExample2">
-                    This is a program
-                </a>
-            </p>
-
-            <!-- Event list for program 2 -->
-            <div class="collapse" id="collapseExample2">
-                <div class="card card-body">
-                    <ul>
-                        <a href="specific_event.html"><li>Event name</li></a>
-                        <a href="specific_event.html"><li>Event name</li></a>
-                        <a href="specific_event.html"><li>Event name</li></a>
-                    </ul>
-                </div>
+            <div class="event">
+                <h2>Event 2</h2>
             </div>
-
-            <!-- Start of program 3 -->
-            <p>
-                <a class="btn btn-dark" data-bs-toggle="collapse" href="#collapseExample3" role="button"
-                    aria-expanded="false" aria-controls="collapseExample3">
-                    This is a program
-                </a>
-            </p>
-            <!-- Event list for program 3 -->
-            <div class="collapse" id="collapseExample3">
-                <div class="card card-body">
-                    <ul>
-                        <a href="specific_event.html"><li>Event name</li></a>
-                        <a href="specific_event.html"><li>Event name</li></a>
-                        <a href="specific_event.html"><li>Event name</li></a>
-                    </ul>
-                </div>
+            <div class="event">
+                <h2>Event 3</h2>
             </div>
         </section>
 
         <!-- Back button -->
-        <div class="container mt-4">
+        <!-- <div class="container mt-4">
             <form action="/back" method="POST">
                 <div>
                     <button type="submit" class="btn btn-outline-dark"><i class="fas fa-arrow-left"></i> Back</button>
                 </div>
             </form>
-        </div>
+        </div> -->
     </div>
 
  <%- include('partials/footer.ejs') %>

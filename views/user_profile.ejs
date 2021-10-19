@@ -6,14 +6,14 @@
     ...
 -->
 
-<%- include('partials/user-profile_header.ejs') %>
+<%- include('partials/home_header.ejs') %>
 
     <!-- Create a card for showing the user data -->
     <div class="container mt-5 mb-5">
         <div class="row register-page-format">
             <div class="col-sm-12 mx-auto">
-                <div class="card">
-                    <div class="card-body">
+                <!-- <div class="card"> -->
+                    <!-- <div class="card-body"> -->
 
                         <!-- Display user profile picture; if user did -->
                         <!-- not use OAuth to sign or does not have picture, -->
@@ -25,9 +25,11 @@
                         </form>
 
                         <!-- Display user name and status -->
-                        <h1>Welcome,&nbsp;<%= user.firstName %>.</h1>
-                        <h3>Status: Volunteer</h3>
-
+                        <header>
+                            <h1>Welcome,&nbsp;<%= user.firstName %>.</h1>
+                            <p>Status: Volunteer</p>
+                        </header>
+                
                         <!-- Create a div for two inline buttons in the user profile -->
                         <div class="mt-4 mb-4 btn-group d-flex special" role="group" aria-label="...">
                             
@@ -52,48 +54,48 @@
                         </div>
 
                         <!-- This represents the main content based on what is selected in the nav -->
-                        <section class="border">
+                        <section>
                             <h1>My Events</h1>
-                            <ul>
-                                <li class="border-bottom">
+                            <ul class="profile-event-list">
+                                <li class="border">
                                     <p>Name: </p>
                                     <p>Date/Time: </p>
                                     <p>Location: </p>
                                 </li>
-                                <li class="border-bottom">
+                                <li class="border">
                                     <p>Name: </p>
                                     <p>Date/Time: </p>
                                     <p>Location: </p>
                                 </li>                    
-                                <li>
+                                <li class="border">
                                     <p>Name: </p>
                                     <p>Date/Time: </p>
                                     <p>Location: </p>
                                 </li>
                             </ul>
                         </section>
-                    </div>
-                </div>
+                    <!-- </div> -->
+                <!-- </div> -->
             </div>
         </div>
     </div>
 
     <!-- Back button -->
-    <div class="container">
+    <!-- <div class="container">
         <form action="/back" method="POST">
             <div>
                 <button type="submit" class="btn btn-lg btn-outline-dark"><i class="fas fa-arrow-left"></i> Back</button>
             </div>
         </form>
-    </div>
+    </div> -->
 
     <!-- Logout button -->
-    <div class="mt-4 mb-4">
+    <!-- <div class="mt-4 mb-4">
         <form action="/logout" method="POST">
             <div>
                 <button type="submit" class="btn btn-lg btn-dark">Logout</button>
             </div>
         </form>
-    </div>
+    </div> -->
 
 <%- include('partials/footer.ejs') %>
