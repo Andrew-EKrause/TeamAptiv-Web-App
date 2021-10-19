@@ -15,7 +15,7 @@ require('dotenv').config();
 
 // Require packages for the server that were installed.
 const express = require("express");
-const flash = require("connect-flash"); // --> MAY NOT NEED THIS
+const flash = require("connect-flash");
 const ejs = require("ejs");
 const _ = require("lodash");
 const mongoose = require("mongoose");
@@ -65,7 +65,7 @@ mongoose.connect("mongodb://localhost:27017/aptivDB", {useNewUrlParser: true, us
 
 // Create a mongoose schema (blueprint) for the users in the database.
 const userSchema = new mongoose.Schema({
-    userID: String, // --> May not need this
+    userID: String, 
     firstName: String,
     lastName: String,
     picture: String,
@@ -79,21 +79,28 @@ const userSchema = new mongoose.Schema({
     userEvents: [{type: mongoose.Schema.Types.ObjectId, ref: 'Event'}]
 });
 
-// Create a mongoose schema for the programs in the database.
-const programSchema = new mongoose.Schema({
-    programID: String, // -->  May not need this
-    programName: String,
-    programDescription: String,
-    programEvents: [{type: mongoose.Schema.Types.ObjectId, ref: 'Event'}] // --> Reference to the event model. Can be many events.
-});
+// !!! LATER
+// // Create a mongoose schema for the programs in the database.
+// const programSchema = new mongoose.Schema({
+//     programID: String, 
+//     programName: String,
+//     programDescription: String,
+//     programEvents: [{type: mongoose.Schema.Types.ObjectId, ref: 'Event'}] // --> Reference to the event model. Can be many events.
+// });
 
 // Create a mongoose schema for the events in the database.
 const eventSchema = new mongoose.Schema({
-    eventID: String, // --> May not need this
+    eventID: String, 
     eventName: String,
-    eventDate: {type: Date, default: Date.now }, // --> Will need to change this later.
-    eventTime: Number,
-    eventProgram: {type: mongoose.Schema.Types.ObjectId, ref: 'Program'} // --> Each unique event is only associated with one program.
+    eventDate: {type: Date, default: Date.now},
+    eventStartTime: String,
+    eventEndTime: String,
+    eventLocation: String,
+    eventDescription: String,
+    numVolunteersNeeded: Number,
+    neededDonations: Number,
+    // !!! LATER
+    // eventProgram: {type: mongoose.Schema.Types.ObjectId, ref: 'Program'} // --> Each unique event is only associated with one program. --> CHANGE LATER
 });
 
 // Create a plugin for the user Schema. Also create
@@ -103,7 +110,7 @@ userSchema.plugin(findOrCreate);
 
 // Create mongoose models based on the above schemas.
 const UserModel = new mongoose.model("User", userSchema);
-const ProgramModel = new mongoose.model("Program", programSchema);
+// const ProgramModel = new mongoose.model("Program", programSchema); // !!! LATER
 const EventModel = new mongoose.model("Event", eventSchema);
 
 // ============================================================================================================
@@ -189,7 +196,7 @@ app.get("/login", function(req, res, next){
     // failed if they have attempted to login and 
     // have entered the wrong info.
     const errors = req.flash().error || [];
-    res.render("login", { errors });
+    res.render("login", { errors, permissionDenied: req.flash("permissionDenied") });
 });
 
 // Create a route for viewing the register page. If the account already
@@ -213,9 +220,9 @@ app.get("/user_profile", function(req, res){
     } else if(req.isAuthenticated()) {
 
         // Render the user profile page and determine if user is undefined.
-        res.render("user_profile", {
-            user: req.user
-        });
+        // Flash an error message if the regular user attempted to access 
+        // the ADMIN route.
+        res.render("user_profile", { user: req.user, permissionDenied: req.flash("permissionDenied") });
 
     } else {
         res.redirect("/login");
@@ -247,20 +254,38 @@ app.get("/admin_profile", function(req, res){
 
         // Render the admin profile page and determine if the user is undefined.
         res.render("admin_profile", {
-            user: req.user
+            user: req.user,
+            successCreated: req.flash("successCreated"),
+            failureNotCreated: req.flash("failureNotCreated")
         });
 
         // Otherwise, if the user is authenticated, redirect them to
         // their profile page and flash an error message.
     } else if (req.isAuthenticated()) {
-        // req.flash("permissionDenied", "You cannot access this page");
+        req.flash("permissionDenied", "You cannot access that page");
         res.redirect("/user_profile");
+        return;
         
         // If the user is not authenticated, redirect them to the
         // login page and flash an error message.
     } else {
-        // req.flash("permissionDenied", "You cannot access this page");
+        req.flash("permissionDenied", "You cannot access that page"); // <-- !!! NOT WORKING 
         res.redirect("/login");
+        return;
+    }
+});
+
+// Create a route for the ADMIN event creation page.
+app.get("/event_creation", function(req, res){
+
+    const user = req.user;
+
+    if(req.isAuthenticated() && user.username == ADMIN_NAME) {
+        res.render("event_creation", {
+            user: req.user
+        });
+    } else {
+        res.redirect("/user_profile");
     }
 });
 
@@ -374,7 +399,6 @@ app.post("/register", function(req, res){
                     } else {
                         passport.authenticate("local")(req, res, function(){
                             res.redirect("/admin_profile");
-                            console.log("Current state: " + req.body.username)
                         });
                     }
                 });
@@ -414,7 +438,6 @@ app.post("/login", passport.authenticate("local", {
 
     // Create an object to store the user information in an object.
     const user = req.user
-    console.log(user.username)
 
     if(user.username == ADMIN_NAME) { // <-- THIS MAY BE WRONG
         res.redirect("/admin_profile");
@@ -437,6 +460,58 @@ app.post("/logout", function(req, res){
 
 // -------------------------------------- ADMIN SECTION (POST) -----------------------------------------------
 
+// Create a post request for the ADMIN so that they can 
+// access the "event creation" page on the web application.
+app.post("/create_event", function(req, res){
+    res.redirect("/event_creation");
+});
+
+// Create a post request for the ADMIN so when they want to 
+// add an event, that event is added to the database.
+app.post("/added_event", function(req, res){
+
+    // Create a new event ID for the developers to use and track. // <-- MAYBE!!!
+    event_ID = mongoose.Types.ObjectId();
+
+    // MAYBE ADD CHECKS AT SOME POINT TO DETERMINE IF AN EVENT WAS ALREADY CREATED
+
+    // Create a new event based on the event schema.
+    const newEvent = new EventModel({
+        eventID: event_ID,
+        eventName: req.body.eventname,
+        eventDate: req.body.eventdate,
+        eventStartTime: req.body.eventstarttime,
+        eventEndTime: req.body.eventendtime,
+        eventLocation: req.body.eventlocation,
+        eventDescription: req.body.eventdescription,
+        numVolunteersNeeded: req.body.eventvolunteers,
+        neededDonations: req.body.eventdonations
+    });
+
+    // Save the new event created by the ADMIN 
+    // to the database. 
+    newEvent.save(function(err){
+    
+        // If there is no error in saving the new event, redirect
+        // back to the "root"/"HOME" route of the webpage.
+        if(!err) {
+            req.flash("successCreated", "Event created");
+            res.redirect("/admin_profile");
+            return;
+        } else {
+            req.flash("failureNotCreated", "Failed to create event");
+            res.redirect("/admin_profile");
+            console.log(err);
+            return;
+        }
+    });
+});
+
+// Create a post request for when the ADMIN wants to cancel 
+// creating a new event.
+app.post("/cancel", function(req, res){
+    res.redirect("/admin_profile");
+});
 
 // ============================================================================================================
 

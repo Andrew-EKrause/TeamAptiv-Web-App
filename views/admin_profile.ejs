@@ -8,6 +8,30 @@
 
 <%- include('partials/admin-profile_header.ejs') %>
 
+    <!-- 
+        Include EJS to display a success message to the ADMIN if
+        they successfully created a new event.
+    -->
+    <% if(successCreated.length > 0) { %>
+        <div class="card">
+            <div class="card-body elementToFadeInAndOut">
+                <h1 class="confirmation"><%= successCreated %></h1>
+            </div>
+        </div>
+    <% } %>
+
+    <!-- 
+        Include EJS to display a failure message to the ADMIN if
+        they failed to create a new event.
+    -->
+    <% if(failureNotCreated.length > 0) { %>
+        <div class="card">
+            <div class="card-body elementToFadeInAndOut">
+                <h1 class="incorrect-input"><%= failureNotCreated %></h1>
+            </div>
+        </div>
+    <% } %>
+
     <!-- Create a card for showing the user data -->
     <div class="container mt-5 mb-5">
         <div class="row register-page-format">
@@ -40,9 +64,9 @@
                                 </form>
                             </div>
 
-                            <!-- Add a button to create a new PROGRAM !!!-->
+                            <!-- Add a button to create a new PROGRAM !!! THIS WILL BE LATER ON IN THE COURSE -->
                             <div>
-                                <form action="" method="POST">
+                                <form action="" method="">
                                     <div class="inner">
                                         <button type="submit" class="btn btn-outline-dark btn-block w-100">Create New Program</button>
                                     </div>
@@ -51,16 +75,16 @@
 
                             <!-- Add a button to create a new EVENT !!!-->
                             <div>
-                                <form action="" method="POST">
+                                <form action="/create_event" method="POST">
                                     <div class="inner">
                                         <button type="submit" class="btn btn-outline-dark btn-block w-100">Create New Event</button>
                                     </div>
                                 </form>
                             </div>
                             
-                            <!-- Add a button for the user to see their history -->
+                            <!-- Add a button for the user to see their HISTORY !!! THIS WILL BE LATER ON IN THE COURSE -->
                             <div>
-                                <form action="" method=""> <!-- ADD A LINK TO THIS LATER!!! -->
+                                <form action="" method="">
                                     <div class="inner">
                                         <button type="submit" class="btn btn-outline-dark btn-block w-100">See Event History</button>
                                     </div>

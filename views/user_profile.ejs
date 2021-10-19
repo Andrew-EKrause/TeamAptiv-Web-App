@@ -8,6 +8,18 @@
 
 <%- include('partials/home_header.ejs') %>
 
+    <!-- 
+        Include EJS to display any error messages to the user if the
+        attempt to access a page that they are not authorized to access.
+    -->
+    <% if(permissionDenied.length > 0) { %>
+        <div class="card">
+            <div class="card-body elementToFadeInAndOut">
+                <h1 class="incorrect-input"><%= permissionDenied %></h1>
+            </div>
+        </div>
+    <% } %>
+
     <!-- Create a card for showing the user data -->
     <div class="container mt-5 mb-5">
         <div class="row register-page-format">
