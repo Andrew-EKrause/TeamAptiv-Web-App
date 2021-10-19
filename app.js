@@ -184,7 +184,19 @@ app.get("/auth/google/team-aptiv",
 
 // Create a route for viewing the events page for Aptiv.
 app.get("/events", function(req, res){
-    res.render("events", { user: req.user });
+
+    // Use the find function to render all of the events in your
+    // Aptiv database onto the screen.
+    EventModel.find({}, function(err, events){
+        
+        // Render the events on the events page of
+        // the web application.
+        res.render("events", { 
+            user: req.user,
+            events: events
+        });
+
+    });
 });
 
 // Create a route for viewing the login page for Aptiv.
@@ -289,7 +301,7 @@ app.get("/event_creation", function(req, res){
     }
 });
 
-// // Create a route for viewing the events page.
+// // Create a route for viewing the events page. <-- LEFT OF RIGHT HERE !!!!!!!!!!!!!!!!!!!!!
 // app.get("/events", function(req, res){
 
 //     // Go through database and find all program, with events attached to them,
@@ -345,12 +357,12 @@ app.get("/event_creation", function(req, res){
 app.post("/back", function(req, res){
 
     // Render the home page and determine if user is undefined.
-    res.render("home", { user: req.user });
+    res.redirect("/home");
 });
 
 // Create a post request for when user clicks the "Find Events" button.
 app.post("/find_events", function(req, res){
-    res.render("events", { user: req.user });
+    res.redirect("/events");
 });
 
 // Create a post request for when user clicks the "Register" button.

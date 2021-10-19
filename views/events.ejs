@@ -19,8 +19,7 @@
         </div>
     <% } %> -->
 
-    <!-- This is where the list of programs/events will go -->
-    <!-- For now this is just placeholder -->
+    <!-- List of programs/events -->
     <div class="container mt-4 mb-4">
         <header>
             <h1>Find Community Events</h1>
@@ -28,17 +27,18 @@
             <hr>
         </header>
 
-        <!-- Loop through the database and display the events -->
+        <!-- Include a section for the events to be posted -->
         <section>
-            <div class="event">
-                <h2>Event 1</h2>
-            </div>
-            <div class="event">
-                <h2>Event 2</h2>
-            </div>
-            <div class="event">
-                <h2>Event 3</h2>
-            </div>
+            <!-- Loop through the database and display the events -->
+            <% events.forEach(function(event) { %>
+
+                <!-- Put the specified event information to the page -->
+                <div class="event">
+                    <h2> <%= event.eventName %> </h2>
+                    <p> <%= event.eventDate %> </p>
+                    <p> <%= event.eventLocation %> </p>
+                </div>
+            <% }); %>
         </section>
 
         <!-- Back button -->
