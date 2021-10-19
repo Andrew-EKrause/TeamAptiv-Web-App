@@ -23,10 +23,9 @@
     <div class="container mt-5 mb-5">
 
         <div class="row register-page-format">
-            <div class="col-sm-7 mx-auto">
+            <div class="col-lg-6 col-md-8 col-sm-10 col-xs-12 mx-auto">
                 <div class="card">
                     <div class="card-body">
-
                         <!-- Makes a POST request to the /register route -->
                         <form class="form-horizontal" action="/register" method="POST">
                             <div class="form-group">
@@ -48,10 +47,10 @@
                             <button type="submit" class="mt-3 btn btn-lg btn-dark">Register</button>
                         </form>
 
-                        <h5 class="mt-3">Or<h5>
+                        <h5 class="m-3">Or<h5>
 
                         <!-- Authentication sign up with Google -->
-                        <div class="card-body">
+                        <div class="">
                             <a class="btn btn-block btn-lg btn-social btn-google" href="/auth/google" role="button">
                                 <i class="fab fa-google"></i>
                                 Sign Up with Google
@@ -61,19 +60,19 @@
                     </div>
 
                     <!-- Add a link to login if the user already has an account -->
-                    <h5>Already have an account? <a class="" href="/login">Login Here</a></h5>
+                    <h5>Already have an account? <a class="reference-link" href="/login">Login Here</a></h5>
                 </div>
             </div>
         </div>
 
         <!-- Back button -->
-        <div class="container mt-4">
+        <!-- <div class="container mt-4">
             <form action="/back" method="POST">
                 <div>
                     <button type="submit" class="btn btn-lg btn-outline-dark"><i class="fas fa-arrow-left"></i> Back</button>
                 </div>
             </form>
-        </div>
+        </div> -->
         
     </div>
 
