@@ -327,6 +327,30 @@ app.get("/event_creation", function(req, res){
 
 // -------------------------------------- SINGLE EVENT SECTION (GET) -----------------------------------------------
 
+// The following function relates to the route, NEW POSTS, created below.
+// The function simplifies the date displayed for each event.
+// --> THIS MAY BE A TEMPORARY FUNCTION!!!
+function simplifyDate(eventDate){
+    
+    const date = eventDate.toISOString().split("T")[0] // "2016-06-06"
+    const arrayDate = date.split('-');
+    console.log(arrayDate);
+
+
+    switch(arrayDate[1]) {
+        case '1':
+          // code block
+          break;
+        case '2':
+          // code block
+          break;
+        default:
+          // code block
+      }
+
+
+}
+
 // The following function relates to the route, NEW POSTS, created below
 // it. The function takes the military time that is stored in the database
 // and converts it to regular time. This conversion function is called
@@ -384,7 +408,10 @@ app.get("/events/:eventId", function(req, res){
         // Call a function to simplify the date of the event.
         // const eventDate = simplifyEventDate(event.eventDate);
         // var date = event.eventDate;
-        // date = date.toISOString().split("T")[0] // "2016-06-06"
+        const date = event.eventDate.toISOString().split("T")[0] // "2016-06-06"
+        console.log(date);
+
+        const eventDate = simplifyDate(event.eventDate);
 
         // Call a function to to convert the event start time and event 
         // end time, both in military time, to regular time.
