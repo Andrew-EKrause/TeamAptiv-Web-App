@@ -179,11 +179,7 @@ ul {
 
 .card {
     background-color: #f5f5f5;
-}
-
-.card {
-    /* padding: 5em; */
-    color: #aba597;
+    color: #9a9b9f;
 }
 
 .form-group {
@@ -192,14 +188,14 @@ ul {
 
 .form-control {
     background-color: #f5f5f5;
-    color: #797575;
+    color: #747474;
     border: none;
     border-bottom: 1px solid lightgray;
 }
 
 .form-control:focus {
     background-color: #f5f5f5;
-    color: #797575;
+    color: #747474;
 }
 
 /* ===== ID SELECTORS ===== */
@@ -238,6 +234,15 @@ ul {
     width: 100%;
     font-size: 1.5em;
 }
+
+/* ===== Events Page ===== */
+
+.event-list > a {
+    text-decoration: none !important;
+}
+
+/* ===== Specific Event Page ===== */
+
 
 /* ===== User Profile Page ===== */
 

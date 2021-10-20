@@ -28,17 +28,22 @@
         </header>
 
         <!-- Include a section for the events to be posted -->
-        <section>
+        <section class="event-list">
             <!-- Loop through the database and display the events -->
             <% events.forEach(function(event) { %>
 
-                <!-- Put the specified event information to the page -->
-                <div class="event">
-                    <h2> <%= event.eventName %> </h2>
-                    <p> <%= event.eventDate %> </p>
-                    <p> <%= event.eventLocation %> </p>
-                    <a href="/events/<%=event._id%>">View Event</a>
-                </div>
+                <a href="/events/<%=event._id%>">
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <div class="event">
+                                <h2 class="black-text"> <%= event.eventName %> </h2>
+                                <p> <%= event.eventDate %> </p>
+                                <p> <%= event.eventLocation %> </p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
             <% }); %>
         </section>
 
