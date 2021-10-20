@@ -191,14 +191,14 @@ app.get("/events", function(req, res){
     // Use the find function to render all of the events in your
     // Aptiv database onto the screen.
     EventModel.find({}, function(err, events){
-        
-        // Render the events on the events page of
-        // the web application.
+
+        // Render the events on the events
+        // page of the web application.
         res.render("events", { 
             user: req.user,
-            events: events
+            events: events,
+            successVolunteered: req.flash("successVolunteered"),
         });
-
     });
 });
 
@@ -211,7 +211,11 @@ app.get("/login", function(req, res, next){
     // failed if they have attempted to login and 
     // have entered the wrong info.
     const errors = req.flash().error || [];
-    res.render("login", { errors, permissionDenied: req.flash("permissionDenied") });
+    res.render("login", { 
+        errors, 
+        permissionDenied: req.flash("permissionDenied"), 
+        needAnAccount: req.flash("needAnAccount")
+    });
 });
 
 // Create a route for viewing the register page. If the account already
@@ -328,27 +332,58 @@ app.get("/event_creation", function(req, res){
 // -------------------------------------- SINGLE EVENT SECTION (GET) -----------------------------------------------
 
 // The following function relates to the route, NEW POSTS, created below.
+// The function ALSO relates to the route, 
 // The function simplifies the date displayed for each event.
 // --> THIS MAY BE A TEMPORARY FUNCTION!!!
-function simplifyDate(eventDate){
+function simplifyEventDate(eventDate){
     
-    const date = eventDate.toISOString().split("T")[0] // "2016-06-06"
-    const arrayDate = date.split('-');
-    console.log(arrayDate);
+    // First split the event into the components that directly
+    // involve the numberical representations of a date.
+    var date = eventDate.toISOString().split("T")[0];
 
+    // Create variables for workring with
+    // the nubmers in the date variable.
+    var arrayDate = date.split('-');
+    var day = arrayDate[2];
+    var getMonth = arrayDate[1];
+    var month = "";
+    var year = arrayDate[0];
+    var simplifiedDate = "";
 
-    switch(arrayDate[1]) {
-        case '1':
-          // code block
-          break;
-        case '2':
-          // code block
-          break;
-        default:
-          // code block
-      }
+    // Use a series of conditionals to determine
+    // what the name of the month is based on the
+    // numerical representation of it.
+    if(getMonth.localeCompare('1') == 0) {
+        month = 'Jan';
+    } else if(getMonth.localeCompare('2') == 0) {
+        month = 'Feb';
+    } else if(getMonth.localeCompare('3') == 0) {
+        month = 'Mar';
+    } else if(getMonth.localeCompare('4') == 0) {
+        month = 'Apr';
+    } else if(getMonth.localeCompare('5') == 0) {
+        month = 'May';
+    } else if(getMonth.localeCompare('6') == 0) {
+        month = 'Jun';
+    } else if(getMonth.localeCompare('7') == 0) {
+        month = 'Jul'; 
+    } else if(getMonth.localeCompare('8') == 0) {
+        month = 'Aug';
+    } else if(getMonth.localeCompare('9') == 0) {
+        month = 'Sep';
+    } else if(getMonth.localeCompare('10') == 0) {
+        month = 'Oct';
+    } else if(getMonth.localeCompare('11') == 0) {
+        month = 'Nov';
+    } else if(getMonth.localeCompare('12') == 0) {
+        month = 'Dec';
+    } else {
+        month = 'ERROR';
+    }
 
-
+    // Create the simplified date and return it.
+    simplifiedDate = month + " " + (day - 1) + ", " + year;
+    return simplifiedDate;
 }
 
 // The following function relates to the route, NEW POSTS, created below
@@ -406,12 +441,7 @@ app.get("/events/:eventId", function(req, res){
     EventModel.findOne({_id: requestedEventId}, function(err, event){
       
         // Call a function to simplify the date of the event.
-        // const eventDate = simplifyEventDate(event.eventDate);
-        // var date = event.eventDate;
-        const date = event.eventDate.toISOString().split("T")[0] // "2016-06-06"
-        console.log(date);
-
-        const eventDate = simplifyDate(event.eventDate);
+        const eventDate = simplifyEventDate(event.eventDate);
 
         // Call a function to to convert the event start time and event 
         // end time, both in military time, to regular time.
@@ -422,8 +452,9 @@ app.get("/events/:eventId", function(req, res){
         // the website.
         res.render("specific_event", {
             user: req.user,
+            eventID: event.id, // --> THIS IS EXTREMELY IMPORTANT TO ADDING THE EVENT TO THE USER'S PAGE!!!
             eventName: event.eventName,
-            eventDate: event.eventDate,
+            eventDate: eventDate,
             eventStartTime: eventStartTime,
             eventEndTime: eventEndTime,
             eventLocation: event.eventLocation,
@@ -538,7 +569,8 @@ app.post("/login", passport.authenticate("local", {
     // Create an object to store the user information in an object.
     const user = req.user
 
-    if(user.username == ADMIN_NAME) { // <-- THIS MAY BE WRONG
+    // Check if the username is the ADMIN username.
+    if(user.username == ADMIN_NAME) {
         res.redirect("/admin_profile");
     } else {
         res.redirect("/user_profile");
@@ -616,6 +648,87 @@ app.post("/added_event", function(req, res){
 app.post("/cancel", function(req, res){
     res.redirect("/admin_profile");
 });
+
+// ---------------------------------- USER VOLUNTEER SIGN-UP (POST) -------------------------------------------
+
+// Create a route for when the user wants to sign up for a particular event.
+app.post("/volunteer", function(req, res){
+
+    // YOU WILL NEED TO CHECK AND MAKE SURE THAT THE USER HAS NOT ALREADY VOLUNTEERED/DONATED TO AN EVENT.
+    // THIS PART IS NOT COMPLETED YET!!!
+
+    // const requestedEventId = req.params.eventId;
+    // console.log(requestedEventId);
+
+    // Check if the user is authenticated. If user is authenticated, display a
+    // confirmation message and add the event to the user's list of events.
+    if(req.isAuthenticated()) {
+
+        // Create a flash message informing the user 
+        // that they have signed up for an event.
+        req.flash("successVolunteered", "You have signed up for the event");
+
+        // UserModel.findById(req.user, function(err, user, record) {
+            
+            
+        //     console.log(user);
+
+        // });
+
+        // EventModel.findById(req.event, function(err, event) {
+
+        // });
+
+        res.redirect("/events");
+
+    } else {
+        req.flash("needAnAccount", "You need an account to volunteer.");
+        res.redirect("/login");
+    }
+});
+
+
+
+
+// // Create a get request route for NEW POSTS.
+// app.get("/events/:eventId", function(req, res){
+  
+//     // Create a constant for storing the post ID so that it
+//     // can be retrieved from the database.
+//     const requestedEventId = req.params.eventId;
+  
+//     // Use the findOne function to find the post that the user
+//     // wishes to view from the database based on the post ID.
+//     // The method will look for the post that matches the ID
+//     // that was requested indirectly by the user and render
+//     // that post on the screen.
+//     EventModel.findOne({_id: requestedEventId}, function(err, event){
+      
+//         // Call a function to simplify the date of the event.
+//         const eventDate = simplifyEventDate(event.eventDate);
+
+//         // Call a function to to convert the event start time and event 
+//         // end time, both in military time, to regular time.
+//         const eventStartTime = convertToStandardTime(event.eventStartTime);
+//         const eventEndTime = convertToStandardTime(event.eventEndTime);
+    
+//         // Render the post that was requested by the user on 
+//         // the website.
+//         res.render("specific_event", {
+//             user: req.user,
+//             eventID: event.id, // --> THIS IS EXTREMELY IMPORTANT TO ADDING THE EVENT TO THE USER'S PAGE!!!
+//             eventName: event.eventName,
+//             eventDate: eventDate,
+//             eventStartTime: eventStartTime,
+//             eventEndTime: eventEndTime,
+//             eventLocation: event.eventLocation,
+//             eventDescription: event.eventDescription,
+//             numVolunteersNeeded: event.numVolunteersNeeded,
+//             neededDonations: event.neededDonations
+//         });
+//     });
+// });
+// --> !!! LATER Create a route for when the user wants to donate to a particular event.
 
 
 // ============================================================================================================

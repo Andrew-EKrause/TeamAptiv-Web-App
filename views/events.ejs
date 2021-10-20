@@ -19,6 +19,18 @@
         </div>
     <% } %> -->
 
+    <!-- 
+        Include EJS display a message informing the user that 
+        they successfully volunteered or donated to an event.
+    -->
+    <% if(successVolunteered.length > 0) { %>
+        <div class="card">
+            <div class="card-body elementToFadeInAndOut">
+                <h1 class="confirmation"><%= successVolunteered %></h1>
+            </div>
+        </div>
+    <% } %>
+
     <!-- List of programs/events -->
     <div class="container mt-4 mb-4">
         <header>

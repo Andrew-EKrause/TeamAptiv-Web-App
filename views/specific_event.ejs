@@ -40,8 +40,8 @@
                                 <!-- Makes POST request to the donation route -->
                                 <form class="form-horizontal" action="/donate" method="POST">
                                     <div class="form-group mt-2">
-                                        <label class="login-register-font control-label" for="donations">Donation Goal: $<%=neededDonations %></label>
-                                        <input type="number" class="login-register-font form-control" name="eventdonations" required>
+                                        <label class="login-register-font control-label" for="donations">Donation Goal: $<%= neededDonations %></label>
+                                        <input type="number" class="login-register-font form-control" name="eventdonations" min="1" max=<%= neededDonations %> required>
                                     </div>
                                     <button type="submit" class="mt-4 btn btn-lg btn-dark">Place Donation</button>
                                 </form>
@@ -51,6 +51,7 @@
                             <div class="collapse" id="collapseVolunteering">
                                 <!-- Makes POST request to the volunteer route -->
                                 <form class="form-horizontal" action="/volunteer" method="POST">
+                                    <input type="hidden" id="custId" name="custId" value=<%=eventID%>>
                                     <button type="submit" class="mt-4 btn btn-lg btn-dark">Sign Up</button>
                                 </form>
                             </div>

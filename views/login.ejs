@@ -12,12 +12,14 @@
         Include EJS to display any error messages to the user 
         if they entered in the wrong password information.
     -->
-    <% for (let i = 0; i < errors.length; i++) { %>
-        <div class="card">
-            <div class="card-body elementToFadeInAndOut">
-                <h1 class="incorrect-input"><%= errors[i] %></h1>
+    <% if(errors.length > 0) { %>
+        <% for (let i = 0; i < errors.length; i++) { %>
+            <div class="card">
+                <div class="card-body elementToFadeInAndOut">
+                    <h1 class="incorrect-input"><%= errors[i] %></h1>
+                </div>
             </div>
-        </div>
+        <% } %>
     <% } %>
 
     <!-- 
@@ -28,6 +30,19 @@
         <div class="card">
             <div class="card-body elementToFadeInAndOut">
                 <h1 class="incorrect-input"><%= permissionDenied %></h1>
+            </div>
+        </div>
+    <% } %>
+
+    <!-- 
+        Include EJS to display any error messages to the user 
+        if they attempted to volunteer for an event while not
+        signed in.
+    -->
+    <% if(needAnAccount.length > 0) { %>
+        <div class="card">
+            <div class="card-body elementToFadeInAndOut">
+                <h1 class="incorrect-input"><%= needAnAccount %></h1>
             </div>
         </div>
     <% } %>
