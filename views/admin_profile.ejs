@@ -49,8 +49,10 @@
                         </form>
 
                         <!-- Display ADMIN name and ADMIN status -->
-                        <h1>Welcome,&nbsp;<%= user.firstName %>.</h1>
-                        <h3>Status: Admin</h3>
+                        <header>
+                            <h1 class="black-text">Welcome,&nbsp;<%= user.firstName %>.</h1>
+                            <p>Status: Admin</p>
+                        </header>
 
                         <!-- Create a div for two inline buttons in the user profile -->
                         <div class="mt-4 mb-4 btn-group d-flex special" role="group" aria-label="...">
@@ -115,29 +117,29 @@
                             </ul>
                         </section> -->
                     </div>
+                    <div class="btn-group p-2">
+                        <!-- Back button -->
+                        <div class="d-flex">
+                            <form action="/back" method="POST">
+                                <div>
+                                    <button type="submit" class="btn btn-outline-dark btn-back"><i class="fas fa-arrow-left"></i> Back</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Logout button -->
+                        <div class="">
+                            <form action="/logout" method="POST">
+                                <div>
+                                    <button type="submit" class="btn btn-outline-dark btn-logout">Logout</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- <div class="btn-group"> -->
-            <!-- Back button -->
-            <div class="container">
-                <form action="/back" method="POST">
-                    <div>
-                        <button type="submit" class="btn btn-lg btn-outline-dark"><i class="fas fa-arrow-left"></i> Back</button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Logout button -->
-            <div class="mt-4 mb-4">
-                <form action="/logout" method="POST">
-                    <div>
-                        <button type="submit" class="btn btn-lg btn-dark">Logout</button>
-                    </div>
-                </form>
-            </div>
-        <!-- </div> -->
-    </div>
+     </div>
   
 
 <%- include('./partials/footer.ejs') %>

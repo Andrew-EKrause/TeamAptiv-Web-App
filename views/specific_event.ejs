@@ -27,12 +27,14 @@
                             </div>
 
                             <!-- Create two buttons that collapse and show the donate and volunteer information -->
-                            <% if(neededDonations > 0) { %>
-                                <button class="btn btn-outline-dark btn-block" type="button" data-bs-toggle="collapse" 
-                                data-bs-target="#collapseDonations" aria-expanded="false" aria-controls="collapseDonations">Donate</button>
-                            <% } %>
-                            <button class="btn btn-outline-dark btn-block" type="button" data-bs-toggle="collapse" 
-                                data-bs-target="#collapseVolunteering" aria-expanded="false" aria-controls="collapseVolunteering">Volunteer</button>
+                            <div class="special btn-group w-50 mx-auto">
+                                <% if(neededDonations > 0) { %>
+                                    <button class="btn btn-outline-dark" type="button" data-bs-toggle="collapse" 
+                                    data-bs-target="#collapseDonations" aria-expanded="false" aria-controls="collapseDonations">Donate</button>
+                                <% } %>
+                                <button class="btn btn-outline-dark" type="button" data-bs-toggle="collapse" 
+                                    data-bs-target="#collapseVolunteering" aria-expanded="false" aria-controls="collapseVolunteering">Volunteer</button>
+                            </div>
 
                             <!-- Collapsed content for donation information -->
                             <div class="collapse" id="collapseDonations">
@@ -42,7 +44,7 @@
                                         <label class="login-register-font control-label" for="donations">Donation Goal: $<%=neededDonations %></label>
                                         <input type="number" class="login-register-font form-control" name="eventdonations" required>
                                     </div>
-                                    <button type="submit" class="mt-4 btn btn-lg btn-dark">Donate</button>
+                                    <button type="submit" class="mt-4 btn btn-lg btn-dark">Place Donation</button>
                                 </form>
                             </div>
           
@@ -55,15 +57,15 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- Button to go back to the other events -->
+                                    <!-- Button to go back to the other events -->
                 <!-- Place this outside of the card -->
-                <div class=" mt-4 mb-4">
+                <div class="d-flex">
                     <form action="/back_events" method="POST">
                         <div>
-                            <button type="submit" class="btn btn-outline-dark"><i class="fas fa-arrow-left"></i> Back to Events</button>
+                            <button type="submit" class="btn btn-outline-dark btn-back"><i class="fas fa-arrow-left"></i> Back to Events</button>
                         </div>
                     </form>
+                </div>
                 </div>
             </div>
         </div>
