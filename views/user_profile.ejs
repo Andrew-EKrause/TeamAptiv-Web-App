@@ -38,7 +38,7 @@
 
                         <!-- Display user name and status -->
                         <header>
-                            <h1>Welcome,&nbsp;<%= user.firstName %>.</h1>
+                            <h1 class="black-text">Welcome,&nbsp;<%= user.firstName %>.</h1>
                             <p>Status: Volunteer</p>
                         </header>
                 
@@ -87,27 +87,29 @@
                             </ul>
                         </section> -->
                     </div>
+
+                    <div class="btn-group p-2">
+                        <!-- Back button -->
+                        <div class="d-flex">
+                            <form action="/back" method="POST">
+                                <div>
+                                    <button type="submit" class="btn btn-outline-dark btn-back"><i class="fas fa-arrow-left"></i> Back</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Logout button -->
+                        <div class="">
+                            <form action="/logout" method="POST">
+                                <div>
+                                    <button type="submit" class="btn btn-outline-dark btn-logout">Logout</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Back button -->
-    <!-- <div class="container">
-        <form action="/back" method="POST">
-            <div>
-                <button type="submit" class="btn btn-lg btn-outline-dark"><i class="fas fa-arrow-left"></i> Back</button>
-            </div>
-        </form>
-    </div> -->
-
-    <!-- Logout button -->
-    <!-- <div class="mt-4 mb-4">
-        <form action="/logout" method="POST">
-            <div>
-                <button type="submit" class="btn btn-lg btn-dark">Logout</button>
-            </div>
-        </form>
-    </div> -->
 
 <%- include('./partials/footer.ejs') %>

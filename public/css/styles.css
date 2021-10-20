@@ -118,9 +118,28 @@ ul {
 .special .btn {
     flex: 1;
     flex-basis: 100%;
-    /*width: 30rem;*/
+    font-size: 1.25em;
     height: 2.75rem;
     border-radius: 0%;
+}
+
+/* Set the styling for back buttons */
+.btn-back {
+    width: 100% !important;
+    border-radius: 0% !important;
+    border: none;
+    text-decoration: underline;
+    font-size: 1.1em;
+}
+
+/* Add styling to the logout button on a user page */
+.btn-logout {
+    width: 100% !important;
+    border-radius: 0% !important;
+    border: none;
+    text-decoration: underline;
+    font-size: 1.1em;
+    border-left: 1px solid #182139;
 }
 
 /* Style incorrect login with redish color. */
