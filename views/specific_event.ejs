@@ -17,47 +17,51 @@
                             
                             <!-- Create a title for the event creation page.-->
                             <div class="mb-4">
-                                <h1> <%= eventName %> </h1>
+                                <h1 class="black-text"> <%= eventName %> </h1>
                                 <h3> <%= eventDate %> </h3>
                                 <p><%= eventStartTime %> - <%= eventEndTime %> </p>
                                 <p>Location: <%= eventLocation %> </p>
                                 <p>Description: <%= eventDescription %> </p>
-                                <p>Number of Volunteers Needed: <%= numVolunteersNeeded %> </p>
-                                <!-- <p>Money Needed: $<%= neededDonations %> </p> -->
+                                <p>Volunteers Needed: <%= numVolunteersNeeded %> </p>
+                                <!-- <p>Money Needed: <%= neededDonations %> </p> -->
                             </div>
 
-                            <!-- 
-                                If the needed donations for the event are greater than zero, 
-                                render donation button on screen 
-                            -->
-                            <% if(neededDonations > 0) { %>
+                            <!-- Create two buttons that will collapse and show the donate and volunteer information -->
+                            <button class="btn btn-outline-dark btn-block" type="button" data-bs-toggle="collapse" 
+                                data-bs-target="#collapseDonations" aria-expanded="false" aria-controls="collapseDonations">Donate</button>
+                            <button class="btn btn-outline-dark btn-block" type="button" data-bs-toggle="collapse" 
+                                data-bs-target="#collapseVolunteering" aria-expanded="false" aria-controls="collapseVolunteering">Volunteer</button>
+
+                            <!-- Collapsed content for donation information -->
+                            <div class="collapse" id="collapseDonations">
                                 <!-- Makes POST request to the donation route -->
                                 <form class="form-horizontal" action="/donate" method="POST">
                                     <div class="form-group mt-2">
-                                        <label class="login-register-font control-label" for="donations">Amount to Donate</label>
+                                        <label class="login-register-font control-label" for="donations">Donation Goal: $<%=neededDonations %></label>
                                         <input type="number" class="login-register-font form-control" name="eventdonations" required>
                                     </div>
                                     <button type="submit" class="mt-4 btn btn-lg btn-dark">Donate</button>
                                 </form>
-                            <% } %>
-                            
-                            <!-- Makes POST request to the volunteer route -->
-                            <form class="form-horizontal" action="/volunteer" method="POST">
-                                <button type="submit" class="mt-4 btn btn-lg btn-dark">Sign Up</button>
-                            </form>
-    
+                            </div>
+          
+                            <!-- Collapsed content for volunteering information -->
+                            <div class="collapse" id="collapseVolunteering">
+                                <!-- Makes POST request to the volunteer route -->
+                                <form class="form-horizontal" action="/volunteer" method="POST">
+                                    <button type="submit" class="mt-4 btn btn-lg btn-dark">Sign Up</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
-    
-                    <!-- Button to go back to the other events -->
-                    <div class="container mt-4 mb-4">
-                        <form action="/back_events" method="POST">
-                            <div>
-                                <button type="submit" class="btn btn-outline-dark"><i class="fas fa-arrow-left"></i> Back to Events</button>
-                            </div>
-                        </form>
-                    </div>
-    
+                </div>
+                <!-- Button to go back to the other events -->
+                <!-- Place this outside of the card -->
+                <div class=" mt-4 mb-4">
+                    <form action="/back_events" method="POST">
+                        <div>
+                            <button type="submit" class="btn btn-outline-dark"><i class="fas fa-arrow-left"></i> Back to Events</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

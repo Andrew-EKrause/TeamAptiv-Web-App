@@ -94,7 +94,7 @@
                         </div>
 
                         <!-- This represents the main content based on what is selected in the nav -->
-                        <section class="border">
+                        <!-- <section class="border">
                             <h1>My Events</h1>
                             <ul>
                                 <li class="border-bottom">
@@ -113,29 +113,31 @@
                                     <p>Location: </p>
                                 </li>
                             </ul>
-                        </section>
+                        </section> -->
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Back button -->
-    <div class="container">
-        <form action="/back" method="POST">
-            <div>
-                <button type="submit" class="btn btn-lg btn-outline-dark"><i class="fas fa-arrow-left"></i> Back</button>
+        <!-- <div class="btn-group"> -->
+            <!-- Back button -->
+            <div class="container">
+                <form action="/back" method="POST">
+                    <div>
+                        <button type="submit" class="btn btn-lg btn-outline-dark"><i class="fas fa-arrow-left"></i> Back</button>
+                    </div>
+                </form>
             </div>
-        </form>
-    </div>
 
-    <!-- Logout button -->
-    <div class="mt-4 mb-4">
-        <form action="/logout" method="POST">
-            <div>
-                <button type="submit" class="btn btn-lg btn-dark">Logout</button>
+            <!-- Logout button -->
+            <div class="mt-4 mb-4">
+                <form action="/logout" method="POST">
+                    <div>
+                        <button type="submit" class="btn btn-lg btn-dark">Logout</button>
+                    </div>
+                </form>
             </div>
-        </form>
+        <!-- </div> -->
     </div>
+  
 
 <%- include('./partials/footer.ejs') %>
