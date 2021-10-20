@@ -34,7 +34,7 @@ const ADMIN_NAME = "$ADMIN$@ACCOUNT-2023";
 
 // Create web app using express and set view engine to EJS
 const app = express();
-app.use(express.static("public"));
+app.use(express.static(__dirname + "/public")); // --> Might not need "__dirname"
 app.set('view engine', 'ejs');
 
 // Use the body parser within the express module.
@@ -301,26 +301,6 @@ app.get("/event_creation", function(req, res){
     }
 });
 
-// // Create a route for viewing the events page. <-- LEFT OF RIGHT HERE !!!!!!!!!!!!!!!!!!!!!
-// app.get("/events", function(req, res){
-
-//     // Go through database and find all program, with events attached to them,
-//     // and publish them on the Aptiv website.
-//     ProgramModel.find({"program": {$ne: null}}, function(err, foundPrograms){
-
-//         // If there are errors, log the errors. Otherwise, if programs
-//         // were found in the database with events (created by admin user),
-//         // add the programs to the main 'events' page of the website.
-//         if(err) {
-//             console.log(err);
-//         } else {
-//             if(foundPrograms) {
-//                 res.render("programs", {programsWithEvents: foundPrograms});
-//             }
-//         }
-//     });
-// });
-
 // // Create a route for the user to volunteer for an event.
 // app.get("/volunteer", function(req, res){
 
@@ -344,6 +324,68 @@ app.get("/event_creation", function(req, res){
 //         res.redirect("/login")
 //     }
 // });
+
+// Create a get request for NEW POSTS.
+app.get("/events/:eventId", function(req, res){
+  
+    // Create a constant for storing the post ID so that it
+    // can be retrieved from the database.
+    const requestedEventId = req.params.eventId;
+    console.log(requestedEventId);
+  
+    // Use the findOne function to find the post that the user
+    // wishes to view from the database based on the post ID.
+    // The method will look for the post that matches the ID
+    // that was requested indirectly by the user and render
+    // that post on the screen.
+    EventModel.findOne({_id: requestedEventId}, function(err, event){
+      
+    console.log(event.eventName);
+    
+    // Convert the military time for the start time 
+    var time = event.eventStartTime
+
+    time = time.split(':'); // convert to array
+
+    // fetch
+    var hours = Number(time[0]);
+    var minutes = Number(time[1]);
+    var seconds = Number(time[2]);
+
+    // calculate
+    var timeValue;
+
+    if (hours > 0 && hours <= 12) {
+        timeValue= "" + hours;
+    } else if (hours > 12) {
+        timeValue= "" + (hours - 12);
+    } else if (hours == 0) {
+        timeValue= "12";
+    }
+    
+    timeValue += (minutes < 10) ? ":0" + minutes : ":" + minutes;  // get minutes
+    // timeValue += (seconds < 10) ? ":0" + seconds : ":" + seconds;  // get seconds
+    timeValue += (hours >= 12) ? " P.M." : " A.M.";  // get AM/PM
+
+    // show
+    console.log(timeValue);
+    
+      // Render the post that was requested by the user on 
+      // the website.
+      res.render("specific_event", {
+        user: req.user,
+        eventName: event.eventName,
+        eventDate: event.eventDate,
+        eventStartTime: event.eventStartTime,
+        eventEndTime: event.eventEndTime,
+        eventLocation: event.eventLocation,
+        eventDescription: event.eventDescription,
+        numVolunteersNeeded: event.numVolunteersNeeded,
+        neededDonations: event.neededDonations
+      });
+    });
+  
+});
 
 // ============================================================================================================
 
@@ -468,6 +510,11 @@ app.post("/see_profile", function(req, res){
 app.post("/logout", function(req, res){
     req.logout();
     res.redirect("/login");
+});
+
+// Create a post request for when the user clicks the "Back to Events" button.
+app.post("/back_events", function(req, res){
+    res.redirect("/events");
 });
 
 // -------------------------------------- ADMIN SECTION (POST) -----------------------------------------------

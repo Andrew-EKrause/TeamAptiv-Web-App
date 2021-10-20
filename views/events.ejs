@@ -6,7 +6,7 @@
     ...
 -->
 
-<%- include('partials/home_header.ejs') %>
+<%- include('./partials/home_header.ejs') %>
 
     <!-- Show the format for logged in, which is a button to the user profile -->
     <!-- <% if(typeof user != 'undefined') { %>
@@ -37,6 +37,7 @@
                     <h2> <%= event.eventName %> </h2>
                     <p> <%= event.eventDate %> </p>
                     <p> <%= event.eventLocation %> </p>
+                    <a href="/events/<%=event._id%>">View Event</a>
                 </div>
             <% }); %>
         </section>
@@ -51,4 +52,4 @@
         </div> -->
     </div>
 
- <%- include('partials/footer.ejs') %>
+ <%- include('./partials/footer.ejs') %>
