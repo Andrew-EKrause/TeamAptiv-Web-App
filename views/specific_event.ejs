@@ -26,9 +26,11 @@
                                 <!-- <p>Money Needed: <%= neededDonations %> </p> -->
                             </div>
 
-                            <!-- Create two buttons that will collapse and show the donate and volunteer information -->
-                            <button class="btn btn-outline-dark btn-block" type="button" data-bs-toggle="collapse" 
+                            <!-- Create two buttons that collapse and show the donate and volunteer information -->
+                            <% if(neededDonations > 0) { %>
+                                <button class="btn btn-outline-dark btn-block" type="button" data-bs-toggle="collapse" 
                                 data-bs-target="#collapseDonations" aria-expanded="false" aria-controls="collapseDonations">Donate</button>
+                            <% } %>
                             <button class="btn btn-outline-dark btn-block" type="button" data-bs-toggle="collapse" 
                                 data-bs-target="#collapseVolunteering" aria-expanded="false" aria-controls="collapseVolunteering">Volunteer</button>
 
