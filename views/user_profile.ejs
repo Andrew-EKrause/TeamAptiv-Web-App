@@ -23,9 +23,9 @@
     <!-- Create a card for showing the user data -->
     <div class="container mt-5 mb-5">
         <div class="row register-page-format">
-            <div class="col-sm-12 mx-auto">
-                <!-- <div class="card"> -->
-                    <!-- <div class="card-body"> -->
+            <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12 mx-auto">
+                <div class="card">
+                    <div class="card-body">
 
                         <!-- Display user profile picture; if user did -->
                         <!-- not use OAuth to sign or does not have picture, -->
@@ -49,7 +49,7 @@
                             <div>
                                 <form action="/find_events" method="POST">
                                     <div class="inner">
-                                        <button type="submit" class="btn btn-outline-dark btn-block w-100">View Different Events</button>
+                                        <button type="submit" class="btn btn-outline-dark btn-block w-100">All Events</button>
                                     </div>
                                 </form>
                             </div>
@@ -58,7 +58,7 @@
                             <div>
                                 <form action="" method=""> <!-- ADD A LINK TO THIS LATER!!! -->
                                     <div class="inner">
-                                        <button type="submit" class="btn btn-outline-dark btn-block w-100">See Event History</button>
+                                        <button type="submit" class="btn btn-outline-dark btn-block w-100">Event History</button>
                                     </div>
                                 </form>
                             </div>
@@ -66,28 +66,28 @@
                         </div>
 
                         <!-- This represents the main content based on what is selected in the nav -->
-                        <section>
+                        <section class="row">
                             <h1>My Events</h1>
                             <ul class="profile-event-list">
-                                <li class="border">
+                                <li class="">
                                     <p>Name: </p>
                                     <p>Date/Time: </p>
                                     <p>Location: </p>
                                 </li>
-                                <li class="border">
+                                <li class="">
                                     <p>Name: </p>
                                     <p>Date/Time: </p>
                                     <p>Location: </p>
                                 </li>                    
-                                <li class="border">
+                                <li class="">
                                     <p>Name: </p>
                                     <p>Date/Time: </p>
                                     <p>Location: </p>
                                 </li>
                             </ul>
                         </section>
-                    <!-- </div> -->
-                <!-- </div> -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
