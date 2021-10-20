@@ -34,7 +34,7 @@ const ADMIN_NAME = "$ADMIN$@ACCOUNT-2023";
 
 // Create web app using express and set view engine to EJS
 const app = express();
-app.use(express.static(__dirname + "/public")); // --> Might not need "__dirname"
+app.use(express.static(__dirname + "/public")); // --> Need this for now: "__dirname"
 app.set('view engine', 'ejs');
 
 // Use the body parser within the express module.
@@ -54,6 +54,7 @@ app.use(flash());
 // Initialize the passport package. Use passport in the session.
 app.use(passport.initialize());
 app.use(passport.session());
+
 
 // ============================================================================================================
 
@@ -113,6 +114,7 @@ const UserModel = new mongoose.model("User", userSchema);
 // const ProgramModel = new mongoose.model("Program", programSchema); // !!! LATER
 const EventModel = new mongoose.model("Event", eventSchema);
 
+
 // ============================================================================================================
 
 
@@ -150,6 +152,7 @@ passport.use(new GoogleStrategy({
         });
     }
 ));
+
 
 // ============================================================================================================
 
@@ -254,9 +257,6 @@ app.get("/logout", function(req, res){
 // unless they are the admin.
 app.get("/admin_profile", function(req, res){
 
-    // console.log("In admin profile route"); // --> Debugging statement
-    // console.log("State of admin name: " + user.username); // --> Debugging statement
-
     // Create an object to store the user information in an object.
     const user = req.user
 
@@ -325,13 +325,54 @@ app.get("/event_creation", function(req, res){
 //     }
 // });
 
-// Create a get request for NEW POSTS.
+// -------------------------------------- SINGLE EVENT SECTION (GET) -----------------------------------------------
+
+// The following function relates to the route, NEW POSTS, created below
+// it. The function takes the military time that is stored in the database
+// and converts it to regular time. This conversion function is called
+// in the route below that displays events on the page. 
+function convertToStandardTime(eventStartTime){
+
+    // Convert the military time for the parameter passed 
+    // through the function (start and end times).
+    var time = eventStartTime;
+
+    // Convert the time into an array.
+    time = time.split(':'); 
+
+    // Create variables for the hours and minutes
+    // by accessing the first and second array elements.
+    var hours = Number(time[0]);
+    var minutes = Number(time[1]);
+
+    // Create a variable for calculating 
+    // the regular time value.
+    var timeValue;
+
+    // Convert the military time to regular
+    // time hours using the conditionals.
+    if (hours > 0 && hours <= 12) {
+        timeValue = "" + hours;
+    } else if (hours > 12) {
+        timeValue = "" + (hours - 12);
+    } else if (hours == 0) {
+        timeValue = "12";
+    }
+    
+    // Get the minutes for the time and determine whether it is in AM or PM
+    timeValue += (minutes < 10) ? ":0" + minutes : ":" + minutes;  
+    timeValue += (hours >= 12) ? " P.M." : " A.M."; 
+
+    // Return the converted time variable value.
+    return timeValue;
+}
+
+// Create a get request route for NEW POSTS.
 app.get("/events/:eventId", function(req, res){
   
     // Create a constant for storing the post ID so that it
     // can be retrieved from the database.
     const requestedEventId = req.params.eventId;
-    console.log(requestedEventId);
   
     // Use the findOne function to find the post that the user
     // wishes to view from the database based on the post ID.
@@ -340,60 +381,37 @@ app.get("/events/:eventId", function(req, res){
     // that post on the screen.
     EventModel.findOne({_id: requestedEventId}, function(err, event){
       
-    console.log(event.eventName);
+        // Call a function to simplify the date of the event.
+        // const eventDate = simplifyEventDate(event.eventDate);
+        // var date = event.eventDate;
+        // date = date.toISOString().split("T")[0] // "2016-06-06"
+
+        // Call a function to to convert the event start time and event 
+        // end time, both in military time, to regular time.
+        const eventStartTime = convertToStandardTime(event.eventStartTime);
+        const eventEndTime = convertToStandardTime(event.eventEndTime);
     
-    // Convert the military time for the start time 
-    var time = event.eventStartTime
-
-    time = time.split(':'); // convert to array
-
-    // fetch
-    var hours = Number(time[0]);
-    var minutes = Number(time[1]);
-    var seconds = Number(time[2]);
-
-    // calculate
-    var timeValue;
-
-    if (hours > 0 && hours <= 12) {
-        timeValue= "" + hours;
-    } else if (hours > 12) {
-        timeValue= "" + (hours - 12);
-    } else if (hours == 0) {
-        timeValue= "12";
-    }
-    
-    timeValue += (minutes < 10) ? ":0" + minutes : ":" + minutes;  // get minutes
-    // timeValue += (seconds < 10) ? ":0" + seconds : ":" + seconds;  // get seconds
-    timeValue += (hours >= 12) ? " P.M." : " A.M.";  // get AM/PM
-
-    // show
-    console.log(timeValue);
-    
-      // Render the post that was requested by the user on 
-      // the website.
-      res.render("specific_event", {
-        user: req.user,
-        eventName: event.eventName,
-        eventDate: event.eventDate,
-        eventStartTime: event.eventStartTime,
-        eventEndTime: event.eventEndTime,
-        eventLocation: event.eventLocation,
-        eventDescription: event.eventDescription,
-        numVolunteersNeeded: event.numVolunteersNeeded,
-        neededDonations: event.neededDonations
-      });
+        // Render the post that was requested by the user on 
+        // the website.
+        res.render("specific_event", {
+            user: req.user,
+            eventName: event.eventName,
+            eventDate: event.eventDate,
+            eventStartTime: eventStartTime,
+            eventEndTime: eventEndTime,
+            eventLocation: event.eventLocation,
+            eventDescription: event.eventDescription,
+            numVolunteersNeeded: event.numVolunteersNeeded,
+            neededDonations: event.neededDonations
+        });
     });
-  
 });
+
 
 // ============================================================================================================
 
 
 /* SECTION: PROCESS REQUESTS MADE TO SERVER (POST) */
-
-// Add code here. Inovles button presses, creating new events, logging in, etc.
-// ...
 
 // Create a post request for when user clicks any "Back" button.
 app.post("/back", function(req, res){
@@ -571,6 +589,7 @@ app.post("/added_event", function(req, res){
 app.post("/cancel", function(req, res){
     res.redirect("/admin_profile");
 });
+
 
 // ============================================================================================================
 

@@ -23,18 +23,24 @@
                                 <p>Location: <%= eventLocation %> </p>
                                 <p>Description: <%= eventDescription %> </p>
                                 <p>Number of Volunteers Needed: <%= numVolunteersNeeded %> </p>
-                                <p>Money Needed: <%= neededDonations %> </p>
+                                <!-- <p>Money Needed: $<%= neededDonations %> </p> -->
                             </div>
 
-                            <!-- Makes POST request to the donation route -->
-                            <form class="form-horizontal" action="/donate" method="POST">
-                                <div class="form-group mt-2">
-                                    <label class="login-register-font control-label" for="donations">Needed Donations</label>
-                                    <input type="number" class="login-register-font form-control" name="eventdonations" required>
-                                </div>
-                                <button type="submit" class="mt-4 btn btn-lg btn-dark">Donate</button>
-                            </form>
-    
+                            <!-- 
+                                If the needed donations for the event are greater than zero, 
+                                render donation button on screen 
+                            -->
+                            <% if(neededDonations > 0) { %>
+                                <!-- Makes POST request to the donation route -->
+                                <form class="form-horizontal" action="/donate" method="POST">
+                                    <div class="form-group mt-2">
+                                        <label class="login-register-font control-label" for="donations">Amount to Donate</label>
+                                        <input type="number" class="login-register-font form-control" name="eventdonations" required>
+                                    </div>
+                                    <button type="submit" class="mt-4 btn btn-lg btn-dark">Donate</button>
+                                </form>
+                            <% } %>
+                            
                             <!-- Makes POST request to the volunteer route -->
                             <form class="form-horizontal" action="/volunteer" method="POST">
                                 <button type="submit" class="mt-4 btn btn-lg btn-dark">Sign Up</button>
