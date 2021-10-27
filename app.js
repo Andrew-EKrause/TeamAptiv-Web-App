@@ -16,6 +16,7 @@ require('dotenv').config();
 // Require packages for the server that were installed.
 const express = require("express");
 const flash = require("connect-flash");
+// const popupS = require("popups"); // --> WORRY ABOUT THIS LATER
 const ejs = require("ejs");
 const _ = require("lodash");
 const mongoose = require("mongoose");
@@ -34,7 +35,7 @@ const ADMIN_NAME = "$ADMIN$@ACCOUNT-2023";
 
 // Create web app using express and set view engine to EJS
 const app = express();
-app.use(express.static(__dirname + "/public")); // --> Need this for now: "__dirname"
+app.use(express.static("public"));
 app.set('view engine', 'ejs');
 
 // Use the body parser within the express module.
@@ -66,16 +67,16 @@ mongoose.connect("mongodb://localhost:27017/aptivDB", {useNewUrlParser: true, us
 
 // Create a mongoose schema (blueprint) for the users in the database.
 const userSchema = new mongoose.Schema({
-    userID: String, 
+    userID: { type: String, unique: true, sparse: true }, 
     firstName: String,
     lastName: String,
     picture: String,
-    username: String, // <-- USED FOR GOOGLE OAUTH; this is your EMAIL ADDRESS! FIGURE OUT HOW TO GET IT
+    username: { type: String, unique: true, sparse: true },
     password: String,
     googleId: String,
     role: {
         type: [String],
-        default: ["Volunteer"] // <-- NEED TO SET STATUS; worry about this later!!! Figure out how to set default!
+        default: ["Volunteer"] 
     },
     userEvents: [{type: mongoose.Schema.Types.ObjectId, ref: 'Event'}]
 });
@@ -131,23 +132,29 @@ passport.serializeUser(function(user, done){
 // Deserialize user.
 passport.deserializeUser(function(id, done){
     UserModel.findById(id, function(err, user){
-        //done(err, user); // --> Potential alternative
         done(null, user);
     });
 });
 
 // Implement the verify callback function as well as other features
 // for the Google OAuth package, which is applied to the Aptiv path.
+// IMPORTANT: When a user uses OAuth to create an account/sign in,
+// they will only have 9 fields in the database. We do not worry about
+// the username and user_ID being stored in our database. Google 
+// handles the security features for the username and password fields.
+// Users that DO NOT use Google OAuth will have 10 fields in the db.
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID, 
     clientSecret: process.env.CLIENT_SECRET, 
     callbackURL: "http://localhost:3000/auth/google/team-aptiv", 
-    //profileFields: ['id', 'displayName', 'email'] // --> DON'T THINK YOU NEED THIS!!!
     },
     function(accessToken, refreshToken, profile, cb) {
-        // console.log(profile); // <-- Comment this out unless testing.
-                                                                                                    // --> USERNAME NEEDS TO BE THE EMAIL ADDRESS!
-        UserModel.findOrCreate({ googleId: profile.id, firstName: profile.name.givenName, lastName: profile.name.familyName, picture: profile._json.picture, username: profile.username}, function (err, user) {
+    
+        // Generate a unique id for the user using Google OAuth.
+        user_ID = mongoose.Types.ObjectId();
+
+        // Find if user already exists and log in. Otherwise, create new user account for site.
+        UserModel.findOrCreate({googleId: profile.id, firstName: profile.name.givenName, lastName: profile.name.familyName, picture: profile._json.picture, username: profile.id}, function (err, user) {
             return cb(err, user);
         });
     }
@@ -197,7 +204,6 @@ app.get("/events", function(req, res){
         res.render("events", { 
             user: req.user,
             events: events,
-            successVolunteered: req.flash("successVolunteered"),
         });
     });
 });
@@ -231,24 +237,73 @@ app.get("/user_profile", function(req, res){
     // Create an object to store the user information in an object.
     const user = req.user
 
+    // If the user is authenticated and is admin, redirect to admin page.
     if(req.isAuthenticated() && user.username == ADMIN_NAME) {
 
         // Render the user profile page and determine if user is undefined.
         res.redirect("/admin_profile");
-        
+
     } else if(req.isAuthenticated()) {
 
-        // Render the user profile page and determine if user is undefined.
-        // Flash an error message if the regular user attempted to access 
-        // the ADMIN route.
-        res.render("user_profile", { user: req.user, permissionDenied: req.flash("permissionDenied") });
+        // Create variables to help with storing  
+        // the events associated with a given user.
+        const userEventIds = user.userEvents;
+        var listOfUserEvents = [];
+
+        // If the user has events they have signed up for, display the events
+        // on the user's profile page. However, if the user has not signed up
+        // for any events and has none, simply display the user's profile.
+        if(userEventIds.length > 0) {
+
+            // Create variables to track the objects in the database and
+            // to determine when to display the objects in the user profile.
+            var i = 0;
+            j = userEventIds.length;
+
+            // Go through the objects stored in the given user collection and
+            // look them up in the database by their ID. Then add the objects
+            // found as a result of the lookup to a list and pass it to the page.
+            for(i = 0; i < userEventIds.length; i++) {
+
+                // Use the find by ID function to return the event object for the user.
+                EventModel.findById(userEventIds[i], function(err, results){
+                    if(err) {
+                        console.log(err);
+                    } else {
+                        listOfUserEvents.push(results);
+                        j -= 1;
+                    }
+
+                    // The counter 'j' determines when the results should be returned 
+                    // from the callback function and rendered on the user profile page.
+                    if (j == 0) {
+
+                        // Render the user profile page and determine if user is undefined.
+                        // Flash an error message if the regular user had previously  
+                        // attempted to access the ADMIN route.
+                        res.render("user_profile", {  
+                            user: req.user, 
+                            listOfUserEvents: listOfUserEvents,
+                            permissionDenied: req.flash("permissionDenied") 
+                        });
+                    }
+                });
+            }
+
+        } else {
+            res.render("user_profile", {  
+                user: req.user, 
+                listOfUserEvents: listOfUserEvents,
+                permissionDenied: req.flash("permissionDenied") 
+            });
+        }
 
     } else {
         res.redirect("/login");
     }
 });
 
-// Create a route for the user to logout of their account. <-- EVEN NEED THIS???
+// Create a route for the user to logout of their account.
 app.get("/logout", function(req, res){
     req.logout();
     res.redirect("/login");
@@ -268,22 +323,68 @@ app.get("/admin_profile", function(req, res){
     // "Admin", then they can access the admin profile page.
     if(req.isAuthenticated() && user.username == ADMIN_NAME) {
 
-        // Render the admin profile page and determine if the user is undefined.
-        res.render("admin_profile", {
-            user: req.user,
-            successCreated: req.flash("successCreated"),
-            failureNotCreated: req.flash("failureNotCreated")
-        });
+        // Create variables to help with storing  
+        // the events associated with an ADMIN.
+        const userEventIds = user.userEvents;
+        var listOfUserEvents = [];
 
-        // Otherwise, if the user is authenticated, redirect them to
-        // their profile page and flash an error message.
+        // If the ADMIN has events they have signed up for, display the events
+        // on the ADMIN's profile page. However, if the ADMIN has not signed up
+        // for any events and has none, simply display the ADMIN's profile.
+        if(userEventIds.length > 0) {
+
+            // Create variables to track the objects in the database and
+            // to determine when to display the objects in the ADMIN profile.
+            var i = 0;
+            j = userEventIds.length;
+
+            // Go through the objects stored in the given ADMIN collection and
+            // look them up in the database by their ID. Then add the objects
+            // found as a result of the lookup to a list and pass it to the page.
+            for(i = 0; i < userEventIds.length; i++) {
+
+                // Use the find by ID function to return the event object for the ADMIN.
+                EventModel.findById(userEventIds[i], function(err, results){
+                    if(err) {
+                        console.log(err);
+                    } else {
+                        listOfUserEvents.push(results);
+                        j -= 1;
+                    }
+
+                    // The counter 'j' determines when the results should be returned 
+                    // from the callback function and rendered on the user profile page.
+                    if (j == 0) {
+
+                        // Render the ADMIN profile page and determine if ADMIN is undefined.
+                        res.render("admin_profile", {  
+                            user: req.user, 
+                            listOfUserEvents: listOfUserEvents,
+                            successCreated: req.flash("successCreated"),
+                            failureNotCreated: req.flash("failureNotCreated")
+                        });
+                    }
+                });
+            }
+
+        } else {
+            res.render("admin_profile", {  
+                user: req.user, 
+                listOfUserEvents: listOfUserEvents,
+                successCreated: req.flash("successCreated"),
+                failureNotCreated: req.flash("failureNotCreated")
+            });
+        }
+
+    // Otherwise, if the user is authenticated, redirect them to
+    // their profile page and flash an error message.
     } else if (req.isAuthenticated()) {
         req.flash("permissionDenied", "You cannot access that page");
         res.redirect("/user_profile");
         return;
         
-        // If the user is not authenticated, redirect them to the
-        // login page and flash an error message.
+    // If the user is not authenticated, redirect them to the
+    // login page and flash an error message.
     } else {
         req.flash("permissionDenied", "You cannot access that page"); // <-- !!! NOT WORKING 
         res.redirect("/login");
@@ -331,10 +432,11 @@ app.get("/event_creation", function(req, res){
 
 // -------------------------------------- SINGLE EVENT SECTION (GET) -----------------------------------------------
 
+/* SECTION WITHIN GET: FUNCTIONS FOR SIMPLIFYING THE DATE/TIME DISPLAY OF EVENTS */
+
 // The following function relates to the route, NEW POSTS, created below.
 // The function ALSO relates to the route, 
 // The function simplifies the date displayed for each event.
-// --> THIS MAY BE A TEMPORARY FUNCTION!!!
 function simplifyEventDate(eventDate){
     
     // First split the event into the components that directly
@@ -426,6 +528,8 @@ function convertToStandardTime(eventStartTime){
     return timeValue;
 }
 
+/* SECTION WITHIN GET: RENDERING A PAGE ON THE SCREEN SPECIFIC TO AN EVENT */
+
 // Create a get request route for NEW POSTS.
 app.get("/events/:eventId", function(req, res){
   
@@ -452,7 +556,7 @@ app.get("/events/:eventId", function(req, res){
         // the website.
         res.render("specific_event", {
             user: req.user,
-            eventID: event.id, // --> THIS IS EXTREMELY IMPORTANT TO ADDING THE EVENT TO THE USER'S PAGE!!!
+            eventID: event.id,
             eventName: event.eventName,
             eventDate: eventDate,
             eventStartTime: eventStartTime,
@@ -460,7 +564,9 @@ app.get("/events/:eventId", function(req, res){
             eventLocation: event.eventLocation,
             eventDescription: event.eventDescription,
             numVolunteersNeeded: event.numVolunteersNeeded,
-            neededDonations: event.neededDonations
+            neededDonations: event.neededDonations,
+            successVolunteered: req.flash("successVolunteered"),
+            alreadyVolunteered: req.flash("alreadyVolunteered"),
         });
     });
 });
@@ -651,35 +757,69 @@ app.post("/cancel", function(req, res){
 
 // ---------------------------------- USER VOLUNTEER SIGN-UP (POST) -------------------------------------------
 
-// Create a route for when the user wants to sign up for a particular event.
+// Create a route for when the user wants to volunteer for a particular event.
 app.post("/volunteer", function(req, res){
 
-    // YOU WILL NEED TO CHECK AND MAKE SURE THAT THE USER HAS NOT ALREADY VOLUNTEERED/DONATED TO AN EVENT.
+    // YOU WILL NEED TO CHECK AND MAKE SURE THAT THE USER DONATED TO AN EVENT.
     // THIS PART IS NOT COMPLETED YET!!!
 
-    // const requestedEventId = req.params.eventId;
-    // console.log(requestedEventId);
+    // Obtain the specific event id from the webpage 
+    // when the user clicks on the 'volunteer' button.
+    const requestedEventId = req.body.eventvolunteer;
 
     // Check if the user is authenticated. If user is authenticated, display a
     // confirmation message and add the event to the user's list of events.
     if(req.isAuthenticated()) {
 
-        // Create a flash message informing the user 
-        // that they have signed up for an event.
-        req.flash("successVolunteered", "You have signed up for the event");
+        // Create variables to help add the event 
+        // to the user collection in the database.
+        var user = req.user;
+        var eventToAdd = req.body.eventvolunteer;
+        var listOfUserEvents = user.userEvents;
 
-        // UserModel.findById(req.user, function(err, user, record) {
-            
-            
-        //     console.log(user);
+        // Create a variable to represent whether the user 
+        // has already signed up for the event or not.
+        var alreadyAdded = false;
 
-        // });
+        // Go through the list of events in the user events attribute
+        // and check if the event is already in the user db.
+        listOfUserEvents.forEach(function(eventInUserProfile) {
 
-        // EventModel.findById(req.event, function(err, event) {
+            // Check if the event already exists in the user's events section.
+            if(String(eventInUserProfile) == String(eventToAdd)) {
+                alreadyAdded = true;
+            } 
+        });
 
-        // });
+        // If the user has NOT already been added, add the user.
+        if(alreadyAdded == false) {
+            // Add the event to the user's profile so that you can list
+            // the event that the user volunteered for in their profile.
+            UserModel.findOneAndUpdate(
+                { _id: user.id }, 
+                { $push: { userEvents: eventToAdd  } },
+                function (error, success) {
+                    if (error) {
+                        console.log("Error: " + error);
+                    } else {
+                        //console.log("Success: " + success);
+                    }
+                }
+            );
 
-        res.redirect("/events");
+            // Create a flash message informing the user 
+            // that they have signed up for an event.
+            req.flash("successVolunteered", "You have signed up for the event");
+
+            // Redirect to the specific event page of the website.
+            res.redirect("/events/" + requestedEventId);
+
+        } else {
+            // Create a flash message for the specific event page informing 
+            // the user that they already signed up for the event.
+            req.flash("alreadyVolunteered", "You have already signed up for this event");
+            res.redirect("/events/" + requestedEventId);
+        }
 
     } else {
         req.flash("needAnAccount", "You need an account to volunteer.");

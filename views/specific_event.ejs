@@ -8,10 +8,35 @@
 
 <%- include('./partials/home_header.ejs') %>
 
+    <!-- 
+        Include EJS display a message informing the user that 
+        they successfully volunteered or donated to an event.
+    -->
+    <% if(successVolunteered.length > 0) { %>
+        <div class="card">
+            <div class="card-body elementToFadeInAndOut message-format">
+                <h1 class="confirmation"><%= successVolunteered %></h1>
+            </div>
+        </div>
+    <% } %>
+
+    <!-- 
+        Include EJS display a message informing the user that
+        they have already signed up for a particular event.
+    -->
+    <% if(alreadyVolunteered.length > 0) { %>
+        <div class="card">
+            <div class="card-body elementToFadeInAndOut message-format">
+                <h1 class="incorrect-input"><%= alreadyVolunteered %></h1>
+            </div>
+        </div>
+    <% } %>
+
+    <!-- Create a container to format the specific event on the page. -->
     <div class="container mt-5 mb-5">
         <div class="row">
             <div class="col-sm-8 mx-auto">
-                <div class="card">
+                <div class="card event-margin-fine-tuning">
                     <div class="card-body">
                         <div class="card-text">
                             
@@ -23,6 +48,7 @@
                                 <p>Location: <%= eventLocation %> </p>
                                 <p>Description: <%= eventDescription %> </p>
                                 <p>Volunteers Needed: <%= numVolunteersNeeded %> </p>
+                                <p>Donations Needed: <%= neededDonations %> </p>
                             </div>
 
                             <!-- Create two buttons that collapse and show the donate and volunteer information -->
@@ -41,7 +67,7 @@
                                 <form class="form-horizontal" action="/donate" method="POST">
                                     <div class="form-group mt-2">
                                         <label class="login-register-font control-label" for="donations">Donation Goal: $<%= neededDonations %></label>
-                                        <input type="number" class="login-register-font form-control" name="eventdonations" min="1" max=<%= neededDonations %> required>
+                                        <input type="number" class="login-register-font form-control" name="eventdonation" min="1" max=<%= neededDonations %> required>
                                     </div>
                                     <button type="submit" class="mt-4 btn btn-lg btn-dark">Place Donation</button>
                                 </form>
@@ -51,7 +77,7 @@
                             <div class="collapse" id="collapseVolunteering">
                                 <!-- Makes POST request to the volunteer route -->
                                 <form class="form-horizontal" action="/volunteer" method="POST">
-                                    <input type="hidden" id="custId" name="custId" value=<%=eventID%>>
+                                    <input type="hidden" id="custId" name="eventvolunteer" value="<%= eventID %>" onChange="this.form.submit()">
                                     <button type="submit" class="mt-4 btn btn-lg btn-dark">Sign Up</button>
                                 </form>
                             </div>

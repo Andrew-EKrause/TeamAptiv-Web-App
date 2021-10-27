@@ -14,7 +14,7 @@
     -->
     <% if(alreadyCreated.length > 0) { %>
         <div class="card">
-            <div class="card-body elementToFadeInAndOut">
+            <div class="card-body elementToFadeInAndOut message-format">
                 <h1 class="incorrect-input"><%= alreadyCreated %></h1>
             </div>
         </div>
@@ -24,7 +24,7 @@
 
         <div class="row register-page-format">
             <div class="col-lg-6 col-md-8 col-sm-10 col-xs-12 mx-auto">
-                <div class="card">
+                <div class="card margin-fine-tuning">
                     <div class="card-body">
                         <!-- Makes a POST request to the /register route -->
                         <form class="form-horizontal" action="/register" method="POST">

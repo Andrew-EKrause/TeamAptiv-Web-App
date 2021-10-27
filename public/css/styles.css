@@ -1,8 +1,16 @@
 /*
- * DESCRIPTION...
+ * The CSS file contains three primary selector sections:
+ * Tag Selectors, Class Selectors, and ID Selectors. There
+ * is also a section at the bottom for file-specific styling.
+ * This stylesheet applies custom styles created by the dev
+ * team to the Aptiv Web Application for CS 341. The styles
+ * in the file override the Bootstrap styles that are also
+ * utililzed in the design of the site when applied properly.
  *
  * Authors: Andrew Krause, Riley Radle, Anthony Musbach, Zach Gephart
- * Date: TBD
+ * Class: Software Design IV (CS 341)
+ * Group: #2
+ * Due Date: December 15th, 2021
  *
  */
 
@@ -13,6 +21,8 @@
 
 /* Format content within the body tag of the HTML structure */
 body {
+    padding-top: 6rem; /* This portion is included for the fixed header on the page. */
+    /* padding-bottom: 6rem; /* This portion is included for the fixed footer on the page. */
     margin: 0;
     text-align: center;
     font-family: 'Merriweather', serif; 
@@ -38,6 +48,7 @@ ul {
 
 /* Set navbar text color. */
 .navbar-dark .navbar-brand {
+    margin-left: 1rem;
     color: #e7e8ea;
 }
 
@@ -48,6 +59,7 @@ ul {
 
 /* Set the color of the navbar link. */
 .navbar-dark .navbar-nav .nav-link {
+    margin-right: 1rem;
     color: #e7e8ea;
 }
 
@@ -58,6 +70,7 @@ ul {
 
 /* Set the color of the hamburger menu outline. */
 .navbar-dark .navbar-toggler {
+    margin-right: 1rem;
     color: #e7e8ea;
 }
 
@@ -98,11 +111,12 @@ ul {
     font-size: x-large;
 }
 
-/* Change the text that is whiter to a greener color. */
+/* Change the text to a whiter color. */
 .white-text {
     color: #e7e8ea;
 }
 
+/* Change text to a dark blueish color */
 .black-text {
     color: #182139;
 }
@@ -217,16 +231,75 @@ ul {
     color: #747474;
 }
 
-/* ===== ID SELECTORS ===== */
+/* Format the navbar so that it is fixed. */
+.navbar-fixed-top,
+.navbar-fixed-bottom {
+  position: fixed;
+  right: 0;
+  left: 0;
+  z-index: 1030;
+}
+
+/* Modify the margins of the cards for the login/registration page. */
+.margin-fine-tuning {
+    margin-top: 10%;
+    margin-bottom: 6%;
+}
+
+/* Modify the margins of the cards for the specific event page. */
+.event-margin-fine-tuning {
+    margin-top: 8%;
+    margin-bottom: 6%;
+}
+
+/* Format the messages sent to the user. */ /* --> ASK GROUP IF THEY THINK YOU SHOULD HAVE WHITE CARD BACKGROUND OR NOT!!! */
+.message-format {
+    width: 100%;
+    position: relative;
+    margin-top: 1rem;
+}
+
+/* --> ASK THE GROUP IF YOU SHOULD HAVE THE "COMMUNITY EVENTS" TITLE BE FIXED OR NOT!!! */
+/* Make the 'Community Events' title at the top of the events page fixed. */
+/* .fixed-title {
+    background-color: #e7e8ea;
+    top: 6.15rem;
+    padding-top: 3rem;
+    width: 100%;
+    height: 17%;
+    right: 0;
+    left: 0;
+    position: fixed;
+    z-index: 1000;
+} */
+
+/* Give the events on the events page some padding. */
+/* .event-list-top-padding {
+    padding-top: 8rem;
+} */
+
+/******************************* ID SELECTORS *******************************/
 
 /* Add color to header section of page. */
 #header-section {
     background-color: #182139;
 }
 
+/* Style and position the header at the top of the login page. */
+#login-header-section {
+    background-color: #182139;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 1030;
+}
+
 /* Add color to footer section of page. */
 #footer-section {
     background-color: #182139;
+    /* position: fixed;
+    bottom: 0;
+    width: 100%; */
 }
 
 /* Format profile picture for user profile. */

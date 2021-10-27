@@ -14,7 +14,7 @@
     -->
     <% if(permissionDenied.length > 0) { %>
         <div class="card">
-            <div class="card-body elementToFadeInAndOut">
+            <div class="card-body elementToFadeInAndOut message-format">
                 <h1 class="incorrect-input"><%= permissionDenied %></h1>
             </div>
         </div>
@@ -64,30 +64,92 @@
                             </div>
 
                         </div>
-
-                        <!-- This represents the main content based on what is selected in the nav -->
-                        <!-- <section class="row">
-                            <h1>My Events</h1>
-                            <ul class="profile-event-list">
-                                <li class="">
-                                    <p>Name: </p>
-                                    <p>Date/Time: </p>
-                                    <p>Location: </p>
-                                </li>
-                                <li class="">
-                                    <p>Name: </p>
-                                    <p>Date/Time: </p>
-                                    <p>Location: </p>
-                                </li>                    
-                                <li class="">
-                                    <p>Name: </p>
-                                    <p>Date/Time: </p>
-                                    <p>Location: </p>
-                                </li>
-                            </ul>
-                        </section> -->
                     </div>
 
+                    <!-- List out all of the events that the user has signed up for or donated to here -->
+                    <h3>My Events</h3>
+
+                    <!-- 
+                        Include a section for the events that the user has signed up
+                        for to be rendered on the user's profile page
+                    -->
+                    <section class="event-list">
+                        <!-- Loop through the database and display the events -->
+                        <% listOfUserEvents.forEach(function(event) { %>
+                            <% if(event == null) { %>
+                                <% // For now, do nothing. In the future, trigger a request so that the %>
+                                <% // event object ID is removed from the user's info in the database. %>
+                            <% } else { %>
+                                <a href="/events/<%=event._id%>">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="event">
+                                                <h2 class="black-text"> <%= event.eventName %> </h2>
+
+                                                <!-- Include a function to simplify the date display -->
+                                                <% function simplifyEventDate(eventDate){ %>
+
+                                                    <% // First split the event into the components that directly %>
+                                                    <% // involve the numberical representations of a date. %>
+                                                    <% var date = eventDate.toISOString().split("T")[0]; %>
+                                                
+                                                    <% // Create variables for workring with %>
+                                                    <% // the nubmers in the date variable. %>
+                                                    <% var arrayDate = date.split('-'); %>
+                                                    <% var day = arrayDate[2]; %>
+                                                    <% var getMonth = arrayDate[1]; %>
+                                                    <% var month = ""; %>
+                                                    <% var year = arrayDate[0]; %>
+                                                    <% var simplifiedDate = ""; %>
+                                                
+                                                    <% // Use a series of conditionals to determine %>
+                                                    <% // what the name of the month is based on the %>
+                                                    <% // numerical representation of it. %>
+                                                    <% if(getMonth.localeCompare('1') == 0) { %>
+                                                        <% month = 'Jan'; %>
+                                                    <% } else if(getMonth.localeCompare('2') == 0) { %>
+                                                        <% month = 'Feb'; %>
+                                                    <% } else if(getMonth.localeCompare('3') == 0) { %>
+                                                        <% month = 'Mar'; %>
+                                                    <% } else if(getMonth.localeCompare('4') == 0) { %>
+                                                        <% month = 'Apr'; %>
+                                                    <% } else if(getMonth.localeCompare('5') == 0) { %>
+                                                        <% month = 'May'; %>
+                                                    <% } else if(getMonth.localeCompare('6') == 0) { %>
+                                                        <% month = 'Jun'; %>
+                                                    <% } else if(getMonth.localeCompare('7') == 0) { %>
+                                                        <% month = 'Jul'; %>
+                                                    <% } else if(getMonth.localeCompare('8') == 0) { %>
+                                                        <% month = 'Aug'; %>
+                                                    <% } else if(getMonth.localeCompare('9') == 0) { %>
+                                                        <% month = 'Sep'; %>
+                                                    <% } else if(getMonth.localeCompare('10') == 0) { %>
+                                                        <% month = 'Oct'; %>
+                                                    <% } else if(getMonth.localeCompare('11') == 0) { %>
+                                                        <% month = 'Nov'; %>
+                                                    <% } else if(getMonth.localeCompare('12') == 0) { %>
+                                                        <% month = 'Dec'; %>
+                                                    <% } else { %>
+                                                        <% month = 'ERROR'; %>
+                                                    <% } %>
+                                                
+                                                    <% // Create the simplified date and return it. %>
+                                                    <% simplifiedDate = month + " " + (day - 1) + ", " + year; %>
+                                                    <% return simplifiedDate; %>
+                                                <% } %>
+                                                
+                                                <!-- The date displayed utilized the function above for simplification -->
+                                                <p> <%= simplifyEventDate(event.eventDate) %> </p>
+                                                <p> <%= event.eventLocation %> </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            <% } %>
+                        <% }); %>
+                    </section>
+
+                    <!-- Include a button for going back to the "Events" page -->
                     <div class="btn-group p-2">
                         <!-- Back button -->
                         <div class="d-flex">

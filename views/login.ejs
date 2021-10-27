@@ -15,7 +15,7 @@
     <% if(errors.length > 0) { %>
         <% for (let i = 0; i < errors.length; i++) { %>
             <div class="card">
-                <div class="card-body elementToFadeInAndOut">
+                <div class="card-body elementToFadeInAndOut message-format">
                     <h1 class="incorrect-input"><%= errors[i] %></h1>
                 </div>
             </div>
@@ -28,7 +28,7 @@
     -->
     <% if(permissionDenied.length > 0) { %>
         <div class="card">
-            <div class="card-body elementToFadeInAndOut">
+            <div class="card-body elementToFadeInAndOut message-format">
                 <h1 class="incorrect-input"><%= permissionDenied %></h1>
             </div>
         </div>
@@ -41,7 +41,7 @@
     -->
     <% if(needAnAccount.length > 0) { %>
         <div class="card">
-            <div class="card-body elementToFadeInAndOut">
+            <div class="card-body elementToFadeInAndOut message-format">
                 <h1 class="incorrect-input"><%= needAnAccount %></h1>
             </div>
         </div>
@@ -51,7 +51,7 @@
 
         <div class="row">
             <div class="col-lg-6 col-md-8 col-sm-10 col-xs-12 mx-auto">
-                <div class="card">
+                <div class="card margin-fine-tuning">
                     <div class="card-body">
                         <div class="card-text">
                             <!-- Makes POST request to the /login route -->
@@ -84,15 +84,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Back button -->
-        <!-- <div class="container mt-4">
-            <form action="/back" method="POST">
-                <div>
-                    <button type="submit" class="btn btn-lg btn-outline-dark"><i class="fas fa-arrow-left"></i> Back</button>
-                </div>
-            </form>
-        </div> -->
 
     </div>
 

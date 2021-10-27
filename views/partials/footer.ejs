@@ -1,5 +1,12 @@
 <!--
-    DESCRIPTION...
+  The footer.ejs file is used as a template for most of the other
+  pages on the website. The footer is comprised of a section with
+  links to socials as well as 
+
+  Authors: Andrew Krause, Riley Radle, Anthony Musbach, Zach Gephart
+  Class: Software Design IV (CS 341)
+  Group: #2
+  Due Date: December 15th, 2021
 -->
 <footer class="white-section" id="footer-section">
     <div class="p-2">
@@ -8,16 +15,16 @@
         <p class="white-text">Profile Icon from <a class="attribution-text white-text" href="https://thenounproject.com/search/?q=profile+&i=405168" title="NounProject">Nicolas Morand</a></p>
         <p class="white-text">NAME from <a class="attribution-text white-text" href="https://thenounproject.com/search/?q=profile+&i=405168" title="NAME">AUTHOR</a></p>
       </div> -->
-      <i class="white-text footer-icon fab fa-facebook"></i>
-      <i class="white-text footer-icon fab fa-twitter"></i> 
-      <i class="white-text footer-icon fab fa-instagram"></i> 
-      <i class="white-text footer-icon fab fa-snapchat"></i> 
-      <i class="white-text footer-icon fas fa-envelope"></i></p>
-      <p class="white-text">© Copyright 2021 CS 341 by Andrew Krause, Riley Radle, Anthony Musbach, and Zach Gephart.</p>
+      <a href="https://www.facebook.com/Aptiv.org"><i class="white-text footer-icon fab fa-facebook"></i></a>
+      <a href="https://www.instagram.com/aptivorg/"><i class="white-text footer-icon fab fa-instagram"></i> </a>
+      <a href="https://www.linkedin.com/company/aptivorg/"><i class="white-text footer-icon fab fa-linkedin"></i></a>
+      <a href="https://www.youtube.com/channel/UC7z4eF4v1CrUQmclwtXoyBw?view_as=subscriber"><i class="white-text footer-icon fab fa-youtube"></i></a> 
+      <!-- <i class="white-text footer-icon fas fa-envelope"></i></p> -->
+      <p class="white-text">© Copyright <%= new Date().getFullYear() %> CS 341 by Andrew Krause, Riley Radle, Anthony Musbach, and Zach Gephart.</p>
     </div>
 </footer>
 
-<!-- Include a script tag link to the JQuery CDN!!! This should go near the bottom. -->
+<!-- If you include a link to the JQuery CDN, this should go near the bottom of the page. -->
 
 <!-- Include a link to external JavaScript files. -->
 <script src="javascript/behavior.js" charset="utf-8"></script>
