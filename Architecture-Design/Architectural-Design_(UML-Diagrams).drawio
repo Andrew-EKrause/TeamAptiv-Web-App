@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-10-29T20:00:56.991Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36" version="15.6.2" etag="oTVvJsvqmfqLxzU9nPZ8" type="github">
+<mxfile host="app.diagrams.net" modified="2021-10-29T20:03:48.065Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36" version="15.6.2" etag="pzX79-tFV45_12DQluad" type="github">
   <diagram name="Page-1" id="0783ab3e-0a74-02c8-0abd-f7b4e66b4bec">
     <mxGraphModel dx="788" dy="492" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="0" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="#33FFFF" math="0" shadow="0">
       <root>
@@ -124,7 +124,7 @@
         <mxCell id="35" value="Start time" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="734" y="320" width="70" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="36" value="Valunteers needed" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="36" value="Volunteers needed" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="587" y="420" width="70" height="50" as="geometry" />
         </mxCell>
         <mxCell id="37" value="Location" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
@@ -212,10 +212,10 @@
           <mxGeometry x="122" y="590" width="320" height="410" as="geometry" />
         </mxCell>
         <mxCell id="81" value="Many users can volunteer for many Events" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="371" y="668" width="260" height="40" as="geometry" />
+          <mxGeometry x="373" y="668" width="260" height="40" as="geometry" />
         </mxCell>
         <mxCell id="83" value="No particular user for a particular event" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="362" y="708" width="260" height="40" as="geometry" />
+          <mxGeometry x="363" y="708" width="260" height="40" as="geometry" />
         </mxCell>
         <mxCell id="85" value="" style="shape=flexArrow;endArrow=classic;html=1;endWidth=15.862068965517242;endSize=9.875862068965517;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
@@ -223,14 +223,14 @@
             <mxPoint x="426" y="864" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="86" value="Many users can donate to many events, many programs, or one organization" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+        <mxCell id="86" value="Many users can donate to many events, or one organization" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="415" y="788" width="300" height="40" as="geometry" />
         </mxCell>
         <mxCell id="88" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1ba1e2;strokeColor=#006EAF;fontColor=#ffffff;rotation=45;" parent="1" vertex="1">
           <mxGeometry x="189" y="370" width="50" height="10" as="geometry" />
         </mxCell>
-        <mxCell id="90" value="No particular event or program that a user can donate to. There is only one organization the user can donate to,&lt;br&gt;which is the nonprofit organization called Aptiv." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="426" y="844" width="320" height="40" as="geometry" />
+        <mxCell id="90" value="No particular event that a user is restricted to when they donate. There is only one organization the user can donate to, which is the nonprofit organization called Aptiv." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="437" y="844" width="320" height="40" as="geometry" />
         </mxCell>
         <mxCell id="y5xbM2_fARReeAkhNPMZ-90" value="" style="shape=flexArrow;endArrow=classic;html=1;endWidth=15.862068965517242;endSize=9.875862068965517;" edge="1" parent="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
