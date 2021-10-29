@@ -14,8 +14,8 @@
     -->
     <% if(errors.length > 0) { %>
         <% for (let i = 0; i < errors.length; i++) { %>
-            <div class="card">
-                <div class="card-body elementToFadeInAndOut message-format">
+            <div class="card message-format">
+                <div class="card-body elementToFadeInAndOut">
                     <h1 class="incorrect-input"><%= errors[i] %></h1>
                 </div>
             </div>
