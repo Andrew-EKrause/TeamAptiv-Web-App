@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-10-29T23:12:44.097Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36" version="15.6.2" etag="tRa_KUkLR2ROWzIu-4iC" type="github">
+<mxfile host="app.diagrams.net" modified="2021-10-29T23:13:10.547Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36" version="15.6.2" etag="TvTQmBDaUU4sja4A7HI9" type="github">
   <diagram id="sUT08qioEKnFUg04Lj_r" name="Page-1">
     <mxGraphModel dx="2242" dy="1028" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="#33FFFF" math="0" shadow="0">
       <root>
@@ -126,7 +126,7 @@
         <mxCell id="qMAaSZyBrxotYyfBj_Sa-46" value="homeIcon(): link&lt;br&gt;eventsText(): link&lt;br&gt;loginText() or logoutText(): link&lt;br&gt;profileText(): link&lt;br&gt;&lt;br&gt;eventCards(): link&lt;br&gt;eventCardsTitle(): display&lt;br&gt;eventCardsTitle(): date&lt;br&gt;eventCardsTitle(): location&lt;br&gt;&lt;br&gt;facebookLink()&lt;br&gt;instagramLink()&lt;br&gt;linkedInLink()&lt;br&gt;copyrightText(): display" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="715" y="910" width="210" height="220" as="geometry" />
         </mxCell>
-        <mxCell id="qMAaSZyBrxotYyfBj_Sa-50" value="&lt;font style=&quot;font-size: 14px&quot;&gt;&lt;b&gt;Class Diagram for Aptiv Web Application&lt;/b&gt;&lt;/font&gt;&lt;br&gt;CS 341&lt;br&gt;Group #2: Andrew Krause, Riley Radle, Anthony Musbach, Zach Gephart" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="qMAaSZyBrxotYyfBj_Sa-50" value="&lt;font style=&quot;font-size: 14px&quot;&gt;&lt;b&gt;Class Diagram for Aptiv Web App&lt;/b&gt;&lt;/font&gt;&lt;br&gt;CS 341&lt;br&gt;Group #2: Andrew Krause, Riley Radle, Anthony Musbach, Zach Gephart" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="191" y="30" width="468" height="60" as="geometry" />
         </mxCell>
         <mxCell id="qMAaSZyBrxotYyfBj_Sa-52" value="Admin Profile" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
