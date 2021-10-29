@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2021-10-29T23:22:17.155Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36" version="15.6.2" etag="Z9Cx8hHzk5n17dDIvUJO" type="github">
+<mxfile host="app.diagrams.net" modified="2021-10-29T23:31:30.403Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36" version="15.6.2" etag="bRBEZHAzCaeIJZowGqa6" type="github">
   <diagram id="sUT08qioEKnFUg04Lj_r" name="Page-1">
-    <mxGraphModel dx="2839" dy="1469" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="#33FFFF" math="0" shadow="0">
+    <mxGraphModel dx="2242" dy="1028" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="#33FFFF" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -130,16 +130,10 @@
           <mxGeometry x="191" y="30" width="468" height="60" as="geometry" />
         </mxCell>
         <mxCell id="qMAaSZyBrxotYyfBj_Sa-52" value="Admin Profile" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="50" y="880" width="120" height="30" as="geometry" />
+          <mxGeometry x="-120" y="1590" width="120" height="30" as="geometry" />
         </mxCell>
         <mxCell id="qMAaSZyBrxotYyfBj_Sa-53" value="ADD" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="50" y="910" width="120" height="130" as="geometry" />
-        </mxCell>
-        <mxCell id="qMAaSZyBrxotYyfBj_Sa-54" value="User Profile" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="50" y="1090" width="120" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="qMAaSZyBrxotYyfBj_Sa-55" value="ADD" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="50" y="1120" width="120" height="130" as="geometry" />
+          <mxGeometry x="-120" y="1620" width="120" height="130" as="geometry" />
         </mxCell>
         <mxCell id="qMAaSZyBrxotYyfBj_Sa-56" value="Specific Event" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=0" vertex="1" parent="1">
           <mxGeometry x="710" y="1190" width="220" height="30" as="geometry" />
@@ -151,10 +145,10 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="qMAaSZyBrxotYyfBj_Sa-62" value="Create Event" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="-190" y="1270" width="120" height="30" as="geometry" />
+          <mxGeometry x="-270" y="1580" width="120" height="30" as="geometry" />
         </mxCell>
         <mxCell id="qMAaSZyBrxotYyfBj_Sa-63" value="ADD" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="-190" y="1300" width="120" height="130" as="geometry" />
+          <mxGeometry x="-270" y="1610" width="120" height="130" as="geometry" />
         </mxCell>
         <mxCell id="qMAaSZyBrxotYyfBj_Sa-70" value="" style="endArrow=none;html=1;rounded=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="qMAaSZyBrxotYyfBj_Sa-56" target="qMAaSZyBrxotYyfBj_Sa-46">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
@@ -163,10 +157,10 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="qMAaSZyBrxotYyfBj_Sa-72" value="app.js" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="320" y="850" width="200" height="30" as="geometry" />
+          <mxGeometry x="320" y="740" width="200" height="30" as="geometry" />
         </mxCell>
         <mxCell id="qMAaSZyBrxotYyfBj_Sa-73" value="installed packages&lt;br&gt;database schemas&lt;br&gt;connect to MongoDB&lt;br&gt;get routes()&lt;br&gt;post routes()&lt;br&gt;utilize EJS&lt;br&gt;utilize CSS" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="320" y="880" width="200" height="130" as="geometry" />
+          <mxGeometry x="320" y="770" width="200" height="130" as="geometry" />
         </mxCell>
         <mxCell id="qMAaSZyBrxotYyfBj_Sa-74" value="" style="endArrow=classic;html=1;rounded=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="qMAaSZyBrxotYyfBj_Sa-73" target="qMAaSZyBrxotYyfBj_Sa-42">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
@@ -202,6 +196,18 @@
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="180" y="1330" as="sourcePoint" />
             <mxPoint x="280" y="1610" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="qMAaSZyBrxotYyfBj_Sa-82" value="User Profile" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry y="780" width="220" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="qMAaSZyBrxotYyfBj_Sa-83" value="homeIcon(): link&lt;br&gt;subText(): display&lt;br&gt;&lt;br&gt;profileImage(): display&lt;br&gt;welcomeText(): display&lt;br&gt;status(): display&lt;br&gt;allEvents(): button&lt;br&gt;eventHistory(): button&lt;br&gt;userEvents(): display&lt;br&gt;events(): links&lt;br&gt;back(): button&lt;br&gt;logout(): button&lt;br&gt;&lt;br&gt;facebookIcon(): link&lt;br&gt;instagramIcon(): link&lt;br&gt;linkedInIcon(): link&lt;br&gt;youtubeIcon(): link&lt;br&gt;copyrightText(): display" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry y="810" width="220" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="qMAaSZyBrxotYyfBj_Sa-84" value="" style="endArrow=none;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;exitX=-0.01;exitY=0.124;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="qMAaSZyBrxotYyfBj_Sa-43" target="qMAaSZyBrxotYyfBj_Sa-83">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="60" y="1190.004" as="sourcePoint" />
+            <mxPoint x="20" y="1333.71" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>
