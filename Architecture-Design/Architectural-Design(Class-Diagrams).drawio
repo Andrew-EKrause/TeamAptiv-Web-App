@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-10-29T23:13:10.547Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36" version="15.6.2" etag="TvTQmBDaUU4sja4A7HI9" type="github">
+<mxfile host="app.diagrams.net" modified="2021-10-29T23:18:12.898Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36" version="15.6.2" etag="tBqSHUMNESa3j57oT2ny" type="github">
   <diagram id="sUT08qioEKnFUg04Lj_r" name="Page-1">
     <mxGraphModel dx="2242" dy="1028" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="#33FFFF" math="0" shadow="0">
       <root>
@@ -117,7 +117,7 @@
         <mxCell id="qMAaSZyBrxotYyfBj_Sa-42" value="Home" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="320" y="1112" width="200" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="qMAaSZyBrxotYyfBj_Sa-43" value="homeIcon(): link&lt;br&gt;eventsText(): link&lt;br&gt;loginText() or logoutText(): link&lt;br&gt;profileText(): link&lt;br&gt;&lt;br&gt;findEventsButton(): button&lt;br&gt;&lt;br&gt;facebookIcon(): link&lt;br&gt;instagramIcon(): link&lt;br&gt;linkedInIcon(): link&lt;br&gt;youtubeIcon(): link&lt;br&gt;copyrightText(): display" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="qMAaSZyBrxotYyfBj_Sa-43" value="homeIcon(): link&lt;br&gt;eventsText(): link&lt;br&gt;loginText() or logoutText(): link&lt;br&gt;profileText(): link&lt;br&gt;&lt;br&gt;findEvents(): button&lt;br&gt;&lt;br&gt;facebookIcon(): link&lt;br&gt;instagramIcon(): link&lt;br&gt;linkedInIcon(): link&lt;br&gt;youtubeIcon(): link&lt;br&gt;copyrightText(): display" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="320" y="1142" width="200" height="178" as="geometry" />
         </mxCell>
         <mxCell id="qMAaSZyBrxotYyfBj_Sa-45" value="Events" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
@@ -142,10 +142,10 @@
           <mxGeometry x="50" y="1120" width="120" height="130" as="geometry" />
         </mxCell>
         <mxCell id="qMAaSZyBrxotYyfBj_Sa-56" value="Specific Event" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=0" vertex="1" parent="1">
-          <mxGeometry x="710" y="1230" width="220" height="30" as="geometry" />
+          <mxGeometry x="710" y="1190" width="220" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="qMAaSZyBrxotYyfBj_Sa-57" value="homeIcon(): link&lt;br&gt;eventsText(): link&lt;br&gt;loginText() or logoutText(): link&lt;br&gt;profileText(): link&lt;br&gt;&lt;br&gt;eventTitle(): display&amp;nbsp;&lt;br&gt;eventDate(): display&lt;br&gt;eventTime(): display&lt;br&gt;eventLocation(): display&amp;nbsp;&amp;nbsp;&lt;br&gt;eventDescription(): display&lt;br&gt;neededVolunteers(): display&lt;br&gt;neededDonations(): display&lt;br&gt;volunteerButton(): button&lt;br&gt;donationInput(): input&lt;br&gt;donateButton(): button&lt;br&gt;backButton(): button&lt;br&gt;&lt;br&gt;facebookIcon(): link&lt;br&gt;instagramIcon(): link&lt;br&gt;linkedInIcon(): link&lt;br&gt;youtubeIcon(): link&lt;br&gt;copyrightText(): display" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=0" vertex="1" parent="1">
-          <mxGeometry x="710" y="1260" width="220" height="330" as="geometry" />
+        <mxCell id="qMAaSZyBrxotYyfBj_Sa-57" value="homeIcon(): link&lt;br&gt;eventsText(): link&lt;br&gt;loginText() or logoutText(): link&lt;br&gt;profileText(): link&lt;br&gt;&lt;br&gt;eventTitle(): display&amp;nbsp;&lt;br&gt;eventDate(): display&lt;br&gt;eventTime(): display&lt;br&gt;eventLocation(): display&amp;nbsp;&amp;nbsp;&lt;br&gt;eventDescription(): display&lt;br&gt;neededVolunteers(): display&lt;br&gt;neededDonations(): display&lt;br&gt;volunteer(): button&lt;br&gt;donationInput(): input&lt;br&gt;donate(): button&lt;br&gt;back(): button&lt;br&gt;&lt;br&gt;facebookIcon(): link&lt;br&gt;instagramIcon(): link&lt;br&gt;linkedInIcon(): link&lt;br&gt;youtubeIcon(): link&lt;br&gt;copyrightText(): display" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=0" vertex="1" parent="1">
+          <mxGeometry x="710" y="1220" width="220" height="330" as="geometry" />
         </mxCell>
         <mxCell id="qMAaSZyBrxotYyfBj_Sa-64" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0.917;entryY=-0.053;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="qMAaSZyBrxotYyfBj_Sa-62" target="qMAaSZyBrxotYyfBj_Sa-63">
           <mxGeometry relative="1" as="geometry" />
@@ -175,16 +175,16 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="qMAaSZyBrxotYyfBj_Sa-75" value="Login" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="100" y="1540" width="220" height="30" as="geometry" />
+          <mxGeometry x="170" y="1450" width="220" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="qMAaSZyBrxotYyfBj_Sa-76" value="homeIcon(): link&lt;br&gt;subText(): display&lt;br&gt;&lt;br&gt;emailInput(): input&lt;br&gt;passwordInput(): input&lt;br&gt;loginButton(): button&lt;br&gt;googleSignIn(): link&lt;br&gt;registerLink(): link&lt;br&gt;&lt;br&gt;facebookIcon(): link&lt;br&gt;instagramIcon(): link&lt;br&gt;linkedInIcon(): link&lt;br&gt;youtubeIcon(): link&lt;br&gt;copyrightText(): display" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="100" y="1570" width="220" height="230" as="geometry" />
+        <mxCell id="qMAaSZyBrxotYyfBj_Sa-76" value="homeIcon(): link&lt;br&gt;subText(): display&lt;br&gt;&lt;br&gt;emailInput(): input&lt;br&gt;passwordInput(): input&lt;br&gt;login(): button&lt;br&gt;googleSignIn(): link&lt;br&gt;registerLink(): link&lt;br&gt;&lt;br&gt;facebookIcon(): link&lt;br&gt;instagramIcon(): link&lt;br&gt;linkedInIcon(): link&lt;br&gt;youtubeIcon(): link&lt;br&gt;copyrightText(): display" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="170" y="1480" width="220" height="230" as="geometry" />
         </mxCell>
         <mxCell id="qMAaSZyBrxotYyfBj_Sa-77" value="Register" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="450" y="1530" width="220" height="30" as="geometry" />
+          <mxGeometry x="460" y="1440" width="220" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="qMAaSZyBrxotYyfBj_Sa-78" value="homeIcon(): link&lt;br&gt;subText(): display&lt;br&gt;&lt;br&gt;firstNameInput(): input&lt;br&gt;lastNameInput(): input&lt;br&gt;emailInput(): input&lt;br&gt;passwordInput(): input&lt;br&gt;registerButton(): button&lt;br&gt;googleSignIn(): link&lt;br&gt;loginLink(): link&lt;br&gt;&lt;br&gt;facebookIcon(): link&lt;br&gt;instagramIcon(): link&lt;br&gt;linkedInIcon(): link&lt;br&gt;youtubeIcon(): link&lt;br&gt;copyrightText(): display" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="450" y="1560" width="220" height="240" as="geometry" />
+        <mxCell id="qMAaSZyBrxotYyfBj_Sa-78" value="homeIcon(): link&lt;br&gt;subText(): display&lt;br&gt;&lt;br&gt;firstNameInput(): input&lt;br&gt;lastNameInput(): input&lt;br&gt;emailInput(): input&lt;br&gt;passwordInput(): input&lt;br&gt;register(): button&lt;br&gt;googleSignIn(): link&lt;br&gt;login(): link&lt;br&gt;&lt;br&gt;facebookIcon(): link&lt;br&gt;instagramIcon(): link&lt;br&gt;linkedInIcon(): link&lt;br&gt;youtubeIcon(): link&lt;br&gt;copyrightText(): display" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="460" y="1470" width="220" height="240" as="geometry" />
         </mxCell>
         <mxCell id="qMAaSZyBrxotYyfBj_Sa-79" value="" style="endArrow=none;html=1;rounded=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;exitX=1.01;exitY=0.124;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="qMAaSZyBrxotYyfBj_Sa-43" target="qMAaSZyBrxotYyfBj_Sa-46">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
@@ -196,6 +196,12 @@
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="160" y="1589.872" as="sourcePoint" />
             <mxPoint x="353" y="1435.8" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="qMAaSZyBrxotYyfBj_Sa-81" value="" style="endArrow=none;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;exitX=0;exitY=0.923;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="qMAaSZyBrxotYyfBj_Sa-43" target="qMAaSZyBrxotYyfBj_Sa-75">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="180" y="1330" as="sourcePoint" />
+            <mxPoint x="280" y="1610" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>
