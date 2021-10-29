@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-10-29T20:50:58.263Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36" version="15.6.2" etag="LooYN3OmgBCYUkuzcLl9" type="github">
+<mxfile host="app.diagrams.net" modified="2021-10-29T20:52:15.560Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36" version="15.6.2" etag="emZGNb4bcUqn_4UE_Hjy" type="github">
   <diagram name="Page-1" id="0783ab3e-0a74-02c8-0abd-f7b4e66b4bec">
     <mxGraphModel dx="994" dy="734" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="0" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="#33FFFF" math="0" shadow="0">
       <root>
@@ -257,7 +257,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="y5xbM2_fARReeAkhNPMZ-98" value="&lt;font style=&quot;font-size: 14px&quot;&gt;&lt;b&gt;ER Diagram&lt;/b&gt;&lt;/font&gt;&lt;br&gt;CS 341&lt;br&gt;Group #2: Andrew Krause, Riley Radle, Anthony Musbach, Zach Gephart" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="187" y="28" width="468" height="60" as="geometry" />
+          <mxGeometry x="191" y="28" width="468" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
