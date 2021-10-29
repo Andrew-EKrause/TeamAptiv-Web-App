@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-10-29T17:58:18.807Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36" version="15.6.2" etag="sU0ZjRSh7EDoA5SduXt9" type="github">
+<mxfile host="app.diagrams.net" modified="2021-10-29T18:01:05.262Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36" version="15.6.2" etag="GHxuKKL_8Ay_reDzyNrd" type="github">
   <diagram name="Page-1" id="0783ab3e-0a74-02c8-0abd-f7b4e66b4bec">
     <mxGraphModel dx="1534" dy="1021" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="0" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="#66FFFF" math="0" shadow="0">
       <root>
@@ -193,10 +193,10 @@
             <mxPoint x="512" y="410" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="70" value="&lt;font style=&quot;font-size: 15px&quot;&gt;n&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+        <mxCell id="70" value="&lt;font style=&quot;font-size: 15px&quot;&gt;m&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="472" y="280" width="40" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="66" value="&lt;font style=&quot;font-size: 15px&quot;&gt;n&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;rotation=0;" parent="1" vertex="1">
+        <mxCell id="66" value="&lt;font style=&quot;font-size: 15px&quot;&gt;m&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;rotation=0;" parent="1" vertex="1">
           <mxGeometry x="532" y="250" width="35" height="20" as="geometry" />
         </mxCell>
         <mxCell id="73" value="&lt;font style=&quot;font-size: 15px&quot;&gt;n&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
@@ -208,7 +208,7 @@
         <mxCell id="75" value="&lt;span style=&quot;font-size: 15px&quot;&gt;1&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="150" y="381" width="40" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="77" value="&lt;h1&gt;Explanation&lt;/h1&gt;&lt;p&gt;&lt;span&gt;Relationship - Volunteer&lt;/span&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;span&gt;Entities - User and Event&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;Cardinality for User is n&lt;/span&gt;&lt;/li&gt;&lt;li&gt;Cardinality for Event is n&lt;/li&gt;&lt;li&gt;Modality for User is 0&lt;/li&gt;&lt;li&gt;Modality for Event is 0&lt;/li&gt;&lt;/ul&gt;&lt;div&gt;Relationship - Donate&lt;/div&gt;&lt;div&gt;&lt;ul&gt;&lt;li&gt;Enities - User, Event, Program and&amp;nbsp; Organization&lt;/li&gt;&lt;li&gt;Cardinality for User is n&lt;/li&gt;&lt;li&gt;Cardinality for Event is n&lt;/li&gt;&lt;li&gt;Cardinality for Program is n&lt;/li&gt;&lt;li&gt;Cardinality for Organization is 1&lt;/li&gt;&lt;li&gt;Modality for User is 0&lt;/li&gt;&lt;li&gt;Modality for Event is 0&lt;/li&gt;&lt;li&gt;Modality for Program is 0&lt;/li&gt;&lt;li&gt;Modality for Organization is 1&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;p&gt;&lt;/p&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;" parent="1" vertex="1">
+        <mxCell id="77" value="&lt;h1&gt;Explanation&lt;/h1&gt;&lt;p&gt;&lt;span&gt;Relationship - Volunteer&lt;/span&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;span&gt;Entities - User and Event&lt;/span&gt;&lt;/li&gt;&lt;li&gt;&lt;span&gt;Cardinality for User is n&lt;/span&gt;&lt;/li&gt;&lt;li&gt;Cardinality for Event is m&lt;/li&gt;&lt;li&gt;Modality for User is 0&lt;/li&gt;&lt;li&gt;Modality for Event is 0&lt;/li&gt;&lt;/ul&gt;&lt;div&gt;Relationship - Donate&lt;/div&gt;&lt;div&gt;&lt;ul&gt;&lt;li&gt;Enities - User, Event, Program and&amp;nbsp; Organization&lt;/li&gt;&lt;li&gt;Cardinality for User is n&lt;/li&gt;&lt;li&gt;Cardinality for Event is m&lt;/li&gt;&lt;li&gt;Cardinality for Organization is 1&lt;/li&gt;&lt;li&gt;Modality for User is 0&lt;/li&gt;&lt;li&gt;Modality for Event is 0&lt;/li&gt;&lt;li&gt;Modality for Organization is 1&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;p&gt;&lt;/p&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="122" y="590" width="320" height="410" as="geometry" />
         </mxCell>
         <mxCell id="81" value="Many users can volunteer for many Events" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
@@ -219,23 +219,23 @@
         </mxCell>
         <mxCell id="85" value="" style="shape=flexArrow;endArrow=classic;html=1;endWidth=15.862068965517242;endSize=9.875862068965517;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="357" y="881" as="sourcePoint" />
-            <mxPoint x="427" y="881" as="targetPoint" />
+            <mxPoint x="356" y="864" as="sourcePoint" />
+            <mxPoint x="426" y="864" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="86" value="Many users can donate to many events, many programs, or one organization" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="413" y="800" width="300" height="40" as="geometry" />
+          <mxGeometry x="415" y="788" width="300" height="40" as="geometry" />
         </mxCell>
         <mxCell id="88" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1ba1e2;strokeColor=#006EAF;fontColor=#ffffff;rotation=45;" parent="1" vertex="1">
           <mxGeometry x="189" y="370" width="50" height="10" as="geometry" />
         </mxCell>
         <mxCell id="90" value="No particular event or program that a user can donate to. There is only one organization the user can donate to,&lt;br&gt;which is the nonprofit organization called Aptiv." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="426" y="864" width="320" height="40" as="geometry" />
+          <mxGeometry x="426" y="844" width="320" height="40" as="geometry" />
         </mxCell>
         <mxCell id="y5xbM2_fARReeAkhNPMZ-90" value="" style="shape=flexArrow;endArrow=classic;html=1;endWidth=15.862068965517242;endSize=9.875862068965517;" edge="1" parent="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="357" y="819.58" as="sourcePoint" />
-            <mxPoint x="427" y="819.58" as="targetPoint" />
+            <mxPoint x="356" y="806" as="sourcePoint" />
+            <mxPoint x="426" y="806" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="y5xbM2_fARReeAkhNPMZ-91" value="" style="shape=flexArrow;endArrow=classic;html=1;endWidth=15.862068965517242;endSize=9.875862068965517;" edge="1" parent="1">
