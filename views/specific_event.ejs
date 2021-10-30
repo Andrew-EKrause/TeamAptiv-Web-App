@@ -8,35 +8,34 @@
 
 <%- include('./partials/home_header.ejs') %>
 
-    <!-- 
-        Include EJS display a message informing the user that 
-        they successfully volunteered or donated to an event.
-    -->
-    <% if(successVolunteered.length > 0) { %>
-        <div class="card">
-            <div class="card-body elementToFadeInAndOut message-format">
-                <h1 class="confirmation"><%= successVolunteered %></h1>
-            </div>
-        </div>
-    <% } %>
-
-    <!-- 
-        Include EJS display a message informing the user that
-        they have already signed up for a particular event.
-    -->
-    <% if(alreadyVolunteered.length > 0) { %>
-        <div class="card">
-            <div class="card-body elementToFadeInAndOut message-format">
-                <h1 class="incorrect-input"><%= alreadyVolunteered %></h1>
-            </div>
-        </div>
-    <% } %>
-
     <!-- Create a container to format the specific event on the page. -->
     <div class="container mt-5 mb-5">
         <div class="row">
             <div class="col-sm-8 mx-auto">
                 <div class="card event-margin-fine-tuning">
+                    <!-- 
+                        Include EJS display a message informing the user that 
+                        they successfully volunteered or donated to an event.
+                    -->
+                    <% if(successVolunteered.length > 0) { %>
+                        <div class="confirmation">
+                            <div class="elementToFadeInAndOut message-format">
+                                <h2><%= successVolunteered %></h2>
+                            </div>
+                        </div>
+                    <% } %>
+
+                    <!-- 
+                        Include EJS display a message informing the user that
+                        they have already signed up for a particular event.
+                    -->
+                    <% if(alreadyVolunteered.length > 0) { %>
+                        <div class="incorrect-input">
+                            <div class="elementToFadeInAndOut message-format">
+                                <h2><%= alreadyVolunteered %></h2>
+                            </div>
+                        </div>
+                    <% } %>
                     <div class="card-body">
                         <div class="card-text">
                             

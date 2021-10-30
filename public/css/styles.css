@@ -158,12 +158,16 @@ ul {
 
 /* Style incorrect login with redish color. */
 .incorrect-input {
-    color: red;
-}
+    background-color: rgb(255, 169, 169);
+    color: rgb(255, 60, 60);
+    border: 2px solid rgb(255, 60, 60);
+ }
 
 /* Style confirmation message with greenish color. */
 .confirmation {
-    color: green;
+    background-color: rgb(207, 246, 207);
+    color: rgb(145, 182, 145);
+    border: 2px solid rgb(145, 182, 145);
 }
 
 /* Fade the error message in and out. */
@@ -313,7 +317,7 @@ ul {
     border-radius: 50%;
 }
 
-/******************************* FILE SPECIFIC STYLING *******************************/
+/******************************* PAGE SPECIFIC STYLING *******************************/
 
 /* ===== Home Page ===== */
 
@@ -338,10 +342,34 @@ ul {
 
 /* ===== User Profile Page ===== */
 
-.profile-event-list > li {
-    margin-top: 1em; 
-    background-color: #182139;
-    color: #e7e8ea
+.my-events-btn {
+    margin: .25em 0;
+    background-color: transparent;
+    border: none;
+    font-size: 2em;
+    text-decoration: underline;
+}
+
+.my-events-btn:hover { 
+    color: #4d608b;
+}
+
+.my-events-btn-container {
+    margin: auto;
+    padding-bottom: .25em;
+    width: 90%;
+    border-bottom: 2px solid #e7e8ea;
+}
+
+.event-list .event:last-child > .my-events-btn-container {
+    border-bottom: none;
+}
+
+.event .card {
+    width: 90%;
+    margin: auto;
+    border-radius: 0%;
+    background-color: #e7e8ea;
 }
 
 /* ===== Login/Register Pages ===== */

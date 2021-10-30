@@ -49,6 +49,11 @@
                                 <a class="nav-link" href="/events">Events</a>
                             </li>
 
+                            <!-- TEMPORARY -> Remove when we get login system set up -->
+                            <li id="user_profile" class="nav-item">
+                                <a class="nav-link" href="/user_profile">Profile</a>
+                            </li>
+
                             <!-- Show the format for logged out or logged in -->
                             <% if(typeof user != 'undefined') { %>
                                 <!-- Third navigation bar link -->
@@ -61,11 +66,6 @@
                                     <a class="nav-link" href="/login">Login</a>
                                 </li>
                             <% } %>
-
-                            <!-- TEMPORARY -> Remove when we get login system set up -->
-                            <li id="user_profile" class="nav-item">
-                                <a class="nav-link" href="/user_profile">Profile</a>
-                            </li>
                         </ul>
                     </div>
                 </nav>
