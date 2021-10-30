@@ -241,77 +241,7 @@ app.get("/user_profile", function(req, res){
     if(req.isAuthenticated() && user.username == ADMIN_NAME) {
 
         // Redirect the ADMIN profile page and determine if ADMIN is undefined.
-        // res.redirect("/admin_profile");
-
-
-
-
-
-
-
-
-        // Create variables to help with storing  
-        // the events associated with a given ADMIN.
-        const userEventIds = user.userEvents;
-        var listOfUserEvents = [];
-
-        // If the ADMIN has events they have signed up for, display the events
-        // on the ADMIN's profile page. However, if the ADMIN has not signed up
-        // for any events and has none, simply display the ADMIN's profile.
-        if(userEventIds.length > 0) {
-
-            // Create variables to track the objects in the database and
-            // to determine when to display the objects in the user profile.
-            var i = 0;
-            j = userEventIds.length;
-
-            // Go through the objects stored in the given ADMIN collection and
-            // look them up in the database by their ID. Then add the objects
-            // found as a result of the lookup to a list and pass it to the page.
-            for(i = 0; i < userEventIds.length; i++) {
-
-                // Use the find by ID function to return the event object for the ADMIN.
-                EventModel.findById(userEventIds[i], function(err, results){
-                    if(err) {
-                        console.log(err);
-                    } else {
-                        listOfUserEvents.push(results);
-                        j -= 1;
-                    }
-
-                    // The counter 'j' determines when the results should be returned 
-                    // from the callback function and rendered on the ADMIN profile page.
-                    if (j == 0) {
-
-                        // Render the ADMIN profile page and determine if ADMIN is undefined.
-                        res.redirect("/admin_profile", {  
-                            user: req.user, 
-                            listOfUserEvents: listOfUserEvents,
-                            permissionDenied: req.flash("permissionDenied") 
-                        });
-                    }
-                });
-            }
-
-        } else {
-            res.redirect("/admin_profile", {  
-                user: req.user, 
-                listOfUserEvents: listOfUserEvents,
-                permissionDenied: req.flash("permissionDenied") 
-            });
-        }
-
-
-
-
-
-
-
-
-
-
-
-
+        res.redirect("/admin_profile");
 
     } else if(req.isAuthenticated()) {
 
