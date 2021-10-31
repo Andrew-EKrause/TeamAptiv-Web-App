@@ -5,12 +5,15 @@
  * This stylesheet applies custom styles created by the dev
  * team to the Aptiv Web Application for CS 341. The styles
  * in the file override the Bootstrap styles that are also
- * utililzed in the design of the site when applied properly.
+ * utililzed in the design of the site when applied in some
+ * cases.
  *
- * Authors: Andrew Krause, Riley Radle, Anthony Musbach, Zach Gephart
+ * Project: Aptiv Web Application
+ * Authors: Andrew Krause, Riley Radle, 
+ * Anthony Musbach, Zach Gephart
  * Class: Software Design IV (CS 341)
  * Group: #2
- * Due Date: December 15th, 2021
+ * Date: 12/15/2021
  *
  */
 
@@ -262,25 +265,6 @@ ul {
     position: relative;
     margin-top: 1rem;
 }
-
-/* --> ASK THE GROUP IF YOU SHOULD HAVE THE "COMMUNITY EVENTS" TITLE BE FIXED OR NOT!!! */
-/* Make the 'Community Events' title at the top of the events page fixed. */
-/* .fixed-title {
-    background-color: #e7e8ea;
-    top: 6.15rem;
-    padding-top: 3rem;
-    width: 100%;
-    height: 17%;
-    right: 0;
-    left: 0;
-    position: fixed;
-    z-index: 1000;
-} */
-
-/* Give the events on the events page some padding. */
-/* .event-list-top-padding {
-    padding-top: 8rem;
-} */
 
 /******************************* ID SELECTORS *******************************/
 

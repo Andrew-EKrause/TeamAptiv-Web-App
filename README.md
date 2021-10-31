@@ -6,7 +6,7 @@ INCLUDE LINK AFTER PROJECT IS COMPLETED
 
 ## Description
 **_Collaborative Web Application Project Created for Aptiv in CS 341 Course_** <br/>
-This web application was designed for a nonprofit organization as part of an assignment for our CS 341 class at the University of Wisconsin - La Crosse. Groups were formed to work in a collaborative work environment that modeled a modern software development methodology. For our project, we utilized the Agile framework along with Scrum. The web application needed to satisfy key functional requirements, which were specified in the project overview. The website design, functionality, workflow, and tracking can be found in the folder labeled "Project-Documents" that is included in this repository. ADD THIS FOLDER ONCE PROJECT IS COMPLETED.
+This web application was designed for a nonprofit organization as part of an assignment for our CS 341 class at the University of Wisconsin - La Crosse. Groups were formed to work in a collaborative work environment that modeled a modern software development methodology. For our project, we utilized the Agile framework along with Scrum. The web application needed to satisfy key functional requirements, which were specified in the project overview. The website architecture design, functionality, workflow, and tracking can be found in the folder labeled "Project-Documents" that is included in this repository. ADD THIS FOLDER ONCE PROJECT IS COMPLETED.
 
 **Resources for Project:**
 - HTML

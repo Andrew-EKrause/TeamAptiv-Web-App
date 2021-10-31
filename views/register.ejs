@@ -1,8 +1,12 @@
 <!-- 
     DESCRIPTION GOES HERE...
     ...
-    Author: Andrew Krause, Riley Radle, Anthony Musbach, Zach Gephart
-    Date: TBD
+    Project: Aptiv Web Application
+    Authors: Andrew Krause, Riley Radle, 
+    Anthony Musbach, Zach Gephart
+    Class: Software Design IV (CS 341)
+    Group: #2
+    Date: 12/15/2021
     ...
 -->
 
@@ -13,10 +17,8 @@
         they attempt to register with a username that already exists.
     -->
     <% if(alreadyCreated.length > 0) { %>
-        <div class="card">
-            <div class="card-body elementToFadeInAndOut message-format">
-                <h1 class="incorrect-input"><%= alreadyCreated %></h1>
-            </div>
+        <div class="card-body elementToFadeInAndOut message-format">
+            <h1 class="incorrect-input"><%= alreadyCreated %></h1>
         </div>
     <% } %>
 

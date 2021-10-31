@@ -1,8 +1,12 @@
 <!-- 
     DESCRIPTION GOES HERE...
     ...
-    Author: Andrew Krause, Riley Radle, Anthony Musbach, Zach Gephart
-    Date: TBD
+    Project: Aptiv Web Application
+    Authors: Andrew Krause, Riley Radle, 
+    Anthony Musbach, Zach Gephart
+    Class: Software Design IV (CS 341)
+    Group: #2
+    Date: 12/15/2021
     ...
 -->
 
@@ -13,10 +17,8 @@
         they successfully created a new event.
     -->
     <% if(successCreated.length > 0) { %>
-        <div class="card">
-            <div class="card-body elementToFadeInAndOut message-format">
-                <h1 class="confirmation"><%= successCreated %></h1>
-            </div>
+        <div class="card-body elementToFadeInAndOut message-format">
+            <h1 class="confirmation"><%= successCreated %></h1>
         </div>
     <% } %>
 
@@ -25,11 +27,9 @@
         they failed to create a new event.
     -->
     <% if(failureNotCreated.length > 0) { %>
-        <div class="card">
             <div class="card-body elementToFadeInAndOut message-format">
                 <h1 class="incorrect-input"><%= failureNotCreated %></h1>
             </div>
-        </div>
     <% } %>
 
     <!-- Create a card for showing the user data -->
@@ -111,71 +111,76 @@
                                     <% // event object ID is removed from the user's info in the database. %>
                                 <% } else { %>
 
-                                    <a href="/events/<%=event._id%>">
-                                        <div class="card mt-3">
-                                            <div class="card-body">
-                                                <div class="event">
-                                                    <h2 class="black-text"> <%= event.eventName %> </h2>
+                                    <div class="card mt-3">
+                                        <div class="card-body">
+                                            <div class="event">
+                                                <h2 class="black-text"> <%= event.eventName %> </h2>
 
-                                                    <!-- Include a function to simplify the date display -->
-                                                    <% function simplifyEventDate(eventDate){ %>
+                                                <!-- Include a function to simplify the date display -->
+                                                <% function simplifyEventDate(eventDate){ %>
 
-                                                        <% // First split the event into the components that directly %>
-                                                        <% // involve the numberical representations of a date. %>
-                                                        <% var date = eventDate.toISOString().split("T")[0]; %>
-                                                    
-                                                        <% // Create variables for workring with %>
-                                                        <% // the nubmers in the date variable. %>
-                                                        <% var arrayDate = date.split('-'); %>
-                                                        <% var day = arrayDate[2]; %>
-                                                        <% var getMonth = arrayDate[1]; %>
-                                                        <% var month = ""; %>
-                                                        <% var year = arrayDate[0]; %>
-                                                        <% var simplifiedDate = ""; %>
-                                                    
-                                                        <% // Use a series of conditionals to determine %>
-                                                        <% // what the name of the month is based on the %>
-                                                        <% // numerical representation of it. %>
-                                                        <% if(getMonth.localeCompare('1') == 0) { %>
-                                                            <% month = 'Jan'; %>
-                                                        <% } else if(getMonth.localeCompare('2') == 0) { %>
-                                                            <% month = 'Feb'; %>
-                                                        <% } else if(getMonth.localeCompare('3') == 0) { %>
-                                                            <% month = 'Mar'; %>
-                                                        <% } else if(getMonth.localeCompare('4') == 0) { %>
-                                                            <% month = 'Apr'; %>
-                                                        <% } else if(getMonth.localeCompare('5') == 0) { %>
-                                                            <% month = 'May'; %>
-                                                        <% } else if(getMonth.localeCompare('6') == 0) { %>
-                                                            <% month = 'Jun'; %>
-                                                        <% } else if(getMonth.localeCompare('7') == 0) { %>
-                                                            <% month = 'Jul'; %>
-                                                        <% } else if(getMonth.localeCompare('8') == 0) { %>
-                                                            <% month = 'Aug'; %>
-                                                        <% } else if(getMonth.localeCompare('9') == 0) { %>
-                                                            <% month = 'Sep'; %>
-                                                        <% } else if(getMonth.localeCompare('10') == 0) { %>
-                                                            <% month = 'Oct'; %>
-                                                        <% } else if(getMonth.localeCompare('11') == 0) { %>
-                                                            <% month = 'Nov'; %>
-                                                        <% } else if(getMonth.localeCompare('12') == 0) { %>
-                                                            <% month = 'Dec'; %>
-                                                        <% } else { %>
-                                                            <% month = 'ERROR'; %>
-                                                        <% } %>
-                                                    
-                                                        <% // Create the simplified date and return it. %>
-                                                        <% simplifiedDate = month + " " + (day - 1) + ", " + year; %>
-                                                        <% return simplifiedDate; %>
+                                                    <% // First split the event into the components that directly %>
+                                                    <% // involve the numberical representations of a date. %>
+                                                    <% var date = eventDate.toISOString().split("T")[0]; %>
+                                                
+                                                    <% // Create variables for workring with %>
+                                                    <% // the nubmers in the date variable. %>
+                                                    <% var arrayDate = date.split('-'); %>
+                                                    <% var day = arrayDate[2]; %>
+                                                    <% var getMonth = arrayDate[1]; %>
+                                                    <% var month = ""; %>
+                                                    <% var year = arrayDate[0]; %>
+                                                    <% var simplifiedDate = ""; %>
+                                                
+                                                    <% // Use a series of conditionals to determine %>
+                                                    <% // what the name of the month is based on the %>
+                                                    <% // numerical representation of it. %>
+                                                    <% if(getMonth.localeCompare('1') == 0) { %>
+                                                        <% month = 'Jan'; %>
+                                                    <% } else if(getMonth.localeCompare('2') == 0) { %>
+                                                        <% month = 'Feb'; %>
+                                                    <% } else if(getMonth.localeCompare('3') == 0) { %>
+                                                        <% month = 'Mar'; %>
+                                                    <% } else if(getMonth.localeCompare('4') == 0) { %>
+                                                        <% month = 'Apr'; %>
+                                                    <% } else if(getMonth.localeCompare('5') == 0) { %>
+                                                        <% month = 'May'; %>
+                                                    <% } else if(getMonth.localeCompare('6') == 0) { %>
+                                                        <% month = 'Jun'; %>
+                                                    <% } else if(getMonth.localeCompare('7') == 0) { %>
+                                                        <% month = 'Jul'; %>
+                                                    <% } else if(getMonth.localeCompare('8') == 0) { %>
+                                                        <% month = 'Aug'; %>
+                                                    <% } else if(getMonth.localeCompare('9') == 0) { %>
+                                                        <% month = 'Sep'; %>
+                                                    <% } else if(getMonth.localeCompare('10') == 0) { %>
+                                                        <% month = 'Oct'; %>
+                                                    <% } else if(getMonth.localeCompare('11') == 0) { %>
+                                                        <% month = 'Nov'; %>
+                                                    <% } else if(getMonth.localeCompare('12') == 0) { %>
+                                                        <% month = 'Dec'; %>
+                                                    <% } else { %>
+                                                        <% month = 'ERROR'; %>
                                                     <% } %>
-                                                    
-                                                    <!-- The date displayed utilized the function above for simplification -->
-                                                    <p> <%= simplifyEventDate(event.eventDate) %> </p>
-                                                    <p> <%= event.eventLocation %> </p>
-                                                </div>
+                                                
+                                                    <% // Create the simplified date and return it. %>
+                                                    <% simplifiedDate = month + " " + (day - 1) + ", " + year; %>
+                                                    <% return simplifiedDate; %>
+                                                <% } %>
+
+                                                <!-- The date displayed utilized the function above for simplification -->
+                                                <p> <%= simplifyEventDate(event.eventDate) %> </p>
+
+                                                <!-- Display the event location, description, volunteer, and donation information -->
+                                                <p> Location: <%= event.eventLocation %> </p>
+                                                <p> Description: <%= event.eventDescription %> </p>
+                                                <p> Volunteers: TELL USER WHAT TIME THEY VOLUNTEERED FOR </p>
+                                                <% if(event.neededDonations > 0) { // && CHECK IF USER CONTRIBUTED TO THIS EVENT) { %>
+                                                    <p> Donations: You have given PUT AMOUNT HERE<%= event.eventDescription %> </p>
+                                                <% } %>
                                             </div>
                                         </div>
-                                    </a>
+                                    </div>
                                 <% } %>
                             <% }); %>
                         </section>

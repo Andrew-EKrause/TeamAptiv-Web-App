@@ -1,0 +1,21 @@
+{% comment %} 
+
+Project: Aptiv Web Application
+Authors: Andrew Krause, Riley Radle, 
+Anthony Musbach, Zach Gephart
+Class: Software Design IV (CS 341)
+Group: #2
+Date: 12/15/2021
+
+Post Questions / TODOs in this file
+-----------------------------------------
+TODOs:
+1. Enable user to cancel their event
+2. Enable user to donate to an event
+3. Make the sign-up page more specific and handle the data passed through.
+4. Update the status of the user (when the user makes a donation) to "volunteer, donor".
+5. Encrypt the user passwords/confidential information --> DONE
+6. Anything else??? 
+-----------------------------------------
+
+{% endcomment %}

@@ -1,9 +1,77 @@
 /**
- * DESCRIPTION...
+ * The app.js file contains the core processes
+ * that create the different features of the
+ * Team Aptiv web application. The file is, in
+ * essence, the server code that connects to the
+ * MongoDB database as well as handles different
+ * requests to the web application. Given the 
+ * numerous lines of code in this file, sections
+ * have been used to break apart the different
+ * functionalities. To understand the code, read
+ * the comments throughout the app.js file and 
+ * analyze the information section by section.
+ * ----------------------------------------------------------------------------------
+ * The first section contains the installed 
+ * packages used to help run the server for 
+ * the website application. The second section
+ * defines different schemas (blueprints) for
+ * the types of documents that will be stored 
+ * in the database and connects to the database.
+ * The third section contains the information 
+ * that enables the web application to utilize
+ * Google OAuth so that the user can register
+ * or login using their Google account. The 
+ * fourth section contains a series of get 
+ * requests. These requests are used to render
+ * the initial state of a page in the browser.
+ * Within the fourth section, the fifth section
+ * is used to account for the admin account in
+ * terms of get requests. The sixth section, also
+ * contained within the fourth section, is used 
+ * to create a get request for a specific event
+ * when it is regarded by the user. A function
+ * for simplifying the date and time display 
+ * exists in the seventh section (contained
+ * within the fourth section). The eigth 
+ * section, also contained within section four,
+ * helps with the process of rendering a specifc
+ * event on the page. The ninth section handles
+ * the post requests made to the server, which
+ * is used to handle events that occur after 
+ * the initial state (for example, the user
+ * clicking a button would be  handled by a
+ * post request route). Contained within the
+ * ninth section are the tenth and eleventh 
+ * sections, which handle the admin information
+ * for post requests and the user volunteer sign
+ * up for post requests respectively. The twelfth
+ * section contains code for listening for server
+ * requests.
+ * ----------------------------------------------------------------------------------
+ * The sections present in the code are listed 
+ * below in order in all caps:
+ * 
+ * -1 SECTION: INSTALLED PACKAGES AND INITIALIZATION
+ * -2 SECTION: USER, PROGRAM, AND EVENTS FOR DATABASE VIA MONGOOSE AND MONGODB
+ * -3 SECTION: AUTHENTICATE USERS AND USE GOOGLE OAUTH
+ * -4 SECTION: GET INFORMATION FROM SERVER (GET) --> Has sections within it
+ * -->5 ADMIN SECTION (GET) 
+ * -->6 SINGLE EVENT SECTION (GET)
+ * -->7 SECTION WITHIN GET: FUNCTIONS FOR SIMPLIFYING THE DATE/TIME DISPLAY OF EVENTS
+ * -->8 SECTION WITHIN GET: RENDERING A PAGE ON THE SCREEN SPECIFIC TO AN EVENT
+ * -9 SECTION: PROCESS REQUESTS MADE TO SERVER (POST) --> Has sections within it
+ * -->10 ADMIN SECTION (POST)
+ * -->11 USER VOLUNTEER SIGN-UP (POST)
+ * -12 SECTION: LISTEN FOR SERVER REQUESTS
+ * ----------------------------------------------------------------------------------
  * 
  * Project: Aptiv Web Application
- * Author: Andrew Krause
- * Date: TBD
+ * Authors: Andrew Krause, Riley Radle, 
+ * Anthony Musbach, Zach Gephart
+ * Class: Software Design IV (CS 341)
+ * Group: #2
+ * Date: 12/15/2021
+ * 
  */
 
 //jshint esversion:6
@@ -367,6 +435,8 @@ app.get("/admin_profile", function(req, res){
                 });
             }
 
+            // If there are no events for the admin, then 
+            // render the admin profile on the screen. 
         } else {
             res.render("admin_profile", {  
                 user: req.user, 
@@ -395,8 +465,10 @@ app.get("/admin_profile", function(req, res){
 // Create a route for the ADMIN event creation page.
 app.get("/event_creation", function(req, res){
 
+    // Get the current user.
     const user = req.user;
 
+    // If the user is the admin, render the event creation page.
     if(req.isAuthenticated() && user.username == ADMIN_NAME) {
         res.render("event_creation", {
             user: req.user
@@ -435,7 +507,6 @@ app.get("/event_creation", function(req, res){
 /* SECTION WITHIN GET: FUNCTIONS FOR SIMPLIFYING THE DATE/TIME DISPLAY OF EVENTS */
 
 // The following function relates to the route, NEW POSTS, created below.
-// The function ALSO relates to the route, 
 // The function simplifies the date displayed for each event.
 function simplifyEventDate(eventDate){
     
@@ -826,9 +897,6 @@ app.post("/volunteer", function(req, res){
         res.redirect("/login");
     }
 });
-
-
-
 
 // // Create a get request route for NEW POSTS.
 // app.get("/events/:eventId", function(req, res){

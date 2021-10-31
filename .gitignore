@@ -1,2 +1,12 @@
+# Project: Aptiv Web Application
+# Authors: Andrew Krause, Riley Radle, 
+# Anthony Musbach, Zach Gephart
+# Class: Software Design IV (CS 341)
+# Group: #2
+# Date: 12/15/2021
+#
+# Place the names of files you want to ignore
+# when making commits in this gitignore file.
+
 # Ignore the README file when making commits
-README.md
+# README.md --> DO NOT IGNORE THIS FILE FOR NOW
