@@ -156,17 +156,19 @@
                                                     <% simplifiedDate = month + " " + (day - 1) + ", " + year; %>
                                                     <% return simplifiedDate; %>
                                                 <% } %>
-                                                
-                                                <!-- The date displayed utilized the function above for simplification -->
-                                                <p> <%= simplifyEventDate(event.eventDate) %> </p>
 
-                                                <!-- Display the event location, description, volunteer, and donation information -->
-                                                <p> Location: <%= event.eventLocation %> </p>
-                                                <p> Description: <%= event.eventDescription %> </p>
-                                                <p> Volunteers: TELL USER WHAT TIME THEY VOLUNTEERED FOR </p>
-                                                <% if(event.neededDonations > 0) { // && CHECK IF USER CONTRIBUTED TO THIS EVENT) { %>
-                                                    <p> Donations: You have given PUT AMOUNT HERE </p>
-                                                <% } %>
+                                                <section>
+                                                    <!-- The date displayed utilized the function above for simplification -->
+                                                    <p class="text-center"> <%= simplifyEventDate(event.eventDate) %> </p>
+
+                                                    <!-- Display the event location, description, volunteer, and donation information -->
+                                                    <p> Location: <%= event.eventLocation %> </p>
+                                                    <p> Description: <%= event.eventDescription %> </p>
+                                                    <p> Volunteers: TELL USER WHAT TIME THEY VOLUNTEERED FOR </p>
+                                                    <% if(event.neededDonations > 0) { // && CHECK IF USER CONTRIBUTED TO THIS EVENT) { %>
+                                                        <p> Donations: You have given PUT AMOUNT HERE </p>
+                                                    <% } %>
+                                                </section>
                                             </div>
                                         </div>
                                     </div>
