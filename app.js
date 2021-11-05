@@ -101,6 +101,11 @@ const findOrCreate = require("mongoose-findorcreate");
 // Create a string for the current ADMIN username.
 const ADMIN_NAME = "$ADMIN$@ACCOUNT-2023";
 
+// Create a string for the only organization item.
+// Also create a boolean to determine if org data item exists.
+const TEAM_APTIV = "Team-Aptiv-Org";
+var ORG_EXISTS = false;
+
 // Create web app using express and set view engine to EJS
 const app = express();
 app.use(express.static("public"));
@@ -146,31 +151,45 @@ const userSchema = new mongoose.Schema({
         type: [String],
         default: ["Volunteer"] 
     }, // --> STATUS WAS ORIGINALLY CALLED 'ROLE'
+    datesAttending: {
+        type: [Date],
+        default: [],
+        unique: true, 
+        sparse: true
+    }, // --> MAY HAVE TO CHANGE THIS; IS THE DATE(S) OF THE EVENT(S) SIGNED UP FOR
+    timesAttending: {
+        type: [Date],
+        default: [],
+        unique: true, 
+        sparse: true
+    }, // --> MAY HAVE TO CHANGE THIS; IS THE TIME(S) OF THE EVENT(S) SIGNED UP FOR
     userEvents: [{type: mongoose.Schema.Types.ObjectId, ref: 'Event'}]
 });
 
-// !!! LATER
-// // Create a mongoose schema for the programs in the database.
-// const programSchema = new mongoose.Schema({
-//     programID: String, 
-//     programName: String,
-//     programDescription: String,
-//     programEvents: [{type: mongoose.Schema.Types.ObjectId, ref: 'Event'}] // --> Reference to the event model. Can be many events.
-// });
+// Create a mongoose schema for the main organization. This
+// Schema is created for the sole purpose of receiving unrestricted
+// donations for users.
+const orgSchema = new mongoose.Schema({
+    orgID: String, 
+    orgName: String,
+    receivedDonations: Number 
+});
 
 // Create a mongoose schema for the events in the database.
 const eventSchema = new mongoose.Schema({
     eventID: String, 
     eventName: String,
     eventDate: {type: Date, default: Date.now},
+    eventTimeSlots: {
+        type: Date,
+        default: []
+    },
     eventStartTime: String,
     eventEndTime: String,
     eventLocation: String,
     eventDescription: String,
     numVolunteersNeeded: Number,
     neededDonations: Number,
-    // !!! LATER
-    // eventProgram: {type: mongoose.Schema.Types.ObjectId, ref: 'Program'} // --> Each unique event is only associated with one program. --> CHANGE LATER
 });
 
 // Create a plugin for the user Schema. Also create
@@ -180,7 +199,7 @@ userSchema.plugin(findOrCreate);
 
 // Create mongoose models based on the above schemas.
 const UserModel = new mongoose.model("User", userSchema);
-// const ProgramModel = new mongoose.model("Program", programSchema); // !!! LATER
+const orgModel = new mongoose.model("Org", orgSchema);
 const EventModel = new mongoose.model("Event", eventSchema);
 
 
@@ -242,6 +261,35 @@ app.get("/", function(req, res){
 
 // Route to render the home page when the user clicks "Team Aptiv".
 app.get("/home", function(req, res){
+
+    // Determine how many documents exist in the org model.
+    // Create ONE org document if there are none that exist.
+    orgModel.find().count(function(err, count){
+
+        // If the count is greater than zero, the org already exists.
+        // Otherwise, create a new org and add that org to the database.
+        if(count > 0) {
+            return;
+        } else {
+
+            // Create a new identifier for the organization object.
+            var org_ID = mongoose.Types.ObjectId();
+
+            // Create the new organization data model.
+            const newOrg = new orgModel({
+                orgID: org_ID, 
+                orgName: TEAM_APTIV,
+                receivedDonations: 0
+            });
+
+            // Save the new organization to the database.
+            newOrg.save(function(err, result){
+                if (err){
+                    console.log(err);
+                }
+            });
+        }
+    });
     // Render the home page and determine if user is undefined.
     res.render("home", { user: req.user });
 });
@@ -258,6 +306,31 @@ app.get("/auth/google/team-aptiv",
     function(req, res) {
         // Successful authentication, redirect to user profile page.
         res.redirect("/user_profile");
+});
+
+// Create a route to allow the user to download 
+// the user help manual from the web application.
+app.get("/download_help", function(req, res){
+
+    // Download the help manual (PDF) file stored for website.
+    const file = `${__dirname}/public/files/TEMPORARY.pdf`;
+    res.download(file);
+});
+
+// Create a route for the user to view the 'about'
+// page and make an unrestricted donation.
+app.get("/about", function(req, res){
+
+    // See if the data model exists and pass that
+    // through to the about page that is rendered.
+    orgModel.find({}, function(err, events){
+        // Render the about page and create 
+        // a data model behind the scenes.
+        res.render("about_unrestricted", { 
+            user: req.user,
+            events: events
+        });
+    });
 });
 
 // Create a route for viewing the events page for Aptiv.
@@ -655,6 +728,106 @@ app.post("/back", function(req, res){
     res.redirect("/home");
 });
 
+// Create a post request for when the user clicks
+// the link to download the user help manual.
+app.post("/download_help", function(req, res){
+    res.redirect("/download_help");
+});
+
+// Create a post request for when the user wants
+// to donate to the organization of Team Aptiv.
+app.post("/donate_org", function(req, res){
+
+    // Create variables for updating the total donations for the org.
+    const organizationID = req.body.orgidentifier;
+    const currentDonations = req.body.orgcurrent;
+    const addedDonation = req.body.orgdonation;
+
+    // Check if the user has an account. Otherwise, redirect to login.
+    if(req.isAuthenticated()) {
+
+        // Update the total donations to the organization.
+        orgModel.findOneAndUpdate({orgID: organizationID}, {$inc: {receivedDonations: addedDonation}}, function(err, foundDonation){
+            if(!err) {
+                res.redirect("/about");
+            }
+        });
+    } else {
+        res.redirect("/login");
+    }
+
+});
+
+// Create a post request for the user to volunteer for an event.
+app.post("/volunteer", function(req, res){
+
+    // YOU WILL NEED TO CHECK AND MAKE SURE THAT THE USER DONATED TO AN EVENT.
+    // THIS PART IS NOT COMPLETED YET!!!
+
+    // Obtain the specific event id from the webpage 
+    // when the user clicks on the 'volunteer' button.
+    const requestedEventId = req.body.eventvolunteer;
+
+    // Check if the user is authenticated. If user is authenticated, display a
+    // confirmation message and add the event to the user's list of events.
+    if(req.isAuthenticated()) {
+
+        // Create variables to help add the event 
+        // to the user collection in the database.
+        var user = req.user;
+        var eventToAdd = req.body.eventvolunteer;
+        var listOfUserEvents = user.userEvents;
+
+        // Create a variable to represent whether the user 
+        // has already signed up for the event or not.
+        var alreadyAdded = false;
+
+        // Go through the list of events in the user events attribute
+        // and check if the event is already in the user db.
+        listOfUserEvents.forEach(function(eventInUserProfile) {
+
+            // Check if the event already exists in the user's events section.
+            if(String(eventInUserProfile) == String(eventToAdd)) {
+                alreadyAdded = true;
+            } 
+        });
+
+        // If the user has NOT already been added, add the user.
+        if(alreadyAdded == false) {
+            // Add the event to the user's profile so that you can list
+            // the event that the user volunteered for in their profile.
+            UserModel.findOneAndUpdate(
+                { _id: user.id }, 
+                { $push: { userEvents: eventToAdd  } },
+                function (error, success) {
+                    if (error) {
+                        console.log("Error: " + error);
+                    } else {
+                        //console.log("Success: " + success);
+                    }
+                }
+            );
+
+            // Create a flash message informing the user 
+            // that they have signed up for an event.
+            req.flash("successVolunteered", "You have signed up for the event");
+
+            // Redirect to the specific event page of the website.
+            res.redirect("/events/" + requestedEventId);
+
+        } else {
+            // Create a flash message for the specific event page informing 
+            // the user that they already signed up for the event.
+            req.flash("alreadyVolunteered", "You have already signed up for this event");
+            res.redirect("/events/" + requestedEventId);
+        }
+
+    } else {
+        req.flash("needAnAccount", "You need an account to volunteer.");
+        res.redirect("/login");
+    }
+});
+
 // Create a post request for when user clicks the "Find Events" button.
 app.post("/find_events", function(req, res){
     res.redirect("/events");
@@ -667,7 +840,7 @@ app.post("/find_events", function(req, res){
 app.post("/register", function(req, res){
     
     // Create a new user ID for the developers to use and track. // <-- MAYBE!!!
-    user_ID = mongoose.Types.ObjectId();
+    var user_ID = mongoose.Types.ObjectId(); // --> Put identifier 'var' here!!!
 
     // Check if the username being used to register a new account
     // already exists in the database for the Team Aptiv site.

@@ -1,0 +1,95 @@
+<!-- 
+    DESCRIPTION....
+    ...
+    Project: Aptiv Web Application
+    Authors: Andrew Krause, Riley Radle, 
+    Anthony Musbach, Zach Gephart
+    Class: Software Design IV (CS 341)
+    Group: #2
+    Date: 12/15/2021
+    ...
+-->
+
+<%- include('./partials/home_header.ejs') %>
+
+    <!-- Section for the picture on the webpage -->
+    <section class="container about-page my-auto">
+        <!-- Create a title for the 'about' page -->
+        <div class="row">
+            <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12 mx-auto">
+                <h1 class="">About</h1>
+            </div>
+        </div>
+
+        <!-- Create a form to process when user clicks "Donate" button -->
+        <div class="row">
+            <h2>User Help Manual</h2>
+            
+            <!-- Create a link for downloading the user help manual -->
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-8 mx-auto">
+                <a href="/download_help">Download Help Manual for Website</a>
+            </div>
+        </div>
+
+        <!-- Create a div with a form for donating to the organization -->
+        <div class="row">
+            <h2>Donate to Team Aptiv</h2>
+
+            <!-- Create a form for donating to Team Aptiv -->
+            <!-- <form action="/donate_org" method="POST">
+                <div class="col-lg-2 col-md-4 col-sm-6 col-xs-8 mx-auto">
+                    <input type="hidden" id="custId" name="orgdonation" value="" onChange="this.form.submit()">
+                    <button type="submit" class="mb-4 btn btn-dark btn-lg">Donate</button>
+                </div>
+            </form> -->
+            <div class="special btn-group w-50 mx-auto">
+                <button class="btn btn-outline-dark" type="button" data-bs-toggle="collapse" 
+                data-bs-target="#collapseOrgDonations" aria-expanded="false" aria-controls="collapseOrgDonations">Donate to Aptiv</button>
+            </div>
+
+            <!-- Collapsed content for volunteering information -->
+            <div class="collapse" id="collapseOrgDonations">
+                <% events.forEach(function(event) { %>
+                    <!-- Makes POST request to the organization donation route -->
+                    <!-- Use the forEach loop above to access the components of the document -->
+                    <form class="form-horizontal" action="/donate_org" method="POST">
+                        <div class="form-group mt-2">
+                            <label class="login-register-font control-label" for="donations">Donation amount:</label>
+                            <input type="hidden" class="login-register-font form-control" name="orgidentifier" value="<%= event.orgID %>">
+                            <input type="hidden" class="login-register-font form-control" name="orgcurrent" value="<%= event.receivedDonations %>">
+                            <input type="number" class="login-register-font form-control" name="orgdonation" min="1" required>
+                        </div>
+                        <button type="submit" class="mt-4 btn btn-lg btn-dark">Place Donation</button>
+                    </form>
+                <% }); %>
+            </div>
+        </div>
+
+        <!-- Create a paragraph with information about the company -->
+        <div class="row">
+            <h2>Our Mission</h2>
+
+            <div class="badge bg-secondary text-wrap about-text">
+                <p class="text-start">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim 
+                    veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex 
+                    ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate 
+                    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat 
+                    cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id 
+                    est laborum.
+                    <br>
+                    <br>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim 
+                    veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex 
+                    ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate 
+                    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat 
+                    cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id 
+                    est laborum.
+                </p>
+            </div>
+        </div>
+    </section>
+
+<%- include('./partials/footer.ejs') %>
+        

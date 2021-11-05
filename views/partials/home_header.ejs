@@ -59,23 +59,28 @@
                         <!-- NOTE: In Bootstrap 5, ml-auto is ms-auto -->
                         <ul class="navbar-nav ms-auto navbar-links-font-size">
                             <!-- First navigation bar link -->
+                            <li id="about" class="nav-item">
+                                <a class="nav-link" href="/about">About</a>
+                            </li>
+
+                            <!-- Second navigation bar link -->
                             <li id="events" class="nav-item">
                                 <a class="nav-link" href="/events">Events</a>
                             </li>
 
-                            <!-- TEMPORARY -> Remove when we get login system set up -->
+                            <!-- Third navigation bar link -->
                             <li id="user_profile" class="nav-item">
                                 <a class="nav-link" href="/user_profile">Profile</a>
                             </li>
 
                             <!-- Show the format for logged out or logged in -->
                             <% if(typeof user != 'undefined') { %>
-                                <!-- Third navigation bar link -->
+                                <!-- Fourth navigation bar link (logged in) -->
                                 <li id="logout" class="nav-item">
                                     <a class="nav-link" href="/logout">Logout</a>
                                 </li>
                             <% } else { %>
-                                <!-- Third navigation bar link -->
+                                <!-- Fourth navigation bar link (logged out) -->
                                 <li id="home" class="nav-item">
                                     <a class="nav-link" href="/login">Login</a>
                                 </li>
