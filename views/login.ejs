@@ -37,24 +37,13 @@
     <!-- 
         Include EJS to display any error messages to the user if the
         attempt to access a page that they are not authorized to access.
+        This will also appear if the user tries to volunteer or donate
+        when they are not signed in.
     -->
     <% if(permissionDenied.length > 0) { %>
         <div class="card">
             <div class="card-body elementToFadeInAndOut message-format">
                 <h1 class="incorrect-input"><%= permissionDenied %></h1>
-            </div>
-        </div>
-    <% } %>
-
-    <!-- 
-        Include EJS to display any error messages to the user 
-        if they attempted to volunteer for an event while not
-        signed in.
-    -->
-    <% if(needAnAccount.length > 0) { %>
-        <div class="card">
-            <div class="card-body elementToFadeInAndOut message-format">
-                <h1 class="incorrect-input"><%= needAnAccount %></h1>
             </div>
         </div>
     <% } %>

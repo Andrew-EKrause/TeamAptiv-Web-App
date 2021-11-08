@@ -12,6 +12,13 @@
 
 <%- include('./partials/home_header.ejs') %>
 
+    <!-- Send a message to the user alterting them that they made an unrestricted donation-->
+    <% if(thanksForDonation.length > 0) { %>
+        <div class="card-body elementToFadeInAndOut message-format">
+            <h1 class="confirmation"><%= thanksForDonation %></h1>
+        </div>
+    <% } %>
+
     <!-- Section for the picture on the webpage -->
     <section class="container about-page my-auto">
         <!-- Create a title for the 'about' page -->
@@ -32,7 +39,7 @@
         </div>
 
         <!-- Create a div with a form for donating to the organization -->
-        <div class="row">
+        <div class="row mt-4">
             <h2>Donate to Team Aptiv</h2>
 
             <!-- Create a form for donating to Team Aptiv -->
@@ -66,7 +73,7 @@
         </div>
 
         <!-- Create a paragraph with information about the company -->
-        <div class="row">
+        <div class="row mt-4 mb-4">
             <h2>Our Mission</h2>
 
             <div class="badge bg-secondary text-wrap about-text">

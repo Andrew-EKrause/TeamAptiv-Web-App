@@ -34,10 +34,10 @@
                         Include EJS display a message informing the user that 
                         they successfully volunteered or donated to an event.
                     -->
-                    <% if(successVolunteered.length > 0) { %>
+                    <% if(successVolunteeredOrDonated.length > 0) { %>
                         <div class="confirmation">
                             <div class="elementToFadeInAndOut message-format">
-                                <h2><%= successVolunteered %></h2>
+                                <h2><%= successVolunteeredOrDonated %></h2>
                             </div>
                         </div>
                     <% } %>
@@ -64,7 +64,7 @@
                                 <p>Location: <%= eventLocation %> </p>
                                 <p>Description: <%= eventDescription %> </p>
                                 <p>Volunteers Needed: <%= numVolunteersNeeded %> </p>
-                                <p>Donations Needed: <%= neededDonations %> </p>
+                                <p>Donations Needed: $<%= neededDonations %> </p>
                             </div>
 
                             <!-- Create two buttons that collapse and show the donate and volunteer information -->
@@ -86,6 +86,7 @@
                                 <form class="form-horizontal" action="/donate" method="POST">
                                     <div class="form-group mt-2">
                                         <label class="login-register-font control-label" for="donations">Donation Goal: $<%= neededDonations %></label>
+                                        <input type="hidden" id="custId" name="eventidetifier" value="<%= eventID %>" onChange="this.form.submit()">
                                         <input type="number" class="login-register-font form-control" name="eventdonation" min="1" max=<%= neededDonations %> required>
                                     </div>
                                     <button type="submit" class="mt-4 btn btn-lg btn-dark">Place Donation</button>
@@ -94,26 +95,37 @@
           
                             <!-- Collapsed content for volunteering information -->
                             <div class="collapse" id="collapseVolunteering">
-                                <h3 class="mt-3">Available time slots</h3>
-                                <!-- INCLUDE AVAILABLE SLOTS HERE -->
+                                <h3 class="mt-3">Available time slots:</h3>
+
+                                <!-- FUNCTION 1: Function to get the value of the timeslot, which is the slot time -->
+                                <% function getResult() { %>
+                                    <% var value = $('timeslot').getValue(); %>
+                                <% } %>
 
                                 <!-- Makes POST request to the volunteer route -->
                                 <form class="form-horizontal" action="/volunteer" method="POST">
-                                    <input type="hidden" id="custId" name="eventvolunteer" value="<%= eventID %>" onChange="this.form.submit()">
+
+                                    <!-- Create different time slots that the user can sign up for -->
+                                    <% eventTimeIncrements.forEach(function(timeSlot) { %>
+                                        <input type="checkbox" class="myCheckBox" name="timeslot" value="<%= timeSlot %>">
+                                        <p><%= timeSlot %></p>
+                                    <% }); %>
+                                    <input type="hidden" id="custId" name="eventidetifier" value="<%= eventID %>" onChange="getResult()"> 
                                     <button type="submit" class="mt-4 btn btn-lg btn-dark">Sign Up</button>
+
                                 </form>
                             </div>
                         </div>
                     </div>
                 
-                <!-- Button to go back to the other events -->
-                <div class="d-flex">
-                    <form action="/back_events" method="POST">
-                        <div>
-                            <button type="submit" class="btn btn-outline-dark btn-back"><i class="fas fa-arrow-left"></i> Back to Events</button>
-                        </div>
-                    </form>
-                </div>
+                    <!-- Button to go back to the other events -->
+                    <div class="d-flex">
+                        <form action="/back_events" method="POST">
+                            <div>
+                                <button type="submit" class="btn btn-outline-dark btn-back"><i class="fas fa-arrow-left"></i> Back to Events</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
