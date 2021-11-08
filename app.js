@@ -97,6 +97,7 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const LocalStrategy = require("passport-local");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const findOrCreate = require("mongoose-findorcreate");
+const { times } = require('async');
 
 // Create a string for the current ADMIN username.
 const ADMIN_NAME = "$ADMIN$@ACCOUNT-2023";
@@ -104,7 +105,6 @@ const ADMIN_NAME = "$ADMIN$@ACCOUNT-2023";
 // Create a string for the only organization item.
 // Also create a boolean to determine if org data item exists.
 const TEAM_APTIV = "Team-Aptiv-Org";
-var ORG_EXISTS = false;
 
 // Create web app using express and set view engine to EJS
 const app = express();
@@ -140,36 +140,70 @@ mongoose.connect("mongodb://localhost:27017/aptivDB", {useNewUrlParser: true, us
 
 // Create a mongoose schema (blueprint) for the users in the database.
 const userSchema = new mongoose.Schema({
-    userID: { type: String, unique: true, sparse: true }, 
+    
+    // User identification number.
+    userID: { 
+        type: String, 
+        unique: true, 
+        sparse: true 
+    }, 
+
+    // First name, last name, and picture of user.
     firstName: String,
     lastName: String,
     picture: String,
-    username: { type: String, unique: true, sparse: true },
+
+    // Username of user.
+    username: { 
+        type: String, 
+        unique: true, 
+        sparse: true 
+    },
+
+    // Password and google identification number of user.
     password: String,
     googleId: String,
+
+    // Status of user. Default status is "Volunteer"
     status: {
-        type: [String],
-        default: ["Volunteer"] 
-    }, // --> STATUS WAS ORIGINALLY CALLED 'ROLE'
-    datesAttending: {
-        type: [Date],
-        default: [],
+        type: String,
+        default: "Volunteer" 
+    }, 
+
+    // // Array of dates that the user is attending.
+    // // (Corresponds with the array below.)
+    // datesAttending: [{
+    //     //type: String,
+    //     type: mongoose.Schema.Types.ObjectId, 
+    //     ref: 'Event'
+    //     // default: null,
+    //     // unique: false,
+    //     //sparse: true
+    // }], // --> MAY HAVE TO CHANGE THIS; IS THE DATE(S) OF THE EVENT(S) SIGNED UP FOR !!!!!CURRENT ISSUE
+
+    // Array of times that the user is attending.
+    // (Corresponds with the array above.)
+    timesAttending: [{
+        //type: String,
+        type: String, 
+        //default: null,
         unique: true, 
         sparse: true
-    }, // --> MAY HAVE TO CHANGE THIS; IS THE DATE(S) OF THE EVENT(S) SIGNED UP FOR
-    timesAttending: {
-        type: [Date],
-        default: [],
-        unique: true, 
-        sparse: true
-    }, // --> MAY HAVE TO CHANGE THIS; IS THE TIME(S) OF THE EVENT(S) SIGNED UP FOR
-    userEvents: [{type: mongoose.Schema.Types.ObjectId, ref: 'Event'}]
+    }], // --> MAY HAVE TO CHANGE THIS; IS THE TIME(S) OF THE EVENT(S) SIGNED UP FOR !!!!!CURRENT ISSUE
+
+    // Array of the event identification numbers user has signed up for.
+    userEvents: [{
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Event'
+    }]
 });
 
 // Create a mongoose schema for the main organization. This
 // Schema is created for the sole purpose of receiving unrestricted
 // donations for users.
 const orgSchema = new mongoose.Schema({
+
+    // Create organization id, name, and received donations.
     orgID: String, 
     orgName: String,
     receivedDonations: Number 
@@ -177,19 +211,46 @@ const orgSchema = new mongoose.Schema({
 
 // Create a mongoose schema for the events in the database.
 const eventSchema = new mongoose.Schema({
+    
+    // Identification number and name of event.
     eventID: String, 
     eventName: String,
-    eventDate: {type: Date, default: Date.now},
-    eventTimeSlots: {
-        type: Date,
-        default: []
+
+    // Date of event.
+    eventDate: {
+        type: Date, 
+        default: Date.now
     },
+
+    // Labels for the event start and end time.
     eventStartTime: String,
     eventEndTime: String,
+
+    // Array for the time slots available. // --> NOT WORKING???
+    eventTimeIncrements: [{
+        type: String,
+        default: null,
+        unique: true,
+        sparse: true
+    }],
+
+    // Location, description, needed volunteers and needed donations
     eventLocation: String,
     eventDescription: String,
     numVolunteersNeeded: Number,
     neededDonations: Number,
+
+    // Users who have volunteered for the event.
+    numVolunteers: {
+        type: Number,
+        default: 0
+    },
+
+    // Donations received for the event.
+    numDonations: {
+        type: Number,
+        default: 0
+    }
 });
 
 // Create a plugin for the user Schema. Also create
@@ -300,7 +361,7 @@ app.get("/auth/google",
     passport.authenticate("google", {scope: ["profile"]})
 );
 
-// Add the Google redirect route. --> FOR USER PROFILE PAGE AS WELL
+// Add the Google redirect route.
 app.get("/auth/google/team-aptiv",
     passport.authenticate("google", { failureRedirect: "/login" }),
     function(req, res) {
@@ -328,7 +389,8 @@ app.get("/about", function(req, res){
         // a data model behind the scenes.
         res.render("about_unrestricted", { 
             user: req.user,
-            events: events
+            events: events,
+            thanksForDonation: req.flash("thanksForDonation")
         });
     });
 });
@@ -361,7 +423,6 @@ app.get("/login", function(req, res, next){
     res.render("login", { 
         errors, 
         permissionDenied: req.flash("permissionDenied"), 
-        needAnAccount: req.flash("needAnAccount")
     });
 });
 
@@ -551,30 +612,6 @@ app.get("/event_creation", function(req, res){
     }
 });
 
-// // Create a route for the user to volunteer for an event.
-// app.get("/volunteer", function(req, res){
-
-//     // Check if the user is authenticated and cleared to 
-//     // sign up to volunteer for an event.
-//     if(req.isAuthenticated()){
-//         res.render("INSERT PAGE LINK HERE");
-//     } else {
-//         res.redirect("/login")
-//     }
-// });
-
-// // Create a route for the user to donate to an event.
-// app.get("/donate", function(req, res){
-
-//     // Check if the user is authenticated and cleared to 
-//     // sign up to volunteer for an event.
-//     if(req.isAuthenticated()){
-//         res.render("INSERT PAGE LINK HERE");
-//     } else {
-//         res.redirect("/login")
-//     }
-// });
-
 // -------------------------------------- SINGLE EVENT SECTION (GET) -----------------------------------------------
 
 /* SECTION WITHIN GET: FUNCTIONS FOR SIMPLIFYING THE DATE/TIME DISPLAY OF EVENTS */
@@ -590,7 +627,7 @@ function simplifyEventDate(eventDate){
     // Create variables for workring with
     // the nubmers in the date variable.
     var arrayDate = date.split('-');
-    var day = arrayDate[2];
+    var day = arrayDate[2]; // --> MAYBE CHECK IF THIS IS ZERO. IF ZERO, SET TO ONE
     var getMonth = arrayDate[1];
     var month = "";
     var year = arrayDate[0];
@@ -636,11 +673,11 @@ function simplifyEventDate(eventDate){
 // it. The function takes the military time that is stored in the database
 // and converts it to regular time. This conversion function is called
 // in the route below that displays events on the page. 
-function convertToStandardTime(eventStartTime){
+function convertToStandardTime(eventTime){
 
     // Convert the military time for the parameter passed 
     // through the function (start and end times).
-    var time = eventStartTime;
+    var time = eventTime;
 
     // Convert the time into an array.
     time = time.split(':'); 
@@ -705,11 +742,12 @@ app.get("/events/:eventId", function(req, res){
             eventDate: eventDate,
             eventStartTime: eventStartTime,
             eventEndTime: eventEndTime,
+            eventTimeIncrements: event.eventTimeIncrements, 
             eventLocation: event.eventLocation,
             eventDescription: event.eventDescription,
             numVolunteersNeeded: event.numVolunteersNeeded,
             neededDonations: event.neededDonations,
-            successVolunteered: req.flash("successVolunteered"),
+            successVolunteeredOrDonated: req.flash("successVolunteeredOrDonated"),
             alreadyVolunteered: req.flash("alreadyVolunteered"),
         });
     });
@@ -740,7 +778,6 @@ app.post("/donate_org", function(req, res){
 
     // Create variables for updating the total donations for the org.
     const organizationID = req.body.orgidentifier;
-    const currentDonations = req.body.orgcurrent;
     const addedDonation = req.body.orgdonation;
 
     // Check if the user has an account. Otherwise, redirect to login.
@@ -749,88 +786,13 @@ app.post("/donate_org", function(req, res){
         // Update the total donations to the organization.
         orgModel.findOneAndUpdate({orgID: organizationID}, {$inc: {receivedDonations: addedDonation}}, function(err, foundDonation){
             if(!err) {
+                req.flash("thanksForDonation", "Thank you for your donation!");
                 res.redirect("/about");
             }
         });
     } else {
         res.redirect("/login");
     }
-
-});
-
-// Create a post request for the user to volunteer for an event.
-app.post("/volunteer", function(req, res){
-
-    // YOU WILL NEED TO CHECK AND MAKE SURE THAT THE USER DONATED TO AN EVENT.
-    // THIS PART IS NOT COMPLETED YET!!!
-
-    // Obtain the specific event id from the webpage 
-    // when the user clicks on the 'volunteer' button.
-    const requestedEventId = req.body.eventvolunteer;
-
-    // Check if the user is authenticated. If user is authenticated, display a
-    // confirmation message and add the event to the user's list of events.
-    if(req.isAuthenticated()) {
-
-        // Create variables to help add the event 
-        // to the user collection in the database.
-        var user = req.user;
-        var eventToAdd = req.body.eventvolunteer;
-        var listOfUserEvents = user.userEvents;
-
-        // Create a variable to represent whether the user 
-        // has already signed up for the event or not.
-        var alreadyAdded = false;
-
-        // Go through the list of events in the user events attribute
-        // and check if the event is already in the user db.
-        listOfUserEvents.forEach(function(eventInUserProfile) {
-
-            // Check if the event already exists in the user's events section.
-            if(String(eventInUserProfile) == String(eventToAdd)) {
-                alreadyAdded = true;
-            } 
-        });
-
-        // If the user has NOT already been added, add the user.
-        if(alreadyAdded == false) {
-            // Add the event to the user's profile so that you can list
-            // the event that the user volunteered for in their profile.
-            UserModel.findOneAndUpdate(
-                { _id: user.id }, 
-                { $push: { userEvents: eventToAdd  } },
-                function (error, success) {
-                    if (error) {
-                        console.log("Error: " + error);
-                    } else {
-                        //console.log("Success: " + success);
-                    }
-                }
-            );
-
-            // Create a flash message informing the user 
-            // that they have signed up for an event.
-            req.flash("successVolunteered", "You have signed up for the event");
-
-            // Redirect to the specific event page of the website.
-            res.redirect("/events/" + requestedEventId);
-
-        } else {
-            // Create a flash message for the specific event page informing 
-            // the user that they already signed up for the event.
-            req.flash("alreadyVolunteered", "You have already signed up for this event");
-            res.redirect("/events/" + requestedEventId);
-        }
-
-    } else {
-        req.flash("needAnAccount", "You need an account to volunteer.");
-        res.redirect("/login");
-    }
-});
-
-// Create a post request for when user clicks the "Find Events" button.
-app.post("/find_events", function(req, res){
-    res.redirect("/events");
 });
 
 // Create a post request for when user clicks the "Register" button.
@@ -840,7 +802,8 @@ app.post("/find_events", function(req, res){
 app.post("/register", function(req, res){
     
     // Create a new user ID for the developers to use and track. // <-- MAYBE!!!
-    var user_ID = mongoose.Types.ObjectId(); // --> Put identifier 'var' here!!!
+    var user_ID = mongoose.Types.ObjectId();
+    var user_IDString = user_ID.toString();
 
     // Check if the username being used to register a new account
     // already exists in the database for the Team Aptiv site.
@@ -867,7 +830,9 @@ app.post("/register", function(req, res){
                     firstName: req.body.fname,
                     lastName: req.body.lname,
                     username: req.body.username,
-                    status: "ADMIN"
+                    status: "Admin, Volunteer, Donor",
+                    //datesAttending: [""], // --> MAYBE DELETE LATER!!!
+                    timesAttending: [user_IDString] // --> MAYBE DELETE LATER!!!
                 });
 
                 // Obtain the ADMIN user information and, if no errors, redirect ADMIN to their page.
@@ -884,13 +849,17 @@ app.post("/register", function(req, res){
                 });
             } else {
 
+                console.log("CREATING USER");
+
                 // Create a new instance of the user schema 
                 // to pass into the register method.
                 const newUser = new UserModel({
                     userID: user_ID,
                     firstName: req.body.fname,
                     lastName: req.body.lname,
-                    username: req.body.username
+                    username: req.body.username,
+                    //datesAttending: [""], // --> MAYBE DELETE LATER!!!
+                    timesAttending: [user_IDString] // --> MAYBE DELETE LATER!!!
                 });
 
                 // Obtain the user information and, if no errors, redirect new user to profile page.
@@ -956,26 +925,125 @@ app.post("/create_event", function(req, res){
 // add an event, that event is added to the database.
 app.post("/added_event", function(req, res){
 
-    // Create a new event ID for the developers to use and track. // <-- MAYBE!!!
+    // Create a new event ID for the developers to use and track.
     event_ID = mongoose.Types.ObjectId();
 
     // MAYBE ADD CHECKS AT SOME POINT TO DETERMINE IF AN EVENT WAS ALREADY CREATED
 
-    // Create a new event based on the event schema.
+    // STEP 1: Calculate the total duration of a given event.
+    // The function takes the time range and returns the total time
+    // of any event.
+    function diffInTime(start, end) {
+        start = start.split(":");
+        end = end.split(":");
+        var startDate = new Date(0, 0, 0, start[0], start[1], 0);
+        var endDate = new Date(0, 0, 0, end[0], end[1], 0);
+        var diff = endDate.getTime() - startDate.getTime();
+        var hours = Math.floor(diff / 1000 / 60 / 60);
+        diff -= hours * 1000 * 60 * 60;
+        var minutes = Math.floor(diff / 1000 / 60);
+    
+        // If using time pickers with 24 hours format, add the below line to get exact hours
+        if (hours < 0)
+           hours = hours + 24;
+    
+        return (hours <= 9 ? "0" : "") + hours + ":" + (minutes <= 9 ? "0" : "") + minutes;
+    }
+
+    // STEP 2: Convert the duration of the given event to minutes.
+    // The function takes in the total calculated time from the previous
+    // function above as an input and returns the total calculated time as
+    // minutes.
+    function convertH2M(timeInHour){
+        var timeParts = timeInHour.split(":");
+        return Number(timeParts[0]) * 60 + Number(timeParts[1]);
+    }
+    
+    // STEP 3: Execute STEP 2 and STEP 3. Find the total duration 
+    // of the event, and then convert it to minutes. Then divide the
+    // calculated total time (in minutes) by the number of volunteers.
+    var totalTime = diffInTime(req.body.eventstarttime, req.body.eventendtime);
+    var totalTimeMinutes = convertH2M(totalTime);
+    var incrementTimeMinutes = totalTimeMinutes / req.body.eventvolunteers;
+
+    // STEP 4: Break the time of the event into increments based on the number of volunteers.
+    // The result of the functions above, divided minutes (totalTimeMinutes)
+    // parameter), is passed into this function.
+    var makeTimeIntervals = function (startTime, endTime, increment) {
+        
+        // If the increment entered by the admin is zero, return 
+        // the range as from the start time to the end time.
+        if(increment == 0) {
+
+            var range  = [startTime.toString() + " - " + endTime.toString()];
+            return range;
+
+        } else {
+
+            startTime = startTime.toString().split(':');
+            endTime = endTime.toString().split(':');
+            increment = parseInt(increment, 10);
+        
+            var pad = function (n) { return (n < 10) ? '0' + n.toString() : n; },
+                startHr = parseInt(startTime[0], 10),
+                startMin = parseInt(startTime[1], 10),
+                endHr = parseInt(endTime[0], 10),
+                endMin = parseInt(endTime[1], 10),
+                currentHr = startHr,
+                currentMin = startMin,
+                previous = currentHr + ':' + pad(currentMin),
+                current = '',
+                r = [];
+        
+            do {
+                currentMin += increment;
+                if ((currentMin % 60) === 0 || currentMin > 60) {
+                    currentMin = (currentMin === 60) ? 0 : currentMin - 60;
+                    currentHr += 1;
+                }
+                current = currentHr + ':' + pad(currentMin);
+                r.push(previous + ' - ' + current);
+                previous = current;
+            } while (currentHr !== endHr);
+            
+                return r;
+        }
+    };
+
+    // STEP 5: Call the function right above to generate the different time intervals of the event.
+    var volunteerTimeIncrements = makeTimeIntervals(req.body.eventstarttime, req.body.eventendtime, incrementTimeMinutes);
+
+    // STEP 6: Loop through the array and convert the military times to standard times.
+    var convertVolunteerTimeIncrements = [];
+    let i = 0;
+    for (i = 0; i < volunteerTimeIncrements.length; i++) {
+
+        // Convert the time ranges to standard time.  
+        var splitStartAndEnd = volunteerTimeIncrements[i].split(' - ');
+        var convertStart = convertToStandardTime(splitStartAndEnd[0]);
+        var convertEnd = convertToStandardTime(splitStartAndEnd[1])
+        var newConvertedTimeRange = convertStart + ' - ' + convertEnd;
+        convertVolunteerTimeIncrements.push(newConvertedTimeRange);
+    }
+
+    // STEP 7: Create a new event based on the event schema.
+    // Pass in the different time slots as an array for the
+    // 'eventTimeIncrements' attribute.
     const newEvent = new EventModel({
         eventID: event_ID,
         eventName: req.body.eventname,
         eventDate: req.body.eventdate,
         eventStartTime: req.body.eventstarttime,
         eventEndTime: req.body.eventendtime,
+        eventTimeIncrements: convertVolunteerTimeIncrements, 
         eventLocation: req.body.eventlocation,
         eventDescription: req.body.eventdescription,
         numVolunteersNeeded: req.body.eventvolunteers,
-        neededDonations: req.body.eventdonations
+        neededDonations: req.body.eventdonations,
     });
 
-    // Save the new event created by the ADMIN 
-    // to the database. 
+    // STEP 8: Save the new event created 
+    // by the ADMIN to the database. 
     newEvent.save(function(err){
     
         // If there is no error in saving the new event, redirect
@@ -1001,15 +1069,159 @@ app.post("/cancel", function(req, res){
 
 // ---------------------------------- USER VOLUNTEER SIGN-UP (POST) -------------------------------------------
 
-// Create a route for when the user wants to volunteer for a particular event.
+// Create a post request for the user to volunteer for an event.
 app.post("/volunteer", function(req, res){
-
-    // YOU WILL NEED TO CHECK AND MAKE SURE THAT THE USER DONATED TO AN EVENT.
-    // THIS PART IS NOT COMPLETED YET!!!
 
     // Obtain the specific event id from the webpage 
     // when the user clicks on the 'volunteer' button.
-    const requestedEventId = req.body.eventvolunteer;
+    const requestedEventId = req.body.eventidetifier;
+
+    // Check if the user is authenticated. If user is authenticated, display a
+    // confirmation message and add the event to the user's list of events.
+    if(req.isAuthenticated()) {
+
+        var atLeastOneBox = req.body.timeslot;
+        console.log(atLeastOneBox);
+
+        // // First check and see if the user selected at
+        // // least one checkbox. If the user did not select
+        // // any checkboxes, reroute them back to the specific_event
+        // // route and give them an alert message.
+        if(atLeastOneBox == undefined) {
+            req.flash("alreadyVolunteered", "Please select at least one checkbox");
+            res.redirect("/events/" + requestedEventId);
+            return;
+        } else {
+            // Create variables to help add the event 
+            // to the user collection in the database.
+            var user = req.user;
+            var eventToAdd = req.body.eventidetifier;
+            var listOfUserEvents = user.userEvents;
+
+            // Create a variable to represent whether the user 
+            // has already signed up for the event or not.
+            var alreadyAdded = false;
+
+            // Go through the list of events in the user events attribute
+            // and check if the event is already in the user db.
+            listOfUserEvents.forEach(function(eventInUserProfile) {
+
+                // Check if the event already exists in the user's events section.
+                if(String(eventInUserProfile) == String(eventToAdd)) {
+                    alreadyAdded = true;
+                } 
+            });
+
+            // If the user has NOT already been added, add the user.
+            if(alreadyAdded == false) {
+                // Add the event to the user's profile so that you can list
+                // the event that the user volunteered for in their profile.
+                UserModel.findOneAndUpdate(
+                    { _id: user.id }, 
+                    { $push: { userEvents: eventToAdd } },
+                    function (error, success) {
+                        if (error) {
+                            console.log("Error: " + error);
+                        } else {
+                            //console.log("Success: " + success);
+                        }
+                    }
+                );
+
+                // ------------------- Volunteer Info -------------------
+
+                // Decrement the number of volunteers needed for 
+                // the event.
+                EventModel.findOneAndUpdate(
+                    { _id: requestedEventId }, 
+                    { $inc: { numVolunteersNeeded: -1 } }, // !!! DECREMENT SHOULD BE BASED ON THE NUMBER OF TIME SLOTS TAKEN
+                    function (error, success) {
+                        if (error) {
+                            console.log("Error: " + error);
+                        } else {
+                            // console.log("Success: " + success);
+                        }
+                    }
+                );
+
+                // Increment the number of volunteers that are
+                // currently attending the event.
+                EventModel.findOneAndUpdate(
+                    { _id: requestedEventId }, 
+                    { $inc: { numVolunteers: 1 } },
+                    function (error, success) {
+                        if (error) {
+                            console.log("Error: " + error);
+                        } else {
+                            // console.log("Success: " + success);
+                        }
+                    }
+                );
+
+                // ------------------- Timeslot Info -------------------
+
+                // Remove the time that the user selected 
+                // from the given event database. 
+                EventModel.findOneAndUpdate(
+                    { _id: requestedEventId },
+                    { $pull: { eventTimeIncrements: atLeastOneBox } },                   
+                    function (error, success) {
+                        if (error) {
+                            console.log("Error: " + error);
+                        } else {
+                            console.log("Success: " + success);
+                        }
+                    }
+                );
+
+                // Add the time that the user selected to the
+                // user's event time database.
+                UserModel.findOneAndUpdate(
+                    { _id: requestedEventId },
+                    { $push: { timesAttending: atLeastOneBox } },                   
+                    function (error, success) {
+                        if (error) {
+                            console.log("Error: " + error);
+                        } else {
+                            console.log("Success: " + success);
+                        }
+                    }
+                );
+
+                // Create a flash message informing the user 
+                // that they have signed up for an event.
+                req.flash("successVolunteeredOrDonated", "You have signed up for the event");
+
+                // Redirect to the specific event page of the website.
+                res.redirect("/events/" + requestedEventId);
+
+            } else {
+                // Create a flash message for the specific event page informing 
+                // the user that they already signed up for the event.
+                req.flash("alreadyVolunteered", "You have already signed up for this event");
+                res.redirect("/events/" + requestedEventId);
+            }
+        }
+
+    } else {
+        req.flash("permissionDenied", "You need an account to volunteer.");
+        res.redirect("/login");
+    }
+});
+
+// Create a post request for when user clicks the "Find Events" button.
+app.post("/find_events", function(req, res){
+    res.redirect("/events");
+});
+
+// ---------------------------------- USER DONATION (POST) -------------------------------------------
+
+// Create a route for when the user wants to volunteer for a particular event.
+app.post("/donate", function(req, res){
+
+    // Obtain the specific event id from the webpage 
+    // when the user clicks on the 'donate' button.
+    const requestedEventId = req.body.eventidetifier;
 
     // Check if the user is authenticated. If user is authenticated, display a
     // confirmation message and add the event to the user's list of events.
@@ -1018,11 +1230,30 @@ app.post("/volunteer", function(req, res){
         // Create variables to help add the event 
         // to the user collection in the database.
         var user = req.user;
-        var eventToAdd = req.body.eventvolunteer;
+        var eventToAdd = req.body.eventidetifier;
         var listOfUserEvents = user.userEvents;
+        var userStatus = user.status;
+
+        // Check if the user already has the status of "Volunteer and Donor".
+        // If not, then make the user have the status of "Volunteer and Donor".
+        if(userStatus == "Volunteer") {
+
+            // Set the status of the user to "Volunteer and Donor".
+            UserModel.findOneAndUpdate(
+                { _id: user.id }, 
+                { $set: { status: "Volunteer, Donor" } },
+                function (error, success) {
+                    if (error) {
+                        console.log("Error: " + error);
+                    } else {
+                        //console.log("Success: " + success);
+                    }
+                }
+            );
+        }
 
         // Create a variable to represent whether the user 
-        // has already signed up for the event or not.
+        // has already had the event added to their profile or not.
         var alreadyAdded = false;
 
         // Go through the list of events in the user events attribute
@@ -1041,7 +1272,7 @@ app.post("/volunteer", function(req, res){
             // the event that the user volunteered for in their profile.
             UserModel.findOneAndUpdate(
                 { _id: user.id }, 
-                { $push: { userEvents: eventToAdd  } },
+                { $push: { userEvents: eventToAdd } },
                 function (error, success) {
                     if (error) {
                         console.log("Error: " + error);
@@ -1050,66 +1281,48 @@ app.post("/volunteer", function(req, res){
                     }
                 }
             );
-
-            // Create a flash message informing the user 
-            // that they have signed up for an event.
-            req.flash("successVolunteered", "You have signed up for the event");
-
-            // Redirect to the specific event page of the website.
-            res.redirect("/events/" + requestedEventId);
-
-        } else {
-            // Create a flash message for the specific event page informing 
-            // the user that they already signed up for the event.
-            req.flash("alreadyVolunteered", "You have already signed up for this event");
-            res.redirect("/events/" + requestedEventId);
         }
 
+        // Decrement the number of donations needed for 
+        // the event.
+        EventModel.findOneAndUpdate(
+            { _id: requestedEventId }, 
+            { $inc: { neededDonations: -(req.body.eventdonation) } },
+            function (error, success) {
+                if (error) {
+                    console.log("Error: " + error);
+                } else {
+                    // console.log("Success: " + success);
+                }
+            }
+        );
+
+        // Increment the number of donations that 
+        // have been given to the event.
+        EventModel.findOneAndUpdate(
+            { _id: requestedEventId }, 
+            { $inc: { numDonations: req.body.eventdonation } },
+            function (error, success) {
+                if (error) {
+                    console.log("Error: " + error);
+                } else {
+                    // console.log("Success: " + success);
+                }
+            }
+        );
+
+        // Create a flash message informing the user 
+        // that they have donated to an event.
+        req.flash("successVolunteeredOrDonated", "Thank you for your donation");
+
+        // Redirect to the specific event page of the website.
+        res.redirect("/events/" + requestedEventId);
+
     } else {
-        req.flash("needAnAccount", "You need an account to volunteer.");
+        req.flash("permissionDenied", "You need an account to volunteer or donate.");
         res.redirect("/login");
     }
 });
-
-// // Create a get request route for NEW POSTS.
-// app.get("/events/:eventId", function(req, res){
-  
-//     // Create a constant for storing the post ID so that it
-//     // can be retrieved from the database.
-//     const requestedEventId = req.params.eventId;
-  
-//     // Use the findOne function to find the post that the user
-//     // wishes to view from the database based on the post ID.
-//     // The method will look for the post that matches the ID
-//     // that was requested indirectly by the user and render
-//     // that post on the screen.
-//     EventModel.findOne({_id: requestedEventId}, function(err, event){
-      
-//         // Call a function to simplify the date of the event.
-//         const eventDate = simplifyEventDate(event.eventDate);
-
-//         // Call a function to to convert the event start time and event 
-//         // end time, both in military time, to regular time.
-//         const eventStartTime = convertToStandardTime(event.eventStartTime);
-//         const eventEndTime = convertToStandardTime(event.eventEndTime);
-    
-//         // Render the post that was requested by the user on 
-//         // the website.
-//         res.render("specific_event", {
-//             user: req.user,
-//             eventID: event.id, // --> THIS IS EXTREMELY IMPORTANT TO ADDING THE EVENT TO THE USER'S PAGE!!!
-//             eventName: event.eventName,
-//             eventDate: eventDate,
-//             eventStartTime: eventStartTime,
-//             eventEndTime: eventEndTime,
-//             eventLocation: event.eventLocation,
-//             eventDescription: event.eventDescription,
-//             numVolunteersNeeded: event.numVolunteersNeeded,
-//             neededDonations: event.neededDonations
-//         });
-//     });
-// });
-// --> !!! LATER Create a route for when the user wants to donate to a particular event.
 
 
 // ============================================================================================================

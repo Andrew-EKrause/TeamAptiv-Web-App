@@ -50,6 +50,10 @@
                                     <label class="login-register-font control-label" for="time">End Time</label>
                                     <input type="time" class="login-register-font form-control" name="eventendtime" required>
                                 </div>
+                                <!-- <div class="form-group mt-2"> !!! MAYBE DELETE THIS LATER
+                                    <label class="login-register-font control-label" for="time">Time Increments (in minutes)</label>
+                                    <input type="number" class="login-register-font form-control" name="eventtimeincrements" required>
+                                </div> -->
                                 <div class="form-group mt-2">
                                     <label class="login-register-font control-label" for="location">Location</label>
                                     <input type="text" class="login-register-font form-control" name="eventlocation" required>
@@ -60,11 +64,11 @@
                                 </div>
                                 <div class="form-group mt-2">
                                     <label class="login-register-font control-label" for="volunteers">Needed Volunteers</label>
-                                    <input type="number" class="login-register-font form-control" name="eventvolunteers" required>
+                                    <input type="number" class="login-register-font form-control" name="eventvolunteers" min="1" required>
                                 </div>
                                 <div class="form-group mt-2">
                                     <label class="login-register-font control-label" for="donations">Needed Donations</label>
-                                    <input type="number" class="login-register-font form-control" name="eventdonations" required>
+                                    <input type="number" class="login-register-font form-control" name="eventdonations" min="1" required>
                                 </div>
                                 <button type="submit" class="mt-4 btn btn-lg btn-dark">Create Event</button>
                             </form>
