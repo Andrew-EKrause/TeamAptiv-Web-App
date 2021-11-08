@@ -44,7 +44,6 @@
         <!-- <img id="home-illustration" src="images/temp.jpeg" alt=""> -->
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container-fluid">
-<<<<<<< HEAD
                 <!-- Add the brand name for the navigation bar -->
                 <a class="navbar-brand nav-link" href="/home"><img id="custom-logo" height="60px" src="/images/CuteLogo.png" alt=""></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,6 +51,10 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
+                        <!-- First navigation bar link -->
+                        <li id="about" class="nav-item">
+                            <a class="nav-link" href="/about">About</a>
+                        </li>
                         <!-- First navigation bar link -->
                         <li class="nav-item">
                             <a class="nav-link" href="/events">Events</a>
@@ -74,49 +77,5 @@
                         <% } %>
                     </ul>
                 </div>
-=======
-                <!-- Nav Bar -->
-                <nav id="header-section" class="navbar wrapper navbar-expand-lg navbar-dark fixed-top"> 
-                    <!-- Add the brand name for the navigation bar -->
-                    <a class="navbar-brand aptiv-font-size" href="/home">Team Aptiv</a>
-                    <!-- Collapsable Button -->
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <!-- Collapsable div to contain navigation bar links; content within div can be collapsed -->
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <!-- NOTE: In Bootstrap 5, ml-auto is ms-auto -->
-                        <ul class="navbar-nav ms-auto navbar-links-font-size">
-                            <!-- First navigation bar link -->
-                            <li id="about" class="nav-item">
-                                <a class="nav-link" href="/about">About</a>
-                            </li>
-
-                            <!-- Second navigation bar link -->
-                            <li id="events" class="nav-item">
-                                <a class="nav-link" href="/events">Events</a>
-                            </li>
-
-                            <!-- Third navigation bar link -->
-                            <li id="user_profile" class="nav-item">
-                                <a class="nav-link" href="/user_profile">Profile</a>
-                            </li>
-
-                            <!-- Show the format for logged out or logged in -->
-                            <% if(typeof user != 'undefined') { %>
-                                <!-- Fourth navigation bar link (logged in) -->
-                                <li id="logout" class="nav-item">
-                                    <a class="nav-link" href="/logout">Logout</a>
-                                </li>
-                            <% } else { %>
-                                <!-- Fourth navigation bar link (logged out) -->
-                                <li id="home" class="nav-item">
-                                    <a class="nav-link" href="/login">Login</a>
-                                </li>
-                            <% } %>
-                        </ul>
-                    </div>
-                </nav>
->>>>>>> 15f7998e82f704d3ce366f5907299fd82fd3b271
             </div>
         </nav>
