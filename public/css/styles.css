@@ -25,19 +25,13 @@
 /* Format content within the body tag of the HTML structure */
 body {
     padding-top: 6rem; /* This portion is included for the fixed header on the page. */
-    /* padding-bottom: 6rem; /* This portion is included for the fixed footer on the page. */
     margin: 0;
     text-align: center;
     font-family: 'Merriweather', serif; 
-    background-color: #e7e8ea;
+    /* background-color: #e7e8ea; */
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-}
-
-/* Align footer with bottom of page. */
-footer {
-    margin-top: auto;
 }
 
 /* Get rid of the default styling for lists */
@@ -47,61 +41,47 @@ ul {
     padding: 0px;
 }
 
+/* Aligns the footer to the bottom of the viewport */
+footer {
+    margin-top: auto;
+}
+
 /******************************* CLASS SELECTORS *******************************/
 
-/* Set navbar text color. */
-.navbar-dark .navbar-brand {
+/* Place Padding to the left of the logo in navbar */
+/* .navbar-brand {
     margin-left: 1rem;
-    color: #e7e8ea;
-}
+} */
 
-/* Set the hover state so that there no effects. */
-.navbar-dark .navbar-brand:hover {
-    color: #f7c35e;
-}
-
-/* Set the color of the navbar link. */
-.navbar-dark .navbar-nav .nav-link {
+/* Places padding between navbar links on right */
+/* .navbar-nav .nav-link {
     margin-right: 1rem;
-    color: #e7e8ea;
-}
-
-/* Set the hover state so that there are different color effects. */
-.navbar-dark .navbar-nav .nav-link:hover {
-    color: #f7c35e;
-}
+} */
 
 /* Set the color of the hamburger menu outline. */
-.navbar-dark .navbar-toggler {
+.navbar .navbar-toggler {
     margin-right: 1rem;
-    color: #e7e8ea;
+    color: red;
 }
+
 
 /* Set the color of the hamburger menu icon. */
-.navbar-dark .navbar-toggler-icon {
-    color: #e7e8ea;
-}
+/* .navbar-toggler .navbar-toggler-icon {
+    color: red !important;
+} */
 
 /* Style the "Team Aptiv" text. Set hover state below. */
-.aptiv-font-size {
+/* .aptiv-font-size {
     font-size: 3rem;
-    color: #e7e8ea;
-    /* color: red; */
-}
-
-.aptiv-font-size:hover {
-    color: #f7c35e;
-}
+    color: #fdcb65 !important;
+    font-family: "Noto Serif";
+} */
 
 /* Set font size of the navbar links. */
-.navbar-links-font-size {
+.navbar-links-font {
     font-size: 1.5rem;
-    color: #e7e8ea;
-}
+    /* FUCKING IMPOSSIBLE TO CHANGE THE COLOR OF THE TEXT IN THE NAVBAR */
 
-/* Add style to the login page styles (other title content). */
-.login-register-text-alignemnt {
-    color: #e7e8ea;
 }
 
 /* Float the text to the left for the login and register screens. */
@@ -133,10 +113,7 @@ ul {
 
 /* Set positioning of buttons in user profile. */
 .special .btn {
-    flex: 1;
-    flex-basis: 100%;
     font-size: 1.25em;
-    height: 2.75rem;
     border-radius: 0%;
 }
 
@@ -187,54 +164,56 @@ ul {
 
 /* ===== Riley's Styles ===== */
 
-.attribution-text:hover {
+/* .attribution-text:hover {
     color: black;
-}
+} */
 
-.btn {
+/* .btn {
     border-radius: 1.5em;
     width: 30%;
-}
+} */
 
-.btn-dark {
+/* .btn-dark {
     background-color: #182139;
     border-color: #182139;
     color: #f5f5f5
-}
+} */
 
-.btn-dark:hover {
+/* .btn-dark:hover {
     background-color: transparent;
     color: #182139;
-}
+} */
 
-.btn-outline-dark {
+/* .btn-outline-dark {
     color: #182139;
     border-color: #182139;
-}
+} */
 
-.btn-outline-dark:hover {
+/* .btn-outline-dark:hover {
     background-color: #182139;
     color: #e7e8ea;
-}
+} */
 
-.card {
+/* .card {
     background-color: #f5f5f5;
     color: #9a9b9f;
-}
+} */
 
+/* Adds some padding between the form elements */
 .form-group {
     padding: .5em;
 }
 
+/* Changes the styles of the inputs in the form */
 .form-control {
-    background-color: #f5f5f5;
-    color: #747474;
+    background-color: transparent;
     border: none;
     border-bottom: 1px solid lightgray;
 }
 
+/* Changes style of inputs when they are focused on */
 .form-control:focus {
-    background-color: #f5f5f5;
+    background-color: transparent;
     color: #747474;
 }
 
@@ -247,34 +226,24 @@ ul {
   z-index: 1030;
 }
 
-/* Modify the margins of the cards for the login/registration page. */
-.margin-fine-tuning {
-    margin-top: 10%;
-    margin-bottom: 6%;
-}
-
-/* Modify the margins of the cards for the specific event page. */
-.event-margin-fine-tuning {
-    margin-top: 8%;
-    margin-bottom: 6%;
-}
 
 /* Format the messages sent to the user. */ /* --> ASK GROUP IF THEY THINK YOU SHOULD HAVE WHITE CARD BACKGROUND OR NOT!!! */
-.message-format {
+/* .message-format {
     width: 100%;
     position: relative;
     margin-top: 1rem;
-}
+} */
 
 /******************************* ID SELECTORS *******************************/
 
 /* Add color to header section of page. */
 #header-section {
     background-color: #182139;
+    /* WILL PROBABLY BE GETTING RID OF THIS IN FAVOR OF A DIFFERENT STYLING THEME */
 }
 
 /* Style and position the header at the top of the login page. */
-#login-header-section {
+#login-header {
     background-color: #182139;
     width: 100%;
     position: fixed;
@@ -301,15 +270,23 @@ ul {
     border-radius: 50%;
 }
 
+/* Custom logo that is in the navbar */
+#custom-logo {
+    outline: 2px solid #fdcb65;
+    border-radius: 20%;
+}
+
 /******************************* PAGE SPECIFIC STYLING *******************************/
 
 /* ===== Home Page ===== */
 
+/* Styles the main text on the home page */
 .home-picture h1 {
     font-size: 5rem;
     font-family: 'Noto Serif';
 }
 
+/* Styles the button below the main text on the home page */
 .home-picture button {
     width: 100%;
     font-size: 1.5em;
@@ -317,8 +294,9 @@ ul {
 
 /* ===== Events Page ===== */
 
+/* Get rid of the underlines for the text on the event cards */
 .event-list > a {
-    text-decoration: none !important;
+    text-decoration: none;
 }
 
 /* ===== Specific Event Page ===== */
@@ -326,18 +304,8 @@ ul {
 
 /* ===== User Profile Page ===== */
 
-.my-events-btn {
-    margin: .25em 0;
-    background-color: transparent;
-    border: none;
-    font-size: 2em;
-    text-decoration: underline;
-}
 
-.my-events-btn:hover { 
-    color: #4d608b;
-}
-
+/* Style the dropdowns for events on the user profile page */
 .my-events-btn-container {
     margin: auto;
     padding-bottom: .25em;
@@ -345,17 +313,20 @@ ul {
     border-bottom: 2px solid #e7e8ea;
 }
 
+/* Remove the line underneath the last event */
 .event-list .event:last-child > .my-events-btn-container {
     border-bottom: none;
 }
 
+/* Style the drop down cards on the user profile */
 .event .card {
     width: 90%;
     margin: auto;
     border-radius: 0%;
-    background-color: #e7e8ea;
+    /* Maybe also extend these to work for the cards on the events-list page */
 }
 
+/* Align the text inside of the drop down cards on user profile */
 .event section {
     text-align: left;
     margin: auto;
@@ -364,28 +335,25 @@ ul {
 
 /* ===== Login/Register Pages ===== */
 
-.reference-link {
+/* .reference-link {
     color: #aba597;
 }
 
 .reference-link:hover {
-    color: #f7c35e;
-}
+    color: #fdcb65;
+} */
 
 .google-link {
     text-decoration: none;
-    color: #182139;
 }
 
 .google-link:hover {
-    color:#182139;
     text-decoration: underline;
 }
 
 .google-link > i {
-    border: 1px solid #f7c35e;
+    border: 1px solid #fdcb65; /* FIXME */
     border-radius: 50%;
     padding: .25em;
-    color: #f7c35e;
 }
 

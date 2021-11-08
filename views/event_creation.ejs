@@ -24,59 +24,56 @@
         <div class="row">
             <div class="col-sm-8 mx-auto">
                 <div class="card">
-                    <div class="card-body">
-                        <div class="card-text">
-                            
-                            <!-- Create a title for the event creation page.-->
-                            <div class="mb-4">
-                                <h1 class="black-text">Create a New Event</h1>
+                    <div class="card-body">                            
+                        <!-- Create a title for the event creation page.-->
+                        <div class="mb-4">
+                            <h1>Create a New Event</h1>
+                        </div>
+                        
+                        <!-- Makes POST request to the /login route -->
+                        <form class="form-horizontal" action="/added_event" method="POST">
+                            <div class="form-group">
+                                <label class="login-register-font control-label" for="title">Event Name</label>
+                                <input type="title" class="login-register-font form-control" name="eventname" required>
                             </div>
-                            
-                            <!-- Makes POST request to the /login route -->
-                            <form class="form-horizontal" action="/added_event" method="POST">
-                                <div class="form-group">
-                                    <label class="login-register-font control-label" for="title">Event Name</label>
-                                    <input type="title" class="login-register-font form-control" name="eventname" required>
+                            <div class="form-group mt-2">
+                                <label class="login-register-font control-label" for="date">Date</label>
+                                <input type="date" class="login-register-font form-control" name="eventdate" required>
+                            </div>
+                            <div class="form-group mt-2">
+                                <label class="login-register-font control-label" for="time">Start Time</label>
+                                <input type="time" class="login-register-font form-control" name="eventstarttime" required>
+                            </div>
+                            <div class="form-group mt-2">
+                                <label class="login-register-font control-label" for="time">End Time</label>
+                                <input type="time" class="login-register-font form-control" name="eventendtime" required>
+                            </div>
+                            <div class="form-group mt-2">
+                                <label class="login-register-font control-label" for="location">Location</label>
+                                <input type="text" class="login-register-font form-control" name="eventlocation" required>
+                            </div>
+                            <div class="form-group mt-2">
+                                <label class="login-register-font control-label" for="description">Description</label>
+                                <input type="text" class="login-register-font form-control" name="eventdescription" required>
+                            </div>
+                            <div class="form-group mt-2">
+                                <label class="login-register-font control-label" for="volunteers">Needed Volunteers</label>
+                                <input type="number" class="login-register-font form-control" name="eventvolunteers" required>
+                            </div>
+                            <div class="form-group mt-2">
+                                <label class="login-register-font control-label" for="donations">Needed Donations</label>
+                                <input type="number" class="login-register-font form-control" name="eventdonations" required>
+                            </div>
+                            <button type="submit" class="mt-4 btn btn-lg btn-dark">Create Event</button>
+                        </form>
+                        
+                        <!-- Cancel button -->
+                        <div class="container mt-4">
+                            <form action="/cancel" method="POST">
+                                <div>
+                                    <button type="submit" class="btn btn-lg btn-outline-dark"><i class="fas fa-times"></i> Cancel</button>
                                 </div>
-                                <div class="form-group mt-2">
-                                    <label class="login-register-font control-label" for="date">Date</label>
-                                    <input type="date" class="login-register-font form-control" name="eventdate" required>
-                                </div>
-                                <div class="form-group mt-2">
-                                    <label class="login-register-font control-label" for="time">Start Time</label>
-                                    <input type="time" class="login-register-font form-control" name="eventstarttime" required>
-                                </div>
-                                <div class="form-group mt-2">
-                                    <label class="login-register-font control-label" for="time">End Time</label>
-                                    <input type="time" class="login-register-font form-control" name="eventendtime" required>
-                                </div>
-                                <div class="form-group mt-2">
-                                    <label class="login-register-font control-label" for="location">Location</label>
-                                    <input type="text" class="login-register-font form-control" name="eventlocation" required>
-                                </div>
-                                <div class="form-group mt-2">
-                                    <label class="login-register-font control-label" for="description">Description</label>
-                                    <input type="text" class="login-register-font form-control" name="eventdescription" required>
-                                </div>
-                                <div class="form-group mt-2">
-                                    <label class="login-register-font control-label" for="volunteers">Needed Volunteers</label>
-                                    <input type="number" class="login-register-font form-control" name="eventvolunteers" required>
-                                </div>
-                                <div class="form-group mt-2">
-                                    <label class="login-register-font control-label" for="donations">Needed Donations</label>
-                                    <input type="number" class="login-register-font form-control" name="eventdonations" required>
-                                </div>
-                                <button type="submit" class="mt-4 btn btn-lg btn-dark">Create Event</button>
                             </form>
-                            
-                            <!-- Cancel button -->
-                            <div class="container mt-4">
-                                <form action="/cancel" method="POST">
-                                    <div>
-                                        <button type="submit" class="btn btn-lg btn-outline-dark"><i class="fas fa-times"></i> Cancel</button>
-                                    </div>
-                                </form>
-                            </div>
                         </div>
                     </div>
                 </div>

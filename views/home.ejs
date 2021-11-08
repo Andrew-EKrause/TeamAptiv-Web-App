@@ -22,23 +22,22 @@
 -->
 
 <%- include('./partials/home_header.ejs') %>
-
+    
     <!-- Section for the picture on the webpage -->
-    <section class="container home-picture my-auto">
+    <section class="container-fluid home-picture my-auto">
         <div class="row">
-            <div class="col-lg-8 col-md-8 col-sm-10 col-xs-12 mx-auto">
-                <h1 class="black-text">Connecting You with <br>Your Community</h1>
+            <div class="">
+                <h1>Team Aptiv</h1>
+                <p>Connecting You With Your Community</p>
             </div>
         </div>
 
         <!-- Create a form to process when user clicks "Find Events" button -->
         <div class="row">
-            <div class="col-lg-">
-
-            </div>
             <form action="/find_events" method="POST">
-                <div class="col-lg-2 col-md-4 col-sm-6 col-xs-8 mx-auto">
-                    <button type="submit" class="mb-4 btn btn-dark btn-lg white-text">Find Events</button>
+                <div class="">
+                    <button type="submit" class="mb-4 me-1 btn btn-outline-light btn-lg">Find Events</button>
+                    <button type="submit" class="mb-4 ms-1 btn btn-outline-light btn-lg">Support Us</button>
                 </div>
             </form>
         </div>

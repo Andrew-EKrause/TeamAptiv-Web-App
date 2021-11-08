@@ -1,0 +1,368 @@
+/*
+    Authors: Andrew Krause, Zach Gephart, Anthony Musbach, Riley Radle
+    Description:
+        This file contains all of the custom styling for the web app.
+            
+    Navigation: 
+        Styles are organized into sections
+            1. General styles (top of file)
+            2. Styles for each page
+            3. ID selected styles (bottom of file)
+
+        Within each section styles should be ordered 
+        based on subjective importance
+
+        To quickly find a section:
+            - Use command/ctrl f
+            - Search for ...
+                * General styles
+                * <page_name>.ejs styles
+                * ID styles
+
+    Class: CS 341, Fall 2021
+ */
+
+ /* Import fonts */
+ @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono&family=Noto+Serif:ital@1&display=swap'); 
+
+/* ====================================================================
+                            GENERAL STYLES
+ ==================================================================== */
+
+    /* Defines global colors */
+    :root {
+        --foreground-color: black;
+        --background-color: #F9F9F9;
+        --theme1: gray;
+        --theme2: orange;
+        --theme3: white;
+        --theme4: white;
+        --theme5: white;
+
+
+        /* Ex. to use these in another rule: */
+        /* color: var(--light-color); */
+        /* see https://www.w3.org/TR/css-variables/ for full documentation */
+    }
+
+    /* Format content within the body tag of the HTML structure */
+    body {
+        /* padding-top: 6rem; */
+        margin: 0;
+        text-align: center;
+        font-family: 'Merriweather', serif; 
+        background-color: var(--background-color);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Get rid of the default styling for lists */
+    ul {
+        list-style: none;
+        padding: 0px;
+    }
+
+    /* Aligns the footer to the bottom of the viewport */
+    footer {
+        margin-top: auto;
+    }
+
+    /* ~~~~~~~~~~~~~ General Class Selectors ~~~~~~~~~~~~~ */
+
+    /* Set the background-color of the different cards throughout the site */
+    .card {
+        background-color: var(--theme1);
+    }
+
+    .btn-dark {
+        color: var(--foreground-color);
+        background-color: var(background-color);
+    }
+
+    .btn-outline-dark {
+        color: var(--background-color);
+        border: 1px solid var(--background-color);
+    }
+
+    .btn-outline-dark:hover {
+        color: var(--foreground-color);
+        background-color: var(--background-color);
+    }
+
+    .btn-outline-light {
+        color: var(--foreground-color);
+        border: 1px solid var(--foreground-color);
+    }
+
+    .btn-outline-light:hover {
+        color: var(--background-color);
+        background-color: var(--foreground-color);
+    }
+
+    /* Set the styling for back buttons */
+    .btn-back {
+        width: 100% !important;
+        border-radius: 0% !important;
+        border: none;
+        text-decoration: underline;
+        font-size: 1.1em;
+    }
+
+    /* Style incorrect login with redish color. */
+    .incorrect-input {
+        background-color: rgb(255, 169, 169);
+        color: rgb(255, 60, 60);
+        border: 2px solid rgb(255, 60, 60);
+    }
+
+    /* Style confirmation message with greenish color. */
+    .confirmation {
+        background-color: rgb(207, 246, 207);
+        color: rgb(145, 182, 145);
+        border: 2px solid rgb(145, 182, 145);
+    }
+
+    /* Fade the error message in and out. */
+    .elementToFadeInAndOut {
+        opacity: 1;
+        animation: fade 0.75s linear;
+    }
+
+    /* Key frames fade. */
+    @keyframes fade {
+    0%,100% { opacity: 0 }
+    100% { opacity: 1 } 
+    }
+
+    /* Format the messages sent to the user. NOT SURE WHAT THIS DOES*/ 
+    /* .message-format {
+        width: 100%;
+        position: relative;
+        margin-top: 1rem;
+    } */
+
+ /* ====================================================================
+                            HOME.EJS STYLES
+ ==================================================================== */
+
+    .home-picture {
+        text-align: left;
+        padding-left: 5%;
+        color: var(--foreground-color);
+    }
+
+    /* Styles the main text on the home page */
+    .home-picture h1 {
+        font-size: 5em;
+        font-family: 'Noto Serif';
+    }
+
+    /* Styles the button below the main text on the home page */
+    .home-picture button, .home-picture p {
+        font-size: 1.5em;
+    }
+
+ /* ====================================================================
+                        HOME_HEADER.EJS STYLES
+ ==================================================================== */
+
+    /* Set font size of the navbar links. */
+    .navbar-dark .navbar-nav .nav-link {
+        padding-right: 1rem;
+        font-size: 1.5rem;
+        color: var(--foreground-color);
+    }
+
+    .navbar-dark .navbar-brand{
+        color: var(--foreground-color);
+    }
+
+ /* ====================================================================
+                    LOGIN.EJS / REGISTER.EJS STYLES
+ ==================================================================== */
+
+    /* Float the text to the left for the login and register screens. */
+    .form-horizontal .control-label {
+        float: left;
+    }
+
+    /* Make the login/register font larger. */
+    .login-register-font {
+        font-size: x-large;
+        /* POTENTIALLY GET RID OF AND SELECT WITH A COMBINATOR AND CARD */
+    }
+
+    /* Adds some padding between the form elements */
+    .form-group {
+        padding: .5em;
+    }
+
+    /* Changes the styles of the inputs in the form */
+    .form-control {
+        background-color: transparent;
+        border: none;
+        border-bottom: 1px solid lightgray;
+    }
+
+    /* Changes style of inputs when they are focused on */
+    .form-control:focus {
+        background-color: transparent;
+        color: #747474;
+    }
+
+    /* Make the anchor tag for the google link have no text decoration */
+    .google-link {
+        text-decoration: none;
+    }
+
+    /* Set the hover state of the google link */
+    .google-link:hover {
+        text-decoration: underline;
+    }
+
+    /* Style the google link logo */
+    .google-link > i {
+        border: 1px solid var(--theme2); /* FIXME */
+        border-radius: 50%;
+        padding: .25em;
+    }
+
+/* ====================================================================
+                           EVENTS.EJS STYLES
+ ==================================================================== */
+
+    .events-header {
+        color: var(--foreground-color);
+    }
+
+    /* Get rid of the underlines for the text on the event cards */
+    .events-list > a {
+        color: var(--background-color);
+        text-decoration: none;
+    }
+
+/* ====================================================================
+                        USER_PROFILE.EJS STYLES
+ ==================================================================== */
+
+    .profile-header {
+        color: var(--foreground-color);
+        background-color: var(--theme2);
+        padding: 0 1em;
+    }
+
+    .profile-header form, .profile-header #profile-container, .profile-header .user-intro {
+        display: inline;
+        float: left;
+     }
+
+    /* Style the dropdowns for events on the user profile page */
+    .my-events-btn-container {
+        margin: auto;
+        padding-bottom: .25em;
+        width: 90%;
+        border-bottom: 2px solid var(--background-color);
+    }
+
+    .my-events-btn-container > button {
+        color: var(--background-color);
+        background-color: transparent;
+        text-decoration: underline;
+        border: none;
+        font-size: 1.5em;
+    }
+
+    /* Remove the line underneath the last event */
+    .events-list .event:last-child > .my-events-btn-container {
+        border-bottom: none;
+    }
+
+    /* Style the drop down cards on the user profile */
+    .event .card {
+        width: 90%;
+        margin: auto;
+        border-radius: 0%;
+        background-color: var(--background-color);
+        color: var(--theme1);
+        /* Maybe also extend these to work for the cards on the events-list page */
+    }
+
+    /* Align the text inside of the drop down cards on user profile */
+    .event section {
+        text-align: left;
+        margin: auto;
+        width: 50%;
+    }
+    
+    /* Add style to the two inline buttons in user profile. */
+    .btn-group.special {
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
+    }
+
+    /* Set positioning of buttons in user profile. */
+    .special .btn {
+        font-size: 1.25em;
+        border-radius: 0%;
+    }
+
+    /* Add styling to the logout button on a user page */
+    .btn-logout {
+        width: 100% !important;
+        border-radius: 0% !important;
+        border: none;
+        text-decoration: underline;
+        font-size: 1.1em;
+        border-left: 1px solid var(--background-color);
+    }
+
+/* ====================================================================
+                                ID STYLES
+ ==================================================================== */
+
+    /* Add color to header section of page. */
+    #header-section {
+        /* background-color: var(--dark-color); */
+        /* WILL PROBABLY BE GETTING RID OF THIS IN FAVOR OF A DIFFERENT STYLING THEME */
+    }
+
+    /* Style and position the header at the top of the login page. */
+    #login-header {
+        /* background-color: var(--dark-color); */
+        /* width: 100%;
+        position: fixed;
+        top: 0; */
+        /* z-index: 1030; */
+    }
+
+    /* Add color to footer section of page. */
+    #footer-section {
+        color: var(--foreground-color);
+    }
+
+    /* Format profile picture for user profile. */
+    #profileImage {
+        width: 3em;
+        overflow: hidden;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        -ms-border-radius: 50%;
+        -o-border-radius: 50%;
+        border-radius: 50%;
+    }
+
+    #home-illustration {
+        position: absolute;
+        z-index: -1;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    /* Custom logo that is in the navbar */
+    #custom-logo {
+        outline: 2px solid var(--theme2);
+        border-radius: 50%;
+        padding: 20%;
+    }

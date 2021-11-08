@@ -36,11 +36,11 @@
 
     <!-- Create a card for showing the user data -->
     <div class="container mt-5 mb-5">
-        <div class="row register-page-format">
+        <div class="row">
             <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12 mx-auto">
                 <div class="card">
-                    <div class="card-body">
 
+                    <header class="profile-header">
                         <!-- Display user profile picture; if user did -->
                         <!-- not use OAuth to sign or does not have picture, -->
                         <!-- use default profile image -->
@@ -51,33 +51,31 @@
                         </form>
 
                         <!-- Display user name and status -->
-                        <header>
-                            <h1 class="black-text">Welcome,&nbsp;<%= user.firstName %>.</h1>
-                            <p>Status: Volunteer</p>
-                        </header>
-                
-                        <!-- Create a div for two inline buttons in the user profile -->
-                        <div class="mt-4 mb-4 btn-group d-flex special" role="group" aria-label="...">
-                            
-                            <!-- Add a button for the user to find events -->
-                            <div>
-                                <form action="/find_events" method="POST">
-                                    <div class="inner">
-                                        <button type="submit" class="btn btn-outline-dark btn-block w-100">All Events</button>
-                                    </div>
-                                </form>
-                            </div>
-                            
-                            <!-- Add a button for the user to see their history -->
-                            <div>
-                                <form action="" method=""> <!-- ADD A LINK TO THIS LATER!!! -->
-                                    <div class="inner">
-                                        <button type="submit" class="btn btn-outline-dark btn-block w-100">Event History</button>
-                                    </div>
-                                </form>
-                            </div>
-
+                        <div class="user-intro">
+                            <h1 class="pt-3 ms-3"><%= user.firstName %> <%= user.lastName %></h1>
+                            <i>Volunteer</i>
                         </div>
+                        <!-- <p>Status: Volunteer</p> -->
+                    </header>
+
+            
+                    <!-- Create a div for two inline buttons in the user profile -->
+                    <div class="mt-4 mb-4 btn-group special" role="group" aria-label="...">
+                        
+                        <!-- Add a button for the user to find events -->
+                        <div>
+                            <form action="/find_events" method="POST">
+                                <button type="submit" class="btn btn-outline-dark btn-block w-100">All Events</button>
+                            </form>
+                        </div>
+                        
+                        <!-- Add a button for the user to see their history -->
+                        <div>
+                            <form action="" method=""> <!-- ADD A LINK TO THIS LATER!!! -->
+                                <button type="submit" class="btn btn-outline-dark btn-block w-100">Event History</button>
+                            </form>
+                        </div>
+
                     </div>
 
                     <!-- List out all of the events that the user has signed up for or donated to here -->
@@ -87,7 +85,7 @@
                         Include a section for the events that the user has signed up
                         for to be rendered on the user's profile page
                     -->
-                    <section class="event-list">
+                    <section class="events-list">
                         <!-- Loop through the database and display the events -->
                         <% listOfUserEvents.forEach(function(event) { %>
                             <% if(event == null) { %>
@@ -98,7 +96,7 @@
                                 <div class="event">
                                     <!-- Create divs that will make the events be collapsable -->
                                     <div class="my-events-btn-container">
-                                        <button class="my-events-btn black-text mx-auto" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%=event._id%>"
+                                        <button class="mx-auto" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%=event._id%>"
                                             aria-expanded="false" aria-controls="collapse<%=event._id%>"><%= event.eventName %></button>
                                     </div> 
 
@@ -181,7 +179,7 @@
                     <!-- Include a button for going back to the "Events" page -->
                     <div class="btn-group p-2">
                         <!-- Back button -->
-                        <div class="d-flex">
+                        <div>
                             <form action="/back" method="POST">
                                 <div>
                                     <button type="submit" class="btn btn-outline-dark btn-back"><i class="fas fa-arrow-left"></i> Back</button>
@@ -190,7 +188,7 @@
                         </div>
 
                         <!-- Logout button -->
-                        <div class="">
+                        <div>
                             <form action="/logout" method="POST">
                                 <div>
                                     <button type="submit" class="btn btn-outline-dark btn-logout">Logout</button>

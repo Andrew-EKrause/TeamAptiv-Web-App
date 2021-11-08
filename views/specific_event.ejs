@@ -29,7 +29,7 @@
     <div class="container mt-5 mb-5">
         <div class="row">
             <div class="col-sm-8 mx-auto">
-                <div class="card event-margin-fine-tuning">
+                <div class="card">
                     <!-- 
                         Include EJS display a message informing the user that 
                         they successfully volunteered or donated to an event.
@@ -54,49 +54,46 @@
                         </div>
                     <% } %>
                     <div class="card-body">
-                        <div class="card-text">
-                            
-                            <!-- Create a title for the event creation page.-->
-                            <div class="mb-4">
-                                <h1 class="black-text"> <%= eventName %> </h1>
-                                <h3> <%= eventDate %> </h3>
-                                <p><%= eventStartTime %> - <%= eventEndTime %> </p>
-                                <p>Location: <%= eventLocation %> </p>
-                                <p>Description: <%= eventDescription %> </p>
-                                <p>Volunteers Needed: <%= numVolunteersNeeded %> </p>
-                                <p>Donations Needed: <%= neededDonations %> </p>
-                            </div>
+                        <!-- Create a title for the event creation page.-->
+                        <div class="mb-4">
+                            <h1> <%= eventName %> </h1>
+                            <h3> <%= eventDate %> </h3>
+                            <p><%= eventStartTime %> - <%= eventEndTime %> </p>
+                            <p>Location: <%= eventLocation %> </p>
+                            <p>Description: <%= eventDescription %> </p>
+                            <p>Volunteers Needed: <%= numVolunteersNeeded %> </p>
+                            <p>Donations Needed: <%= neededDonations %> </p>
+                        </div>
 
-                            <!-- Create two buttons that collapse and show the donate and volunteer information -->
-                            <div class="special btn-group w-50 mx-auto">
-                                <% if(neededDonations > 0) { %>
-                                    <button class="btn btn-outline-dark" type="button" data-bs-toggle="collapse" 
-                                    data-bs-target="#collapseDonations" aria-expanded="false" aria-controls="collapseDonations">Donate</button>
-                                <% } %>
+                        <!-- Create two buttons that collapse and show the donate and volunteer information -->
+                        <div class="special btn-group w-50 mx-auto">
+                            <% if(neededDonations > 0) { %>
                                 <button class="btn btn-outline-dark" type="button" data-bs-toggle="collapse" 
-                                    data-bs-target="#collapseVolunteering" aria-expanded="false" aria-controls="collapseVolunteering">Volunteer</button>
-                            </div>
+                                data-bs-target="#collapseDonations" aria-expanded="false" aria-controls="collapseDonations">Donate</button>
+                            <% } %>
+                            <button class="btn btn-outline-dark" type="button" data-bs-toggle="collapse" 
+                                data-bs-target="#collapseVolunteering" aria-expanded="false" aria-controls="collapseVolunteering">Volunteer</button>
+                        </div>
 
-                            <!-- Collapsed content for donation information -->
-                            <div class="collapse" id="collapseDonations">
-                                <!-- Makes POST request to the donation route -->
-                                <form class="form-horizontal" action="/donate" method="POST">
-                                    <div class="form-group mt-2">
-                                        <label class="login-register-font control-label" for="donations">Donation Goal: $<%= neededDonations %></label>
-                                        <input type="number" class="login-register-font form-control" name="eventdonation" min="1" max=<%= neededDonations %> required>
-                                    </div>
-                                    <button type="submit" class="mt-4 btn btn-lg btn-dark">Place Donation</button>
-                                </form>
-                            </div>
-          
-                            <!-- Collapsed content for volunteering information -->
-                            <div class="collapse" id="collapseVolunteering">
-                                <!-- Makes POST request to the volunteer route -->
-                                <form class="form-horizontal" action="/volunteer" method="POST">
-                                    <input type="hidden" id="custId" name="eventvolunteer" value="<%= eventID %>" onChange="this.form.submit()">
-                                    <button type="submit" class="mt-4 btn btn-lg btn-dark">Sign Up</button>
-                                </form>
-                            </div>
+                        <!-- Collapsed content for donation information -->
+                        <div class="collapse" id="collapseDonations">
+                            <!-- Makes POST request to the donation route -->
+                            <form class="form-horizontal" action="/donate" method="POST">
+                                <div class="form-group mt-2">
+                                    <label class="login-register-font control-label" for="donations">Donation Goal: $<%= neededDonations %></label>
+                                    <input type="number" class="login-register-font form-control" name="eventdonation" min="1" max=<%= neededDonations %> required>
+                                </div>
+                                <button type="submit" class="mt-4 btn btn-lg btn-dark">Place Donation</button>
+                            </form>
+                        </div>
+        
+                        <!-- Collapsed content for volunteering information -->
+                        <div class="collapse" id="collapseVolunteering">
+                            <!-- Makes POST request to the volunteer route -->
+                            <form class="form-horizontal" action="/volunteer" method="POST">
+                                <input type="hidden" id="custId" name="eventvolunteer" value="<%= eventID %>" onChange="this.form.submit()">
+                                <button type="submit" class="mt-4 btn btn-lg btn-dark">Sign Up</button>
+                            </form>
                         </div>
                     </div>
                 
@@ -104,7 +101,7 @@
                 <div class="d-flex">
                     <form action="/back_events" method="POST">
                         <div>
-                            <button type="submit" class="btn btn-outline-dark btn-back"><i class="fas fa-arrow-left"></i> Back to Events</button>
+                            <button type="submit" class="btn btn-outline-dark btn-back"><i class="fas fa-arrow-left"></i>Back to Events</button>
                         </div>
                     </form>
                 </div>

@@ -20,23 +20,23 @@
 <%- include('./partials/home_header.ejs') %>
 
     <!-- List of programs/events -->
-    <div class="container mt-4 mb-4">
-        <header class="fixed-title">
+    <div class="container w-50 mt-4 mb-4">
+        <header class="events-header">
             <h1>Find Community Events</h1>
             <small>Volunteer | Donate</small>
             <hr>
         </header>
 
         <!-- Include a section for the events to be posted -->
-        <section class="event-list event-list-top-padding">
+        <section class="events-list">
             <!-- Loop through the database and display the events -->
             <% events.forEach(function(event) { %>
-
+                
                 <a href="/events/<%=event._id%>">
                     <div class="card mt-3">
                         <div class="card-body">
                             <div class="event">
-                                <h2 class="black-text"> <%= event.eventName %> </h2>
+                                <h2> <%= event.eventName %> </h2>
 
                                 <!-- Include a function to simplify the date display -->
                                 <% function simplifyEventDate(eventDate){ %>
