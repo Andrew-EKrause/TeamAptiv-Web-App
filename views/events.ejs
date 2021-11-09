@@ -19,28 +19,26 @@
 
 <%- include('./partials/home_header.ejs') %>
 
-    <!-- List of programs/events -->
-    <div class="container w-50 mt-4 mb-4">
-        <header class="events-header">
-            <h1>Find Community Events</h1>
-            <small>Volunteer | Donate</small>
-            <hr>
-        </header>
+    <div class="events-ejs my-auto">
+        <!-- List of programs/events -->
+        <div class="container mt-4 mb-4">
+            <div class="row">
+                <header class="col my-auto fixed">
+                    <h1>Get Involved</h1>
+                    <small>Volunteer | Donate</small>
+                </header>
 
-        <!-- Include a section for the events to be posted -->
-        <section class="events-list">
-            <!-- Loop through the database and display the events -->
-            <% events.forEach(function(event) { %>
-                
-                <a href="/events/<%=event._id%>">
-                    <div class="card mt-3">
-                        <div class="card-body">
+                <section class="col events-list">
+                    <!-- Loop through the database and display the events -->
+                    <% events.forEach(function(event) { %>
+                        
+                        <a href="/events/<%=event._id%>">
                             <div class="event">
                                 <h2> <%= event.eventName %> </h2>
 
                                 <!-- Include a function to simplify the date display -->
                                 <% function simplifyEventDate(eventDate){ %>
-    
+
                                     <% // First split the event into the components that directly %>
                                     <% // involve the numberical representations of a date. %>
                                     <% var date = eventDate.toISOString().split("T")[0]; %>
@@ -93,13 +91,18 @@
                                 <!-- The date displayed utilized the function above for simplification -->
                                 <p> <%= simplifyEventDate(event.eventDate) %> </p>
                                 <p> <%= event.eventLocation %> </p>
+                                <b>Learn more<i class="fas fa-chevron-right"></i></b>
                             </div>
-                        </div>
-                    </div>
-                </a>
+                        </a>
 
-            <% }); %>
-        </section>
+                    <% }); %>
+                </section>
+            </div>
+
+            <!-- Include a section for the events to be posted -->
+        
+        </div>
     </div>
+    
 
  <%- include('./partials/footer.ejs') %>

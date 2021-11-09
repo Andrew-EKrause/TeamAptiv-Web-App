@@ -32,11 +32,7 @@
                         
                         <!-- Makes POST request to the /login route -->
                         <form class="form-horizontal" action="/added_event" method="POST">
-                            <div class="form-group">
-                                <label class="login-register-font control-label" for="title">Event Name</label>
-                                <input type="title" class="login-register-font form-control" name="eventname" required>
-                            </div>
-                            
+
                             <!-- Makes POST request to the /login route -->
                             <form class="form-horizontal" action="/added_event" method="POST">
                                 <div class="form-group">
@@ -74,6 +70,9 @@
                                 <div class="form-group mt-2">
                                     <label class="login-register-font control-label" for="donations">Needed Donations</label>
                                     <input type="number" class="login-register-font form-control" name="eventdonations" min="1" required>
+                                </div>
+                                <div class="form-group mt-2">
+                                    <button class="btn btn-outline-light" type="submit">Create Event</button>
                                 </div>
                             </form>
                         </div>
