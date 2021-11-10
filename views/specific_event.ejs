@@ -65,6 +65,7 @@
                                 <p>Description: <%= eventDescription %> </p>
                                 <p>Volunteers Needed: <%= numVolunteersNeeded %> </p>
                                 <p>Donations Needed: $<%= neededDonations %> </p>
+
                             </div>
 
                             <!-- Create two buttons that collapse and show the donate and volunteer information -->
@@ -86,7 +87,7 @@
                                 <form class="form-horizontal" action="/donate" method="POST">
                                     <div class="form-group mt-2">
                                         <label class="login-register-font control-label" for="donations">Donation Goal: $<%= neededDonations %></label>
-                                        <input type="hidden" id="custId" name="eventidetifier" value="<%= eventID %>" onChange="this.form.submit()">
+                                        <input type="hidden" id="custId" name="eventidentifier" value="<%= eventID %>" onChange="this.form.submit()">
                                         <input type="number" class="login-register-font form-control" name="eventdonation" min="1" max=<%= neededDonations %> required>
                                     </div>
                                     <button type="submit" class="mt-4 btn btn-lg btn-dark">Place Donation</button>
@@ -107,10 +108,19 @@
 
                                     <!-- Create different time slots that the user can sign up for -->
                                     <% eventTimeIncrements.forEach(function(timeSlot) { %>
+
+                                        <% // Take the time and remove the unique id from the total string for display purposes. %>
+                                        <% var timeSlotSplitTemp = timeSlot.split(" "); %>
+                                        <% var timeSlotSplit = timeSlotSplitTemp[1] + " " + timeSlotSplitTemp[2] + " " + timeSlotSplitTemp[3] + " " + timeSlotSplitTemp[4] +  " " + timeSlotSplitTemp[5]; %>
+
+                                        <% // Display the time slot as a checkbox that the user can select. %>
                                         <input type="checkbox" class="myCheckBox" name="timeslot" value="<%= timeSlot %>">
-                                        <p><%= timeSlot %></p>
+                                        <p><%= timeSlotSplit %></p>
+
                                     <% }); %>
-                                    <input type="hidden" id="custId" name="eventidetifier" value="<%= eventID %>" onChange="getResult()"> 
+                                    
+                                    <input type="hidden" id="custId" name="eventidentifier" value="<%= eventID %>" onChange="getResult()"> 
+                                    <input type="hidden" id="custId" name="eventdate" value="<%= eventDate %>" onChange="getResult()"> 
                                     <button type="submit" class="mt-4 btn btn-lg btn-dark">Sign Up</button>
 
                                 </form>
