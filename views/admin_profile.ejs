@@ -43,143 +43,152 @@
 
     <div class="profile-ejs">
         <!-- Create a card for showing the user data -->
-        <div class="container mt-5 mb-5">
+        <div class="container w-75 mt-5">
             <div class="row">
-                <!-- Display ADMIN profile picture; if user did -->
-                <!-- not use OAuth to sign or does not have picture, -->
-                <!-- use default profile image -->
-                <form action="/user_profile" method="post">
-                    <div class="mt-3 mb-3" id="profile-container">
-                        <img id="profileImage" src=<%= user.picture %> alt="Image not Found" onerror=this.src="images/default_pic.png">
-                    </div>
-                </form>
 
-                <!-- Display ADMIN name and ADMIN status -->
-                <header>
-                    <h1>Welcome,&nbsp;<%= user.firstName %>.</h1>
-                    <p>Status: <%= user.status %></p>
-                </header>
+                <div class="col">
+                    <header>
+                        <!-- Display ADMIN profile picture; if user did -->
+                        <!-- not use OAuth to sign or does not have picture, -->
+                        <!-- use default profile image -->
+                        <form action="/user_profile" method="post">
+                            <!-- <div class="mt-3 mb-3" id="profile-container"> --> <!-- CHECK WITH ANDREW THAT THIS WONT MESS WITH STUFF -->
+                                <img id="profileImage" src=<%= user.picture %> alt="Image not Found" onerror=this.src="images/default_pic.png">
+                            <!-- </div> -->
+                        </form>
 
-                <!-- Create a div for two inline buttons in the user profile -->
-                <div class="mt-4 mb-4 btn-group special" role="group" aria-label="...">
-                    
-                    <!-- Add a button to create a new event -->
-                    <div>
+                        <!-- Display ADMIN name and ADMIN status -->
+                        <div>
+                            <h1><%= user.firstName %></h1>
+                            <p>Status: <%= user.status %></p>
+                        </div>
+                    </header>
+
+                    <div class="profile-options">
+                        <button data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                            <i class="fas fa-bolt"></i>
+                            My Events
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                            
+                        <!-- Add a button to create a new event -->
                         <form action="/create_event" method="POST">
-                            <div class="inner">
-                                <button type="submit" class="btn btn-outline-dark btn-block w-100">Create New Event</button>
-                            </div>
+                            <button type="submit">
+                                <i class="fas fa-bolt"></i>
+                                Create New Event
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
                         </form>
-                    </div>
-                    
-                    <!-- Add a button for the user to see their HISTORY !!! THIS WILL BE LATER ON IN THE COURSE -->
-                    <div>
+                        
+                        <!-- Add a button for the user to see their HISTORY !!! THIS WILL BE LATER ON IN THE COURSE -->
                         <form action="" method="">
-                            <div class="inner">
-                                <button type="submit" class="btn btn-outline-dark btn-block w-100">See Event History</button>
-                            </div>
+                            <button type="submit" class="btn">
+                                <i class="fas fa-bolt"></i>
+                                See Event History
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </form>
+
+                        <form action="/logout" method="POST">
+                            <button type="submit">
+                                <i class="fas fa-bolt"></i>
+                                Logout
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
                         </form>
                     </div>
-
                 </div>
-                <!-- DIV MIGHT NEED TO GO HERE INSTEAD!!! -->
 
-                <!-- List out all of the events that the user has signed up for or donated to here -->
-                <h3>My Events</h3>
+                
+                <div class="col">
+                    <!-- 
+                        Include a section for the events that the user has signed up
+                        for to be rendered on the user's profile page
+                    -->
+                    <div class="events-list collapse collapse" id="collapseEvents">
+                        <!-- Loop through the database and display the events -->
+                        <% listOfUserEvents.forEach(function(event) { %>
+                            <% if(event == null) { %>
+                                <% // For now, do nothing. In the future, trigger a request so that the %>
+                                <% // event object ID is removed from the user's info in the database. %>
+                            <% } else { %>
 
-                <!-- 
-                    Include a section for the events that the user has signed up
-                    for to be rendered on the user's profile page
-                -->
-                <section class="event-list">
-                    <!-- Loop through the database and display the events -->
-                    <% listOfUserEvents.forEach(function(event) { %>
-                        <% if(event == null) { %>
-                            <% // For now, do nothing. In the future, trigger a request so that the %>
-                            <% // event object ID is removed from the user's info in the database. %>
-                        <% } else { %>
+                                <div class="event">
+                                    <!-- Create divs that will make the events be collapsable -->
+                                    <button type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%=event._id%>"
+                                    aria-expanded="false" aria-controls="collapse<%=event._id%>"><%= event.eventName %></button>
 
-                            <div class="event">
-                                <!-- Create divs that will make the events be collapsable -->
-                                <div class="my-events-btn-container">
-                                    <button class="my-events-btn mx-auto" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%=event._id%>"
-                                        aria-expanded="false" aria-controls="collapse<%=event._id%>"><%= event.eventName %></button>
-                                </div> 
-
-                                <div class="collapse" id="collapse<%=event._id%>">
-                                    <div class="card mb-3">
-                                        <div class="card-body">
-                                            <!-- Include a function to simplify the date display -->
-                                            <% function simplifyEventDate(eventDate){ %>
-                                                <% // First split the event into the components that directly %>
-                                                <% // involve the numberical representations of a date. %>
-                                                <% var date = eventDate.toISOString().split("T")[0]; %>
-                                            
-                                                <% // Create variables for workring with %>
-                                                <% // the nubmers in the date variable. %>
-                                                <% var arrayDate = date.split('-'); %>
-                                                <% var day = arrayDate[2]; %>
-                                                <% var getMonth = arrayDate[1]; %>
-                                                <% var month = ""; %>
-                                                <% var year = arrayDate[0]; %>
-                                                <% var simplifiedDate = ""; %>
-                                            
-                                                <% // Use a series of conditionals to determine %>
-                                                <% // what the name of the month is based on the %>
-                                                <% // numerical representation of it. %>
-                                                <% if(getMonth.localeCompare('1') == 0) { %>
-                                                    <% month = 'Jan'; %>
-                                                <% } else if(getMonth.localeCompare('2') == 0) { %>
-                                                    <% month = 'Feb'; %>
-                                                <% } else if(getMonth.localeCompare('3') == 0) { %>
-                                                    <% month = 'Mar'; %>
-                                                <% } else if(getMonth.localeCompare('4') == 0) { %>
-                                                    <% month = 'Apr'; %>
-                                                <% } else if(getMonth.localeCompare('5') == 0) { %>
-                                                    <% month = 'May'; %>
-                                                <% } else if(getMonth.localeCompare('6') == 0) { %>
-                                                    <% month = 'Jun'; %>
-                                                <% } else if(getMonth.localeCompare('7') == 0) { %>
-                                                    <% month = 'Jul'; %>
-                                                <% } else if(getMonth.localeCompare('8') == 0) { %>
-                                                    <% month = 'Aug'; %>
-                                                <% } else if(getMonth.localeCompare('9') == 0) { %>
-                                                    <% month = 'Sep'; %>
-                                                <% } else if(getMonth.localeCompare('10') == 0) { %>
-                                                    <% month = 'Oct'; %>
-                                                <% } else if(getMonth.localeCompare('11') == 0) { %>
-                                                    <% month = 'Nov'; %>
-                                                <% } else if(getMonth.localeCompare('12') == 0) { %>
-                                                    <% month = 'Dec'; %>
-                                                <% } else { %>
-                                                    <% month = 'ERROR'; %>
-                                                <% } %>
-                                            
-                                                <% // Create the simplified date and return it. %>
-                                                <% simplifiedDate = month + " " + (day - 1) + ", " + year; %>
-                                                <% return simplifiedDate; %>
+                                    <div class="collapse" id="collapse<%=event._id%>">
+                                        <!-- Include a function to simplify the date display -->
+                                        <% function simplifyEventDate(eventDate){ %>
+                                            <% // First split the event into the components that directly %>
+                                            <% // involve the numberical representations of a date. %>
+                                            <% var date = eventDate.toISOString().split("T")[0]; %>
+                                        
+                                            <% // Create variables for workring with %>
+                                            <% // the nubmers in the date variable. %>
+                                            <% var arrayDate = date.split('-'); %>
+                                            <% var day = arrayDate[2]; %>
+                                            <% var getMonth = arrayDate[1]; %>
+                                            <% var month = ""; %>
+                                            <% var year = arrayDate[0]; %>
+                                            <% var simplifiedDate = ""; %>
+                                        
+                                            <% // Use a series of conditionals to determine %>
+                                            <% // what the name of the month is based on the %>
+                                            <% // numerical representation of it. %>
+                                            <% if(getMonth.localeCompare('1') == 0) { %>
+                                                <% month = 'Jan'; %>
+                                            <% } else if(getMonth.localeCompare('2') == 0) { %>
+                                                <% month = 'Feb'; %>
+                                            <% } else if(getMonth.localeCompare('3') == 0) { %>
+                                                <% month = 'Mar'; %>
+                                            <% } else if(getMonth.localeCompare('4') == 0) { %>
+                                                <% month = 'Apr'; %>
+                                            <% } else if(getMonth.localeCompare('5') == 0) { %>
+                                                <% month = 'May'; %>
+                                            <% } else if(getMonth.localeCompare('6') == 0) { %>
+                                                <% month = 'Jun'; %>
+                                            <% } else if(getMonth.localeCompare('7') == 0) { %>
+                                                <% month = 'Jul'; %>
+                                            <% } else if(getMonth.localeCompare('8') == 0) { %>
+                                                <% month = 'Aug'; %>
+                                            <% } else if(getMonth.localeCompare('9') == 0) { %>
+                                                <% month = 'Sep'; %>
+                                            <% } else if(getMonth.localeCompare('10') == 0) { %>
+                                                <% month = 'Oct'; %>
+                                            <% } else if(getMonth.localeCompare('11') == 0) { %>
+                                                <% month = 'Nov'; %>
+                                            <% } else if(getMonth.localeCompare('12') == 0) { %>
+                                                <% month = 'Dec'; %>
+                                            <% } else { %>
+                                                <% month = 'ERROR'; %>
                                             <% } %>
+                                        
+                                            <% // Create the simplified date and return it. %>
+                                            <% simplifiedDate = month + " " + (day - 1) + ", " + year; %>
+                                            <% return simplifiedDate; %>
+                                        <% } %>
 
-                                            <section>
-                                                <!-- The date displayed utilized the function above for simplification -->
-                                                <p class="text-center"> <%= simplifyEventDate(event.eventDate) %> </p>
+                                        <ul class="mt-1">
+                                            <!-- The date displayed utilized the function above for simplification -->
+                                            <li> <%= simplifyEventDate(event.eventDate) %> </li>
 
-                                                <!-- Display the event location, description, volunteer, and donation information -->
-                                                <p> Location: <%= event.eventLocation %> </p>
-                                                <p> Description: <%= event.eventDescription %> </p>
-                                                <p> Volunteers: TELL USER WHAT TIME THEY VOLUNTEERED FOR </p>
-                                                <% if(event.neededDonations > 0) { // && CHECK IF USER CONTRIBUTED TO THIS EVENT) { %>
-                                                    <p> Donations: You have given PUT AMOUNT HERE </p>
-                                                <% } %>
-                                            </section>
-                                        </div>
+                                            <!-- Display the event location, description, volunteer, and donation information -->
+                                            <li> Location: <%= event.eventLocation %> </li>
+                                            <li> Description: <%= event.eventDescription %> </li>
+                                            <li> Volunteers: TELL USER WHAT TIME THEY VOLUNTEERED FOR </li>
+                                            <% if(event.neededDonations > 0) { // && CHECK IF USER CONTRIBUTED TO THIS EVENT) { %>
+                                                <li> Donations: You have given PUT AMOUNT HERE </li>
+                                            <% } %>
+                                        </ul>
                                     </div>
                                 </div>
-                            </div>
-                            
-                        <% } %>
-                    <% }); %>
-                </section>
+                                
+                            <% } %>
+                        <% }); %>
+                    </div>
+                </div>
 
                 <!-- Include a button for going back to the "Events" page -->
                 <div class="btn-group p-2">
@@ -188,15 +197,6 @@
                         <form action="/back" method="POST">
                             <div>
                                 <button type="submit" class="btn btn-outline-dark btn-back"><i class="fas fa-arrow-left"></i> Back</button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <!-- Logout button -->
-                    <div class="">
-                        <form action="/logout" method="POST">
-                            <div>
-                                <button type="submit" class="btn btn-outline-dark btn-logout">Logout</button>
                             </div>
                         </form>
                     </div>

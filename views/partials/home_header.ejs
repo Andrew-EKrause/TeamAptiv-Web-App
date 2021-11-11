@@ -60,15 +60,18 @@
                             <a class="nav-link" href="/events">Events</a>
                         </li>
                         <!-- Link to user profile -->
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a class="nav-link" href="/user_profile">Profile</a>
-                        </li>
+                        </li> -->
                         <!-- Show the format for logged out or logged in -->
                         <% if(typeof user != 'undefined') { %>
-                            <!-- Third navigation bar link -->
                             <li class="nav-item">
-                                <a class="nav-link" href="/logout">Logout</a>
+                                <a class="nav-link" href="/user_profile">Profile</a>
                             </li>
+                            <!-- Third navigation bar link -->
+                            <!-- <li class="nav-item">
+                                <a class="nav-link" href="/logout">Logout</a>
+                            </li> -->
                         <% } else { %>
                             <!-- Third navigation bar link -->
                             <li class="nav-item">

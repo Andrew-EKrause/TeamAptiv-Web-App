@@ -29,30 +29,6 @@
         <!-- Create a container to format the specific event on the page. -->
         <div class="container mt-5 mb-5">
             <div class="row">
-                <!-- 
-                    Include EJS display a message informing the user that 
-                    they successfully volunteered or donated to an event.
-                -->
-                <% if(successVolunteeredOrDonated.length > 0) { %>
-                    <div class="confirmation">
-                        <div class="elementToFadeInAndOut message-format">
-                            <h2><%= successVolunteeredOrDonated %></h2>
-                        </div>
-                    </div>
-                <% } %>
-
-                <!-- 
-                    Include EJS display a message informing the user that
-                    they have already signed up for a particular event.
-                -->
-                <% if(alreadyVolunteered.length > 0) { %>
-                    <div class="incorrect-input">
-                        <div class="elementToFadeInAndOut message-format">
-                            <h2><%= alreadyVolunteered %></h2>
-                        </div>
-                    </div>
-                <% } %>
-
                 <div class="col mx-auto">
                             
                     <!-- Create a title for the event creation page.-->
@@ -100,6 +76,29 @@
                             <div class="submit-container"><button type="submit" class="btn btn-outline-light">Sign Up</button></div>
                         </form>
                     </div>
+                    <!-- 
+                        Include EJS display a message informing the user that 
+                        they successfully volunteered or donated to an event.
+                    -->
+                    <% if(successVolunteeredOrDonated.length > 0) { %>
+                        <div class="confirmation w-75">
+                            <div class="elementToFadeInAndOut message-format">
+                                <b><%= successVolunteeredOrDonated %></b>
+                            </div>
+                        </div>
+                    <% } %>
+
+                    <!-- 
+                        Include EJS display a message informing the user that
+                        they have already signed up for a particular event.
+                    -->
+                    <% if(alreadyVolunteered.length > 0) { %>
+                        <div class="incorrect-input w-75">
+                            <div class="elementToFadeInAndOut message-format">
+                                <b><%= alreadyVolunteered %></b>
+                            </div>
+                        </div>
+                    <% } %>
                 
                     <!-- Button to go back to the other events -->
                     <!-- <div class="d-flex">
