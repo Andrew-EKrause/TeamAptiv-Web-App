@@ -21,29 +21,9 @@
 
 <%- include('./partials/home_header.ejs') %>
 
-    <!-- 
-        Include EJS to display a success message to the ADMIN if
-        they successfully created a new event.
-    -->
-    <% if(successCreated.length > 0) { %>
-        <div class="card-body elementToFadeInAndOut message-format">
-            <h1 class="confirmation"><%= successCreated %></h1>
-        </div>
-    <% } %>
-
-    <!-- 
-        Include EJS to display a failure message to the ADMIN if
-        they failed to create a new event.
-    -->
-    <% if(failureNotCreated.length > 0) { %>
-            <div class="card-body elementToFadeInAndOut message-format">
-                <h1 class="incorrect-input"><%= failureNotCreated %></h1>
-            </div>
-    <% } %>
-
     <div class="profile-ejs">
         <!-- Create a card for showing the user data -->
-        <div class="container w-75 mt-5">
+        <div class="container w-75 mt-3">
             <div class="row">
 
                 <div class="col">
@@ -101,6 +81,26 @@
 
                 
                 <div class="col">
+
+                        <!-- 
+                            Include EJS to display a success message to the ADMIN if
+                            they successfully created a new event.
+                        -->
+                        <% if(successCreated.length > 0) { %>
+                            <div class="card-body elementToFadeInAndOut message-format">
+                                <h1 class="confirmation"><%= successCreated %></h1>
+                            </div>
+                        <% } %>
+
+                        <!-- 
+                            Include EJS to display a failure message to the ADMIN if
+                            they failed to create a new event.
+                        -->
+                        <% if(failureNotCreated.length > 0) { %>
+                                <div class="card-body elementToFadeInAndOut message-format">
+                                    <h1 class="incorrect-input"><%= failureNotCreated %></h1>
+                                </div>
+                        <% } %>
                     <!-- 
                         Include a section for the events that the user has signed up
                         for to be rendered on the user's profile page
@@ -191,8 +191,7 @@
                 </div>
 
                 <!-- Include a button for going back to the "Events" page -->
-                <div class="btn-group p-2">
-                    <!-- Back button -->
+                <!-- <div class="btn-group p-2">
                     <div class="d-flex">
                         <form action="/back" method="POST">
                             <div>
@@ -200,7 +199,7 @@
                             </div>
                         </form>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

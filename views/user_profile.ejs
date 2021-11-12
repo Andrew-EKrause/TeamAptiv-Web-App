@@ -22,21 +22,9 @@
 
 <%- include('./partials/home_header.ejs') %>
 
-    <!-- 
-        Include EJS to display any error messages to the user if the
-        attempt to access a page that they are not authorized to access.
-    -->
-    <% if(permissionDenied.length > 0) { %>
-        <div class="incorrect-input">
-            <div class="elementToFadeInAndOut message-format">
-                <h1><%= permissionDenied %></h1>
-            </div>
-        </div>
-    <% } %>
-
     <div class="profile-ejs">
         <!-- Create a card for showing the user data -->
-        <div class="container w-75 mt-5">
+        <div class="container w-75 mt-3">
             <div class="row">
 
                 <div class="col">
@@ -85,6 +73,19 @@
 
                 
                 <div class="col">
+
+                        <!-- 
+                            Include EJS to display any error messages to the user if the
+                            attempt to access a page that they are not authorized to access.
+                        -->
+                        <% if(permissionDenied.length > 0) { %>
+                            <div class="incorrect-input">
+                                <div class="elementToFadeInAndOut message-format">
+                                    <h1><%= permissionDenied %></h1>
+                                </div>
+                            </div>
+                        <% } %>
+                        
                     <!-- 
                         Include a section for the events that the user has signed up
                         for to be rendered on the user's profile page

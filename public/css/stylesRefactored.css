@@ -24,6 +24,7 @@
 
  /* Import fonts */
  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono&family=Noto+Serif:ital@1&display=swap'); 
+ @import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&display=swap');
 
 /* ====================================================================
                             GENERAL STYLES
@@ -32,8 +33,9 @@
     /* Defines global colors */
     :root {
         --foreground-color: black;
-        --background-color: #F9F9F9;
-        --theme1: rgb(180, 180, 180);
+        --background-primary: #f0f0f0; /* Background of the body */
+        --background-secondary: white; /* Background of the cards */
+        --theme1: rgb(180, 180, 180); /* This is used for a lot of the box shadows */
         --theme2: rgb(110, 110, 110);
         --theme3: white;
         --theme4: white;
@@ -50,7 +52,7 @@
         /* padding-top: 6rem; */
         margin: 0;
         font-family: 'Merriweather', serif; 
-        background-color: var(--background-color);
+        background-color: var(--background-primary);
         min-height: 100vh;
         display: flex;
         flex-direction: column;
@@ -68,24 +70,13 @@
         text-align: center;
     }
 
+    footer i {
+        color: var(--foreground-color);
+    }
+
     /* ~~~~~~~~~~~~~ General Class Selectors ~~~~~~~~~~~~~ */
 
     /* Set the background-color of the different cards throughout the site */
-
-    .btn-dark {
-        color: var(--foreground-color);
-        background-color: var(background-color);
-    }
-
-    .btn-outline-dark {
-        color: var(--background-color);
-        border: 1px solid var(--background-color);
-    }
-
-    .btn-outline-dark:hover {
-        color: var(--foreground-color);
-        background-color: var(--background-color);
-    }
 
     .btn-outline-light {
         color: var(--foreground-color);
@@ -93,8 +84,9 @@
     }
 
     .btn-outline-light:hover {
-        color: var(--background-color);
+        color: var(--background-primary);
         background-color: var(--foreground-color);
+        border: 1px solid var(--foreground-color);
     }
 
     /* Style incorrect login with redish color. */
@@ -125,9 +117,10 @@
 
     /* Format the messages sent to the user. NOT SURE WHAT THIS DOES*/ 
     .message-format {
+        text-align: center;
         font-size: 1.5em;
         width: 100%;
-        border-radius: 1em !important;
+        border-radius: 1em;
         padding: .5em;
     }
 
@@ -135,21 +128,26 @@
                             HOME.EJS STYLES
  ==================================================================== */
 
-    .home-picture {
+    .home-ejs .home-picture {
         text-align: left;
         padding-left: 5%;
         color: var(--foreground-color);
     }
 
     /* Styles the main text on the home page */
-    .home-picture h1 {
+    .home-ejs .home-picture h1 {
         font-size: 5em;
         font-family: 'Noto Serif';
     }
 
     /* Styles the button below the main text on the home page */
-    .home-picture button, .home-picture p {
+    .home-ejs .home-picture button, .home-picture p {
         font-size: 1.5em;
+    }
+
+    .home-ejs .home-picture form {
+        display: inline;
+        float: left;
     }
 
  /* ====================================================================
@@ -157,23 +155,59 @@
  ==================================================================== */
 
     /* Set font size of the navbar links. */
-    .navbar-dark .navbar-nav .nav-link {
+    .navbar .navbar-nav .nav-link {
         padding-right: 1rem;
         font-size: 1.5rem;
         color: var(--foreground-color);
+        transition: all .25s;
     }
 
-    .navbar-dark .navbar-brand{
+    /* Potentially delete */
+    .navbar .navbar-brand {
         color: var(--foreground-color);
     }
+
+    .navbar .navbar-nav .nav-link:hover {
+        color: var(--theme2);
+    }
+
 
  /* ====================================================================
                     LOGIN.EJS / REGISTER.EJS STYLES
  ==================================================================== */
 
-    /* Float the text to the left for the login and register screens. */
-    .form-horizontal .control-label {
-        float: left;
+    /* Get rid of the default bootstrap padding */
+    .login-register-ejs .row > * {
+        padding: 0;
+    }
+
+    .login-register-ejs {
+        color: var(--foreground-color);
+    }
+    
+    .login-register-ejs .sheet {
+        border-radius: .5em;
+        background-color: var(--background-secondary);
+        box-shadow: 5px 5px 1em var(--theme1);
+        transition: all .5s; 
+    }
+
+    .login-register-ejs .sheet > header {
+        text-align: center;
+        padding: 1em;
+        border-radius: .5em .5em 0 0;
+        background-color: var(--foreground-color);
+        color: var(--background-primary);
+    }
+
+    .login-register-ejs .sheet > header > a {
+        display: block;
+        font-size: 3em;
+        padding: 0;
+        margin-bottom: .25em;
+        color: var(--background-primary);
+        border-bottom: 1px solid var(--foreground-color);
+        transition: all .5s;
     }
 
     /* Make the login/register font larger. */
@@ -205,16 +239,25 @@
         text-decoration: none;
     }
 
+    /* Style the google link logo */
+    .google-link > i {
+        color: var(--theme2);
+        border: 1px solid var(--theme2); /* FIXME */
+        border-radius: 50%;
+        padding: .25em;
+    }
+
+    .login-register-ejs .sheet:hover {
+        box-shadow: 7px 7px 2em var(--theme1);
+    }
+
     /* Set the hover state of the google link */
     .google-link:hover {
         text-decoration: underline;
     }
 
-    /* Style the google link logo */
-    .google-link > i {
-        border: 1px solid var(--theme2); /* FIXME */
-        border-radius: 50%;
-        padding: .25em;
+    .login-register-ejs .sheet > header a:hover {
+        border-bottom: 1px solid var(--background-primary);
     }
 
 /* ====================================================================
@@ -240,7 +283,7 @@
         margin-top: 1.5em;
         padding: 1em;
         border-radius: .5em;
-        background-color: white;
+        background-color: var(--background-secondary);
         box-shadow: 5px 5px 1em var(--theme1);
         transition: all .5s;
     }
@@ -282,12 +325,12 @@
     .events-ejs .event:hover {
         background-color: var(--foreground-color);
         transform: scale(1.05);
-        color: white;
+        color: var(--background-primary);
     }
 
     /* Change the bottom border when event is hovered on */
     .events-ejs .event:hover > h2 {
-        border-bottom: 1px solid white;
+        border-bottom: 1px solid var(--background-primary);
     }
 
     .events-ejs .event:hover > p {
@@ -298,13 +341,17 @@
                            SPECIFIC_EVENT.EJS STYLES
  ==================================================================== */
 
+ .specific-event-ejs {
+     color: var(--foreground-color);
+ }
+
  .specific-event-ejs .event {
     padding: 1em;
     width: 90%;
     height: 100%;
     border-radius: .5em;
     box-shadow: 5px 5px 1em var(--theme1); 
-    background-color: white;
+    background-color: var(--background-secondary);
     transition: all .5s;
  }
 
@@ -326,7 +373,7 @@
     margin-bottom: 1.5em;
     border-radius: .5em;
     box-shadow: 5px 5px 1em var(--theme1); 
-    background-color: white;
+    background-color: var(--background-secondary);
     transition: all .5s;
  }
 
@@ -434,8 +481,60 @@
 
     .profile-ejs .profile-options button:hover {
         background-color: var(--foreground-color);
-        color: var(--background-color);
+        color: var(--background-primary);
         transform: scale(1.05);
+    }
+
+/* ====================================================================
+                        EVENT_CREATION STYLES
+ ==================================================================== */
+
+    /* Get rid of the default padding for the row */
+    .event-creation-ejs .row > * {
+        padding: 0;
+    }
+
+    .event-creation-ejs .sheet {
+        background-color: white;
+        box-shadow: 5px 5px 1em var(--theme1); 
+        border-radius: .5em;
+        transition: all .6s;    
+    }
+
+    .event-creation-ejs .sheet > header {
+        background-color: var(--foreground-color);
+        color: var(--background-primary);
+        padding: 1em;
+        border-radius: .5em .5em 0 0;
+    }
+
+    .event-creation-ejs .sheet:hover {
+        box-shadow: 7px 7px 2em var(--theme1); 
+    }
+
+ /* ====================================================================
+                           ABOUT.EJS STYLES
+ ==================================================================== */
+
+    .about-ejs {
+        color: var(--foreground-color);
+    }
+
+    .about-ejs .mission, .about-ejs .donate {
+        margin: 1.5em;
+        padding: 1em;
+        background-color: var(--background-secondary);
+        box-shadow: 5px 5px 1em var(--theme1); 
+        border-radius: .5em;
+        transition: all .6s;   
+    }
+
+    .about-ejs .mission > h2, .about-ejs .donate > h2 {
+        border-bottom: 1px solid var(--foreground-color);
+    }
+
+    .about-ejs .mission:hover, .about-ejs .donate:hover {
+        box-shadow: 7px 7px 2em var(--theme1); 
     }
 
 /* ====================================================================
@@ -479,9 +578,17 @@
 
     /* Custom logo that is in the navbar */
     #custom-logo {
-        outline: 2px solid var(--theme2);
-        border-radius: 50%;
-        padding: 10%;
+        font-size: 1.5em;
+        font-family: "Mochiy Pop P One";
+        color: var(--foreground-color);
+        outline: 2px solid var(--foreground-color);
+        border-radius: 1em;
+        transition: all .5s;
+    }
+
+    #custom-logo:hover {
+        background-color: var(--foreground-color);
+        color: var(--background-primary);
     }
 
     /* TODO */
