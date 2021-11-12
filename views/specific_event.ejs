@@ -38,7 +38,21 @@
                             <li> <%= eventDate %> </li>
                             <li><%= eventStartTime %> - <%= eventEndTime %> </li>
                             <li>Location: <%= eventLocation %> </li>
-                            <li><%= eventDescription %> </li>
+                            <!-- <li><%= descriptionString %> </li> -->
+
+                            <!-- Use the split function to determine if the description was left blank -->
+                            <% var descriptionArray = eventDescription.split(" "); %>
+                            <% if(descriptionArray[1] != "") { %>
+
+                                <!-- If the description is not blank, obtain the info for it and display -->
+                                <% var descriptionString = ""; %>
+                                <% for(let i = 1; i < descriptionArray.length; i++) { %>
+                                    <% descriptionString = descriptionString + " " + descriptionArray[i]; %>
+                                <% } %>
+                                
+                                <!-- Display the description assuming it is not blank -->
+                                <li>Description: <%= descriptionString %> </li>
+                            <% } %>
                         </ul>
                     </div>
                 </div>
@@ -81,7 +95,7 @@
                             </form> -->
 
 
-                            <h3 class="mt-3">Available time slots:</h3>
+                            <h3 class="">Available time slots:</h3>
 
                             <!-- FUNCTION: Function to get the value of the timeslot, which is the slot time -->
                             <% function getResult() { %>
@@ -100,15 +114,17 @@
                                     <% if(timeSlotSplitTemp.length > 1) { %>
                                         <% var timeSlotSplit = timeSlotSplitTemp[1] + " " + timeSlotSplitTemp[2] + " " + timeSlotSplitTemp[3] + " " + timeSlotSplitTemp[4] +  " " + timeSlotSplitTemp[5]; %>
                                         <% // Display the time slot as a checkbox that the user can select. %>
-                                        <input type="checkbox" class="myCheckBox" name="timeslot" value="<%= timeSlot %>">
-                                        <p><%= timeSlotSplit %></p>
+                                        <div class="timeslot mt-2">
+                                            <input type="checkbox" id="<%= timeSlot %>" class="myCheckBox" name="timeslot" value="<%= timeSlot %>">
+                                            <label for="<%= timeSlot %>"><%= timeSlotSplit %></label>
+                                        </div>
                                     <% } %>
 
                                 <% }); %>
                                 
                                 <input type="hidden" id="custId" name="eventidentifier" value="<%= eventID %>" onChange="getResult()"> 
                                 <input type="hidden" id="custId" name="eventdate" value="<%= eventDate %>" onChange="getResult()"> 
-                                <button type="submit" class="mt-4 btn btn-lg btn-dark">Sign Up</button>
+                                <button type="submit" class="mt-4 btn btn-lg btn-outline-light">Sign Up</button>
 
                             </form>
                         </div>

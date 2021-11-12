@@ -11,14 +11,6 @@
 -->
 
 <%- include('./partials/home_header.ejs') %>
-
-    <!-- Send a message to the user alterting them that they made an unrestricted donation-->
-    <% if(thanksForDonation.length > 0) { %>
-        <div class="card-body elementToFadeInAndOut message-format">
-            <h1 class="confirmation"><%= thanksForDonation %></h1>
-        </div>
-    <% } %>
-
     <div class="about-ejs">
         <div class="container">
             <div class="row">
@@ -46,6 +38,13 @@
 
                 <div class="col donate">
                     <h2>Donate to Team Aptiv</h2>
+                    <!-- Send a message to the user alterting them that they made an unrestricted donation-->
+                    <% if(thanksForDonation.length > 0) { %>
+                    <div class="card-body elementToFadeInAndOut message-format">
+                        <h1 class="confirmation"><%= thanksForDonation %></h1>
+                    </div>
+                    <% } %>
+                    
                     <% events.forEach(function(event) { %>
                         <!-- Makes POST request to the organization donation route -->
                         <!-- Use the forEach loop above to access the components of the document -->
