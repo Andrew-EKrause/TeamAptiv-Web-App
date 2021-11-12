@@ -97,7 +97,7 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const LocalStrategy = require("passport-local");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const findOrCreate = require("mongoose-findorcreate");
-const { times } = require('async');
+// const { times } = require('async'); // --> NOT USING THIS FOR NOW
 
 // Create a string for the current ADMIN username.
 const ADMIN_NAME = "$ADMIN$@ACCOUNT-2023";
@@ -148,6 +148,8 @@ const userSchema = new mongoose.Schema({
         sparse: true 
     }, 
 
+    // MAY HAVE TO CREATE ANOTHER ID FIELD...
+
     // First name, last name, and picture of user.
     firstName: String,
     lastName: String,
@@ -170,26 +172,13 @@ const userSchema = new mongoose.Schema({
         default: "Volunteer" 
     }, 
 
-    // // Array of dates that the user is attending.
-    // // (Corresponds with the array below.)
-    // datesAttending: [{
-    //     //type: String,
-    //     type: mongoose.Schema.Types.ObjectId, 
-    //     ref: 'Event'
-    //     // default: null,
-    //     // unique: false,
-    //     //sparse: true
-    // }], // --> MAY HAVE TO CHANGE THIS; IS THE DATE(S) OF THE EVENT(S) SIGNED UP FOR !!!!!CURRENT ISSUE
-
     // Array of times that the user is attending.
-    // (Corresponds with the array above.)
+    // Also contains the date of the event.
     timesAttending: [{
-        //type: String,
         type: String, 
-        //default: null,
         unique: true, 
         sparse: true
-    }], // --> MAY HAVE TO CHANGE THIS; IS THE TIME(S) OF THE EVENT(S) SIGNED UP FOR !!!!!CURRENT ISSUE
+    }],
 
     // Array of the event identification numbers user has signed up for.
     userEvents: [{
@@ -226,17 +215,20 @@ const eventSchema = new mongoose.Schema({
     eventStartTime: String,
     eventEndTime: String,
 
-    // Array for the time slots available. // --> NOT WORKING???
+    // Array for the time slots available. 
     eventTimeIncrements: [{
         type: String,
-        default: null,
         unique: true,
         sparse: true
     }],
 
     // Location, description, needed volunteers and needed donations
     eventLocation: String,
-    eventDescription: String,
+    eventDescription: {
+        type: String,
+        unique: true,
+        sparse: true
+    },
     numVolunteersNeeded: Number,
     neededDonations: Number,
 
@@ -260,7 +252,7 @@ userSchema.plugin(findOrCreate);
 
 // Create mongoose models based on the above schemas.
 const UserModel = new mongoose.model("User", userSchema);
-const orgModel = new mongoose.model("Org", orgSchema);
+const OrgModel = new mongoose.model("Org", orgSchema);
 const EventModel = new mongoose.model("Event", eventSchema);
 
 
@@ -299,10 +291,13 @@ passport.use(new GoogleStrategy({
     function(accessToken, refreshToken, profile, cb) {
     
         // Generate a unique id for the user using Google OAuth.
-        user_ID = mongoose.Types.ObjectId();
+        var user_ID = mongoose.Types.ObjectId();
+        var user_IDString = user_ID.toString();
+
+        // --> MAY HAVE ISSUES HERE; IF ISSUES PERSIST, TRY TO FIX AFTER DEMO 2
 
         // Find if user already exists and log in. Otherwise, create new user account for site.
-        UserModel.findOrCreate({googleId: profile.id, firstName: profile.name.givenName, lastName: profile.name.familyName, picture: profile._json.picture, username: profile.id}, function (err, user) {
+        UserModel.findOrCreate({googleId: profile.id, firstName: profile.name.givenName, lastName: profile.name.familyName, picture: profile._json.picture, username: user_ID, timesAttending: [user_IDString]}, function (err, user) {
             return cb(err, user);
         });
     }
@@ -325,7 +320,7 @@ app.get("/home", function(req, res){
 
     // Determine how many documents exist in the org model.
     // Create ONE org document if there are none that exist.
-    orgModel.find().count(function(err, count){
+    OrgModel.find().count(function(err, count){
 
         // If the count is greater than zero, the org already exists.
         // Otherwise, create a new org and add that org to the database.
@@ -337,7 +332,7 @@ app.get("/home", function(req, res){
             var org_ID = mongoose.Types.ObjectId();
 
             // Create the new organization data model.
-            const newOrg = new orgModel({
+            const newOrg = new OrgModel({
                 orgID: org_ID, 
                 orgName: TEAM_APTIV,
                 receivedDonations: 0
@@ -384,7 +379,7 @@ app.get("/about", function(req, res){
 
     // See if the data model exists and pass that
     // through to the about page that is rendered.
-    orgModel.find({}, function(err, events){
+    OrgModel.find({}, function(err, events){
         // Render the about page and create 
         // a data model behind the scenes.
         res.render("about_unrestricted", { 
@@ -538,7 +533,7 @@ app.get("/admin_profile", function(req, res){
             // Create variables to track the objects in the database and
             // to determine when to display the objects in the ADMIN profile.
             var i = 0;
-            j = userEventIds.length;
+            var j = userEventIds.length;
 
             // Go through the objects stored in the given ADMIN collection and
             // look them up in the database by their ID. Then add the objects
@@ -612,7 +607,7 @@ app.get("/event_creation", function(req, res){
     }
 });
 
-// -------------------------------------- SINGLE EVENT SECTION (GET) -----------------------------------------------
+// -------------------------------------- EVENT SECTION (GET) -----------------------------------------------
 
 /* SECTION WITHIN GET: FUNCTIONS FOR SIMPLIFYING THE DATE/TIME DISPLAY OF EVENTS */
 
@@ -627,7 +622,7 @@ function simplifyEventDate(eventDate){
     // Create variables for workring with
     // the nubmers in the date variable.
     var arrayDate = date.split('-');
-    var day = arrayDate[2]; // --> MAYBE CHECK IF THIS IS ZERO. IF ZERO, SET TO ONE
+    var day = arrayDate[2];
     var getMonth = arrayDate[1];
     var month = "";
     var year = arrayDate[0];
@@ -665,7 +660,7 @@ function simplifyEventDate(eventDate){
     }
 
     // Create the simplified date and return it.
-    simplifiedDate = month + " " + (day - 1) + ", " + year;
+    simplifiedDate = month + " " + (day) + ", " + year; // --> ORIGINALLY THIS SAID (day - 1)???
     return simplifiedDate;
 }
 
@@ -707,6 +702,33 @@ function convertToStandardTime(eventTime){
 
     // Return the converted time variable value.
     return timeValue;
+}
+
+// The function is used to convert times into military time.
+// This is useful in the case where two times or time ranges
+// are compared to determine overlaps.
+function convertToMilitaryTime(eventTime) {
+ 
+    // Create variables for storing the data for time conversion.
+    var [time, modifier] = eventTime.split(" ");
+    let [hours, minutes] = time.split(":");
+
+    // If the hours is equal to 12, set to zero for military time.
+    if (hours == "12") {
+        hours = "00";
+    }
+
+    // If the modifier is PM, add 12 to it in accordance with MT.
+    if (modifier == "P.M.") {
+        hours = parseInt(hours, 10) + 12;
+    }
+
+    // Add the minutes to the hours in decimal form.
+    hours = hours + (parseInt(minutes, 10) / 100);
+
+    // Return the converted value.
+    // return `${hours}:${minutes}`;
+    return hours;
 }
 
 /* SECTION WITHIN GET: RENDERING A PAGE ON THE SCREEN SPECIFIC TO AN EVENT */
@@ -784,7 +806,7 @@ app.post("/donate_org", function(req, res){
     if(req.isAuthenticated()) {
 
         // Update the total donations to the organization.
-        orgModel.findOneAndUpdate({orgID: organizationID}, {$inc: {receivedDonations: addedDonation}}, function(err, foundDonation){
+        OrgModel.findOneAndUpdate({orgID: organizationID}, {$inc: {receivedDonations: addedDonation}}, function(err, foundDonation){
             if(!err) {
                 req.flash("thanksForDonation", "Thank you for your donation!");
                 res.redirect("/about");
@@ -830,9 +852,8 @@ app.post("/register", function(req, res){
                     firstName: req.body.fname,
                     lastName: req.body.lname,
                     username: req.body.username,
-                    status: "Admin, Volunteer, Donor",
-                    //datesAttending: [""], // --> MAYBE DELETE LATER!!!
-                    timesAttending: [user_IDString] // --> MAYBE DELETE LATER!!!
+                    status: "Admin",
+                    timesAttending: [user_IDString] 
                 });
 
                 // Obtain the ADMIN user information and, if no errors, redirect ADMIN to their page.
@@ -849,8 +870,6 @@ app.post("/register", function(req, res){
                 });
             } else {
 
-                console.log("CREATING USER");
-
                 // Create a new instance of the user schema 
                 // to pass into the register method.
                 const newUser = new UserModel({
@@ -858,8 +877,7 @@ app.post("/register", function(req, res){
                     firstName: req.body.fname,
                     lastName: req.body.lname,
                     username: req.body.username,
-                    //datesAttending: [""], // --> MAYBE DELETE LATER!!!
-                    timesAttending: [user_IDString] // --> MAYBE DELETE LATER!!!
+                    timesAttending: [user_IDString] 
                 });
 
                 // Obtain the user information and, if no errors, redirect new user to profile page.
@@ -926,9 +944,12 @@ app.post("/create_event", function(req, res){
 app.post("/added_event", function(req, res){
 
     // Create a new event ID for the developers to use and track.
-    event_ID = mongoose.Types.ObjectId();
+    // Also create a string version of the event ID to put in the 
+    // timeslots array. This eliminates the issue of duplicate keys.
+    var event_ID = mongoose.Types.ObjectId();
+    var event_IDString = event_ID.toString();
 
-    // MAYBE ADD CHECKS AT SOME POINT TO DETERMINE IF AN EVENT WAS ALREADY CREATED
+    // !!!MAYBE ADD CHECKS AT SOME POINT TO DETERMINE IF AN EVENT WAS ALREADY CREATED
 
     // STEP 1: Calculate the total duration of a given event.
     // The function takes the time range and returns the total time
@@ -1015,6 +1036,8 @@ app.post("/added_event", function(req, res){
 
     // STEP 6: Loop through the array and convert the military times to standard times.
     var convertVolunteerTimeIncrements = [];
+    convertVolunteerTimeIncrements.push(event_IDString);
+
     let i = 0;
     for (i = 0; i < volunteerTimeIncrements.length; i++) {
 
@@ -1023,10 +1046,15 @@ app.post("/added_event", function(req, res){
         var convertStart = convertToStandardTime(splitStartAndEnd[0]);
         var convertEnd = convertToStandardTime(splitStartAndEnd[1])
         var newConvertedTimeRange = convertStart + ' - ' + convertEnd;
-        convertVolunteerTimeIncrements.push(newConvertedTimeRange);
+        convertVolunteerTimeIncrements.push(event_IDString + " " + newConvertedTimeRange);
     }
 
-    // STEP 7: Create a new event based on the event schema.
+    // STEP 7: Add the ID of the event to the description 
+    // to avoid the duplicate key error. Also add the content
+    // (or lack thereof) to the event description.
+    var description = event_IDString + " " + req.body.eventdescription;
+
+    // STEP 8: Create a new event based on the event schema.
     // Pass in the different time slots as an array for the
     // 'eventTimeIncrements' attribute.
     const newEvent = new EventModel({
@@ -1037,12 +1065,12 @@ app.post("/added_event", function(req, res){
         eventEndTime: req.body.eventendtime,
         eventTimeIncrements: convertVolunteerTimeIncrements, 
         eventLocation: req.body.eventlocation,
-        eventDescription: req.body.eventdescription,
+        eventDescription: description,
         numVolunteersNeeded: req.body.eventvolunteers,
         neededDonations: req.body.eventdonations,
     });
 
-    // STEP 8: Save the new event created 
+    // STEP 9: Save the new event created 
     // by the ADMIN to the database. 
     newEvent.save(function(err){
     
@@ -1067,6 +1095,14 @@ app.post("/cancel", function(req, res){
     res.redirect("/admin_profile");
 });
 
+
+// ---------------------------------- USER EVENT CANCELLATION (POST) -------------------------------------------
+
+// Create a post request for the user to volunteer for an event.
+app.post("/volunteer_event", function(req, res){
+    // ADD MORE HERE!!!
+});
+
 // ---------------------------------- USER VOLUNTEER SIGN-UP (POST) -------------------------------------------
 
 // Create a post request for the user to volunteer for an event.
@@ -1074,133 +1110,323 @@ app.post("/volunteer", function(req, res){
 
     // Obtain the specific event id from the webpage 
     // when the user clicks on the 'volunteer' button.
-    const requestedEventId = req.body.eventidetifier;
+    const requestedEventId = req.body.eventidentifier;
 
     // Check if the user is authenticated. If user is authenticated, display a
     // confirmation message and add the event to the user's list of events.
     if(req.isAuthenticated()) {
 
+        // Create a variable for the checkbox(s) or timeslot(s)
+        // that the user selected.
         var atLeastOneBox = req.body.timeslot;
-        console.log(atLeastOneBox);
+        var eventDate = req.body.eventdate;
 
-        // // First check and see if the user selected at
-        // // least one checkbox. If the user did not select
-        // // any checkboxes, reroute them back to the specific_event
-        // // route and give them an alert message.
+        // First check and see if the user selected at
+        // least one checkbox. If the user did not select
+        // any checkboxes, reroute them back to the specific_event
+        // route and give them an alert message.
         if(atLeastOneBox == undefined) {
             req.flash("alreadyVolunteered", "Please select at least one checkbox");
             res.redirect("/events/" + requestedEventId);
             return;
         } else {
+
             // Create variables to help add the event 
             // to the user collection in the database.
             var user = req.user;
-            var eventToAdd = req.body.eventidetifier;
+
+            // Create variables for adding the event to the 
+            // user timeslots.
             var listOfUserEvents = user.userEvents;
 
-            // Create a variable to represent whether the user 
-            // has already signed up for the event or not.
-            var alreadyAdded = false;
+            // ------------------- Check if times conflict when the user signs up for events -------------------
 
-            // Go through the list of events in the user events attribute
-            // and check if the event is already in the user db.
-            listOfUserEvents.forEach(function(eventInUserProfile) {
+            // Create a boolean to determine if there is an event conflict or not.
+            var eventConflicts = false;
 
-                // Check if the event already exists in the user's events section.
-                if(String(eventInUserProfile) == String(eventToAdd)) {
-                    alreadyAdded = true;
-                } 
+            // First find the user who wants to volunteer for a particular event.
+            UserModel.findById(user._id, function(err, userInfo) {
+                
+                // If there is an error, log the error. Otherwise, perform validation.
+                if(err) {
+                    console.log(err);
+                } else {
+
+                    // Create a function that is used later on to check if any of the times overlap.
+                    function checkTimeOverlap(startTime1, endTime1, startTime2, endTime2) {
+                        return ((startTime1) <= (endTime1) && (startTime2) < (endTime2) ? true : false);
+                    }
+
+                    // If the user selected multiple time slots, execute accordingly. 
+                    // Otherwise, execute the code that handles a single event sign-up.
+                    if(Array.isArray(atLeastOneBox) == true) {
+                        
+                        // ------------------- Check if times conflict when the user signs up for MULTIPLE time slots -------------------
+
+                        // Go through the array of checkboxes that the user selected  
+                        // and compare them with the users current times.
+                        loop1:
+                        for(let i = 0; i < atLeastOneBox.length; i++) {
+
+                            // Format the date the user is signing up for to compare 
+                            // it to the other times that exist in the user's profile.
+                            var atLeastOneBoxSplit = atLeastOneBox[i].split(" ");
+                            var timeSignedUpFor = atLeastOneBoxSplit[1] + " " + atLeastOneBoxSplit[2] + " " + atLeastOneBoxSplit[3] + " " + atLeastOneBoxSplit[4] + " " + atLeastOneBoxSplit[5]; 
+                        
+                            // If there are no errors, loop through all of the  
+                            // event times that the user is already attending.
+                            loop2:
+                            for(let i = 1; i < userInfo.timesAttending.length; i++) {
+
+                                // Use the split function to extract the neccessary components
+                                // that you will use to make comparisons and check for conflicts.
+                                var userInfoSplit = userInfo.timesAttending[i].split(" ");
+                                var userInfoDate = userInfoSplit[0] + " " + userInfoSplit[1] + " " + userInfoSplit[2];
+                                var userInfoTime = userInfoSplit[4] + " " + userInfoSplit[5] + " " + userInfoSplit[6] + " " + userInfoSplit[7] + " " + userInfoSplit[8];
+
+                                // --> The code below relates to converting the standard time
+                                // --> to military time in order to determine time overlaps.
+
+                                // First convert the user time range into start and end times.
+                                var userInfoTimeArray = userInfoTime.split(" - ");
+                                var userInfoTimeStart = convertToMilitaryTime(userInfoTimeArray[0]);
+                                var userInfoTimeEnd = convertToMilitaryTime(userInfoTimeArray[1]);
+
+                                // Next convert the time(s) signed up for into start and end times.
+                                var timeSignedUpForArray = timeSignedUpFor.split(" - ");
+                                var timeSignedUpForStart = convertToMilitaryTime(timeSignedUpForArray[0]);
+                                var timeSignedUpForEnd = convertToMilitaryTime(timeSignedUpForArray[1]);
+
+                                // Check if any of the times in the user database match the
+                                // time that the user wants to sign up for. This involves
+                                // checking the date of the event as well.
+                                if((userInfoDate == eventDate && userInfoTime == timeSignedUpFor) || (checkTimeOverlap(userInfoTimeStart, userInfoTimeEnd, timeSignedUpForStart, timeSignedUpForEnd) == true)) {
+                                    eventConflicts = true;
+                                    break loop1;
+                                }
+                            }
+                        }
+
+                    } else {
+
+                        // ------------------- Check if times conflict when the user signs up for a SINGLE time slot -------------------
+
+                        // Format the date the user is signing up for to compare 
+                        // it to the other times that exist in the user's profile.
+                        var atLeastOneBoxSplit = atLeastOneBox.split(" ");
+                        var timeSignedUpFor = atLeastOneBoxSplit[1] + " " + atLeastOneBoxSplit[2] + " " + atLeastOneBoxSplit[3] + " " + atLeastOneBoxSplit[4] + " " + atLeastOneBoxSplit[5]; 
+
+                        // If there are no errors, loop through all of the  
+                        // event times that the user is already attending.
+                        for(let i = 1; i < userInfo.timesAttending.length; i++) {
+
+                            // Use the split function to extract the neccessary components
+                            // that you will use to make comparisons and check for conflicts.
+                            var userInfoSplit = userInfo.timesAttending[i].split(" ");
+                            var userInfoDate = userInfoSplit[0] + " " + userInfoSplit[1] + " " + userInfoSplit[2];
+                            var userInfoTime = userInfoSplit[4] + " " + userInfoSplit[5] + " " + userInfoSplit[6] + " " + userInfoSplit[7] + " " + userInfoSplit[8];
+
+                            // --> The code below relates to converting the standard time
+                            // --> to military time in order to determine time overlaps.
+
+                            // First convert the user time range into start and end times.
+                            var userInfoTimeArray = userInfoTime.split(" - ");
+                            var userInfoTimeStart = convertToMilitaryTime(userInfoTimeArray[0]);
+                            var userInfoTimeEnd = convertToMilitaryTime(userInfoTimeArray[1]);
+
+                            // Next convert the time(s) signed up for into start and end times.
+                            var timeSignedUpForArray = timeSignedUpFor.split(" - ");
+                            var timeSignedUpForStart = convertToMilitaryTime(timeSignedUpForArray[0]);
+                            var timeSignedUpForEnd = convertToMilitaryTime(timeSignedUpForArray[1]);
+
+                            // Check if any of the times in the user database match the
+                            // time that the user wants to sign up for. This involves
+                            // checking the date of the event as well.
+                            if((userInfoDate == eventDate && userInfoTime == timeSignedUpFor) || (checkTimeOverlap(userInfoTimeStart, userInfoTimeEnd, timeSignedUpForStart, timeSignedUpForEnd) == true)) {
+                                eventConflicts = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    // ------------------- INCORPORATE Times User Signed Up For -------------------
+        
+                    // If there are no event conflicts, check if the event object itself has
+                    // already been added to the user's events attribute. This is for the
+                    // case when the user signs up for a timeslot or timeslots for the very
+                    // first time.
+                    if(eventConflicts == false) {
+        
+                        // Create a variable to represent whether the user 
+                        // has already signed up for the event or not.
+                        var alreadyAdded = false;
+        
+                        // Go through the list of events in the user events attribute
+                        // and check if the event is already in the user db.
+                        listOfUserEvents.forEach(function(eventInUserProfile) {
+        
+                            // Check if the event already exists in the user's events section.
+                            if(String(eventInUserProfile) == String(requestedEventId)) {
+                                alreadyAdded = true;
+                            } 
+                        });
+        
+                        // If the event object itself has NOT already been added, add it.
+                        if(alreadyAdded == false) {
+                            // Add the event to the user's profile so that you can list
+                            // the event that the user volunteered for in their profile.
+                            UserModel.findOneAndUpdate(
+                                { _id: user.id }, 
+                                { $push: { userEvents: requestedEventId } },
+                                function (error, success) {
+                                    if (error) {
+                                        console.log("Error: " + error);
+                                    } else {
+                                        //console.log("Success: " + success);
+                                    }
+                                }
+                            );
+                        }
+        
+                        // TIMESLOT SECTION: Check if the user selected more than one timeslot.
+                        // Otherwise, only add the single timeslot that the user selected.
+                        if(Array.isArray(atLeastOneBox) == true) {
+        
+                            // ------------------- MULTIPLE Timeslots Selected -------------------
+                            // Use a for each loop to add multiple timeslots to the user DB.
+                            atLeastOneBox.forEach(function(timeSlot) {
+        
+                                // Decrement the number of volunteers needed for 
+                                // the event.
+                                EventModel.findOneAndUpdate(
+                                    { _id: requestedEventId }, 
+                                    { $inc: { numVolunteersNeeded: -1 } },
+                                    function (error, success) {
+                                        if (error) {
+                                            console.log("Error: " + error);
+                                        } else {
+                                            // console.log("Success: " + success);
+                                        }
+                                    }
+                                );
+        
+                                // Increment the number of volunteers that are
+                                // currently attending the event.
+                                EventModel.findOneAndUpdate(
+                                    { _id: requestedEventId }, 
+                                    { $inc: { numVolunteers: 1 } },
+                                    function (error, success) {
+                                        if (error) {
+                                            console.log("Error: " + error);
+                                        } else {
+                                            // console.log("Success: " + success);
+                                        }
+                                    }
+                                );
+        
+                                // Remove the time that the user selected 
+                                // from the given event database. 
+                                EventModel.findOneAndUpdate(
+                                    { _id: requestedEventId },
+                                    { $pull: { eventTimeIncrements: timeSlot } },                   
+                                    function (error, success) {
+                                        if (error) {
+                                            console.log("Error: " + error);
+                                        } else {
+                                            // console.log("Success: " + success);
+                                        }
+                                    }
+                                );
+        
+                                // Add the time that the user selected to the
+                                // user's event time database.
+                                UserModel.findOneAndUpdate(
+                                    { _id: user.id },
+                                    { $push: { timesAttending: eventDate + " " + timeSlot } },                   
+                                    function (error, success) {
+                                        if (error) {
+                                            console.log("Error: " + error);
+                                        } else {
+                                            // console.log("User Success: " + success);
+                                        }
+                                    }
+                                );
+                            });
+                        } else {
+        
+                            // ------------------- SINGLE Timeslot Selected -------------------
+                            // Decrement the number of volunteers needed for 
+                            // the event.
+                            EventModel.findOneAndUpdate(
+                                { _id: requestedEventId }, 
+                                { $inc: { numVolunteersNeeded: -1 } },
+                                function (error, success) {
+                                    if (error) {
+                                        console.log("Error: " + error);
+                                    } else {
+                                        // console.log("Success: " + success);
+                                    }
+                                }
+                            );
+        
+                            // Increment the number of volunteers that are
+                            // currently attending the event.
+                            EventModel.findOneAndUpdate(
+                                { _id: requestedEventId }, 
+                                { $inc: { numVolunteers: 1 } },
+                                function (error, success) {
+                                    if (error) {
+                                        console.log("Error: " + error);
+                                    } else {
+                                        // console.log("Success: " + success);
+                                    }
+                                }
+                            );
+        
+                            // Remove the time that the user selected 
+                            // from the given event database. 
+                            EventModel.findOneAndUpdate(
+                                { _id: requestedEventId },
+                                { $pull: { eventTimeIncrements: atLeastOneBox } },                   
+                                function (error, success) {
+                                    if (error) {
+                                        console.log("Error: " + error);
+                                    } else {
+                                        // console.log("Success: " + success);
+                                    }
+                                }
+                            );
+        
+                            // Add the time that the user selected to the
+                            // user's event time database.
+                            UserModel.findOneAndUpdate(
+                                { _id: user.id },
+                                { $push: { timesAttending: eventDate + " " +atLeastOneBox } },                   
+                                function (error, success) {
+                                    if (error) {
+                                        console.log("Error: " + error);
+                                    } else {
+                                        // console.log("User Success: " + success);
+                                    }
+                                }
+                            );
+                        }
+        
+                        // Create a flash message informing the user 
+                        // that they have signed up for an event.
+                        req.flash("successVolunteeredOrDonated", "You have signed up for the event timeslot(s)");
+        
+                        // Redirect to the specific event page of the website.
+                        res.redirect("/events/" + requestedEventId);
+        
+                    } else {
+                        // Create a flash message for the specific event page informing 
+                        // the user that they already signed up for the event.
+                        req.flash("alreadyVolunteered", "Cannot sign up. You have a time conflict with another event.");
+                        res.redirect("/events/" + requestedEventId);
+                    }
+                }
             });
-
-            // If the user has NOT already been added, add the user.
-            if(alreadyAdded == false) {
-                // Add the event to the user's profile so that you can list
-                // the event that the user volunteered for in their profile.
-                UserModel.findOneAndUpdate(
-                    { _id: user.id }, 
-                    { $push: { userEvents: eventToAdd } },
-                    function (error, success) {
-                        if (error) {
-                            console.log("Error: " + error);
-                        } else {
-                            //console.log("Success: " + success);
-                        }
-                    }
-                );
-
-                // ------------------- Volunteer Info -------------------
-
-                // Decrement the number of volunteers needed for 
-                // the event.
-                EventModel.findOneAndUpdate(
-                    { _id: requestedEventId }, 
-                    { $inc: { numVolunteersNeeded: -1 } }, // !!! DECREMENT SHOULD BE BASED ON THE NUMBER OF TIME SLOTS TAKEN
-                    function (error, success) {
-                        if (error) {
-                            console.log("Error: " + error);
-                        } else {
-                            // console.log("Success: " + success);
-                        }
-                    }
-                );
-
-                // Increment the number of volunteers that are
-                // currently attending the event.
-                EventModel.findOneAndUpdate(
-                    { _id: requestedEventId }, 
-                    { $inc: { numVolunteers: 1 } },
-                    function (error, success) {
-                        if (error) {
-                            console.log("Error: " + error);
-                        } else {
-                            // console.log("Success: " + success);
-                        }
-                    }
-                );
-
-                // ------------------- Timeslot Info -------------------
-
-                // Remove the time that the user selected 
-                // from the given event database. 
-                EventModel.findOneAndUpdate(
-                    { _id: requestedEventId },
-                    { $pull: { eventTimeIncrements: atLeastOneBox } },                   
-                    function (error, success) {
-                        if (error) {
-                            console.log("Error: " + error);
-                        } else {
-                            console.log("Success: " + success);
-                        }
-                    }
-                );
-
-                // Add the time that the user selected to the
-                // user's event time database.
-                UserModel.findOneAndUpdate(
-                    { _id: requestedEventId },
-                    { $push: { timesAttending: atLeastOneBox } },                   
-                    function (error, success) {
-                        if (error) {
-                            console.log("Error: " + error);
-                        } else {
-                            console.log("Success: " + success);
-                        }
-                    }
-                );
-
-                // Create a flash message informing the user 
-                // that they have signed up for an event.
-                req.flash("successVolunteeredOrDonated", "You have signed up for the event");
-
-                // Redirect to the specific event page of the website.
-                res.redirect("/events/" + requestedEventId);
-
-            } else {
-                // Create a flash message for the specific event page informing 
-                // the user that they already signed up for the event.
-                req.flash("alreadyVolunteered", "You have already signed up for this event");
-                res.redirect("/events/" + requestedEventId);
-            }
         }
 
     } else {
@@ -1221,7 +1447,7 @@ app.post("/donate", function(req, res){
 
     // Obtain the specific event id from the webpage 
     // when the user clicks on the 'donate' button.
-    const requestedEventId = req.body.eventidetifier;
+    const requestedEventId = req.body.eventidentifier;
 
     // Check if the user is authenticated. If user is authenticated, display a
     // confirmation message and add the event to the user's list of events.
@@ -1230,7 +1456,6 @@ app.post("/donate", function(req, res){
         // Create variables to help add the event 
         // to the user collection in the database.
         var user = req.user;
-        var eventToAdd = req.body.eventidetifier;
         var listOfUserEvents = user.userEvents;
         var userStatus = user.status;
 
@@ -1261,7 +1486,7 @@ app.post("/donate", function(req, res){
         listOfUserEvents.forEach(function(eventInUserProfile) {
 
             // Check if the event already exists in the user's events section.
-            if(String(eventInUserProfile) == String(eventToAdd)) {
+            if(String(eventInUserProfile) == String(requestedEventId)) {
                 alreadyAdded = true;
             } 
         });
@@ -1272,7 +1497,7 @@ app.post("/donate", function(req, res){
             // the event that the user volunteered for in their profile.
             UserModel.findOneAndUpdate(
                 { _id: user.id }, 
-                { $push: { userEvents: eventToAdd } },
+                { $push: { userEvents: requestedEventId } },
                 function (error, success) {
                     if (error) {
                         console.log("Error: " + error);
