@@ -21,6 +21,34 @@
 
 <%- include('./partials/home_header.ejs') %>
 
+    <!-- REMEMBER, YOU NEED TO UPDATE THIS SO THAT THINGS ARE DISPLAYED APPROPRIATELY!!! -->
+    <!-- YOU WILL END UP RESTRUCTURING THIS IN A WAY SIMILAR TO THE USER PROFILE!!! -->
+
+    <!-- 
+        Include EJS to display a success message to the ADMIN if
+        they successfully created a new event.
+    -->
+    <% if(successCreated.length > 0) { %>
+        <div class="card-body elementToFadeInAndOut message-format">
+            <h1 class="confirmation"><%= successCreated %></h1>
+        </div>
+    <% } %>
+
+    <!-- 
+        Include EJS to display a failure message to the ADMIN if
+        they failed to create a new event.
+    -->
+    <% if(failureNotCreated.length > 0) { %>
+            <div class="card-body elementToFadeInAndOut message-format">
+                <h1 class="incorrect-input"><%= failureNotCreated %></h1>
+            </div>
+    <% } %>
+
+    <!-- Create a card for showing the user data -->
+        <!-- <div class="row register-page-format"> -->
+            <!-- <div class="col-sm-12 mx-auto"> -->
+                <!-- <div class="card"> -->
+                    <!-- <div class="card-body"> -->
     <div class="profile-ejs">
         <!-- Create a card for showing the user data -->
         <div class="container w-75 mt-3">
