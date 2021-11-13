@@ -296,10 +296,124 @@ passport.use(new GoogleStrategy({
 
         // --> MAY HAVE ISSUES HERE; IF ISSUES PERSIST, TRY TO FIX AFTER DEMO 2
 
-        // Find if user already exists and log in. Otherwise, create new user account for site.
-        UserModel.findOrCreate({googleId: profile.id, firstName: profile.name.givenName, lastName: profile.name.familyName, picture: profile._json.picture, username: user_ID, timesAttending: [user_IDString]}, function (err, user) {
-            return cb(err, user);
+
+
+        UserModel.findOne({
+            googleId: profile.id 
+        }, function(err, user) {
+            if (err) {
+                return cb(err);
+            }
+            //No user was found... so create a new user with values from Facebook (all the profile. stuff)
+            if (!user) {
+                // user = new UserModel({
+                //     name: profile.displayName,
+                //     email: profile.emails[0].value,
+                //     username: profile.username,
+                //     provider: 'facebook',
+                //     //now in the future searching on User.findOne({'facebook.id': profile.id } will match because of this next line
+                //     facebook: profile._json
+                // });
+                // user.save(function(err) {
+                //     if (err) console.log(err);
+                //     return done(err, user);
+                // });
+
+
+
+
+
+
+            // Find if user already exists and log in. Otherwise, create new user account for site.
+            UserModel.findOrCreate({googleId: profile.id, firstName: profile.name.givenName, lastName: profile.name.familyName, picture: profile._json.picture, username: user_ID}, function (err, user) {
+
+                // If the user has not already been created, update the timesAttending array
+                // by adding a unique id to it as the first element in order to maintain uniqueness.
+                if(user.timesAttending.length == 0) {
+                    // Remove the timelot from the user's database.
+                    UserModel.findOneAndUpdate(
+                        { _id: user.id },
+                        { $push: { timesAttending: user_IDString } },                   
+                        function (error, success) {
+                            if (error) {
+                                console.log("Error: " + error);
+                            } else {
+                                // console.log("User Success: " + success);
+                            }
+                        }
+                    );
+                }
+
+
+
+
+
+                return cb(err, user);
+            });
+
+
+
+
+
+
+
+
+            } else {
+                //found user. Return
+                return cb(err, user);
+            }
         });
+
+
+
+
+
+
+
+// // Create a new instance of the user schema 
+//                 // to pass into the register method.
+//                 const newUser = new UserModel({
+//                     userID: user_ID,
+//                     firstName: req.body.fname,
+//                     lastName: req.body.lname,
+//                     username: req.body.username,
+//                     timesAttending: [user_IDString] 
+//                 });
+
+
+
+
+
+
+
+
+        // // Find if user already exists and log in. Otherwise, create new user account for site.
+        // UserModel.findOrCreate({googleId: profile.id, firstName: profile.name.givenName, lastName: profile.name.familyName, picture: profile._json.picture, username: user_ID}, function (err, user) {
+
+        //     // If the user has not already been created, update the timesAttending array
+        //     // by adding a unique id to it as the first element in order to maintain uniqueness.
+        //     if(user.timesAttending.length == 0) {
+        //           // Remove the timelot from the user's database.
+        //           UserModel.findOneAndUpdate(
+        //             { _id: user.id },
+        //             { $push: { timesAttending: user_IDString } },                   
+        //             function (error, success) {
+        //                 if (error) {
+        //                     console.log("Error: " + error);
+        //                 } else {
+        //                     // console.log("User Success: " + success);
+        //                 }
+        //             }
+        //         );
+        //     }
+
+
+
+
+
+        //     return cb(err, user);
+        // });
+
     }
 ));
 
@@ -481,7 +595,8 @@ app.get("/user_profile", function(req, res){
                         res.render("user_profile", {  
                             user: req.user, 
                             listOfUserEvents: listOfUserEvents,
-                            permissionDenied: req.flash("permissionDenied") 
+                            permissionDenied: req.flash("permissionDenied") ,
+                            sucessCancelled: req.flash("sucessCancelled")
                         });
                     }
                 });
@@ -491,7 +606,8 @@ app.get("/user_profile", function(req, res){
             res.render("user_profile", {  
                 user: req.user, 
                 listOfUserEvents: listOfUserEvents,
-                permissionDenied: req.flash("permissionDenied") 
+                permissionDenied: req.flash("permissionDenied"),
+                sucessCancelled: req.flash("sucessCancelled")
             });
         }
 
@@ -1098,9 +1214,229 @@ app.post("/cancel", function(req, res){
 
 // ---------------------------------- USER EVENT CANCELLATION (POST) -------------------------------------------
 
+
 // Create a post request for the user to volunteer for an event.
-app.post("/volunteer_event", function(req, res){
-    // ADD MORE HERE!!!
+app.post("/cancel_event", function(req, res){
+
+    // Obtain the specific event id from the webpage 
+    // when the user clicks on the 'cancel-time(s)' button.
+    const requestedEventId = req.body.eventidentifier;
+
+    // Create a variable to act as a counter. If the counter 
+    // ends up being a certain value, remove the actual event 
+    // from the user's profile.
+    var numberOfUserTimeslots = req.body.timeattendlength;
+
+    // First check if the user is authenticated in the case that
+    // a user attempts to manually type in this route.
+    if(req.isAuthenticated()) {
+
+        // Create variables for the checkbox(s) or timeslot(s) to be cancelled.
+        // Also obtain the event identifier for the particular event in which the
+        // timeslot(s) are being removed from.
+        var atLeastOneTime = req.body.timeattending;
+
+        // Create a variable for the event object itself in order to 
+        // remove the actual event object if neccessary.
+        var eventObject = req.body.eventidentifier;
+        
+        // First check and see if the user selected at least 
+        // one checkbox. If the user did not select any
+        // checkboxes, reroute them back to the user_profile page.
+        if(atLeastOneTime == undefined) {
+
+            req.flash("permissionDenied", "Please select at least one checkbox");
+            res.redirect("/user_profile");
+            return;
+
+        } else {
+            
+            // Create variables to help add the event 
+            // to the user collection in the database.
+            var user = req.user;
+
+             // First find the user who wants to volunteer for a particular event.
+             UserModel.findById(user._id, function(err, userInfo) {
+                
+                // If there is an error, log the error. Otherwise, perform validation.
+                if(err) {
+                    console.log(err);
+                } else {
+
+                    // ------------------- CANCEL Times User Wants to Get Rid Of -------------------
+                    // Check whether the user selected one or multiple timeslots to remove.
+                    if(Array.isArray(atLeastOneTime) == true) {
+                        
+                        // ------------------- MULTIPLE Timeslots Selected -------------------
+                        // Go thorugh each timeslot that was selected by the user
+                        // to be cancelled, and remove it from the user profile
+                        // while also updating the other event information.
+                        atLeastOneTime.forEach(function(timeSlot) {
+
+                            //console.log(timeSlot);
+                            // Create variables for simplifying the event time slot
+                            // when it is added back to the different data components.
+                            var timeSlotSplit = timeSlot.split(" ");
+                            var simplifiedTimeSlot = timeSlotSplit[3] + " " + timeSlotSplit[4] + " " + timeSlotSplit[5] + " " + timeSlotSplit[6] + " " + timeSlotSplit[7] + " " + timeSlotSplit[8];
+
+                            // Remove the timelot from the user's database.
+                            UserModel.findOneAndUpdate(
+                                { _id: user.id },
+                                { $pull: { timesAttending: timeSlot } },                   
+                                function (error, success) {
+                                    if (error) {
+                                        console.log("Error: " + error);
+                                    } else {
+                                        // console.log("User Success: " + success);
+                                    }
+                                }
+                            );
+
+                            // Add the timeslot that the user cancelled back 
+                            // to the event database that it belongs to.
+                            EventModel.findOneAndUpdate(
+                                { _id: requestedEventId },
+                                { $push: { eventTimeIncrements: simplifiedTimeSlot } },                   
+                                function (error, success) {
+                                    if (error) {
+                                        console.log("Error: " + error);
+                                    } else {
+                                        // console.log("User Success!!! " + timeSlot); 
+                                    }
+                                }
+                            );
+
+                            // Increment the number of volunteers needed for 
+                            // the event after the user cancels their timeslot.
+                            EventModel.findOneAndUpdate(
+                                { _id: requestedEventId }, 
+                                { $inc: { numVolunteersNeeded: 1 } },
+                                function (error, success) {
+                                    if (error) {
+                                        console.log("Error: " + error);
+                                    } else {
+                                        // console.log("Success: " + success);
+                                    }
+                                }
+                            );
+
+                            // Decrement the number of timeslots variable to determine
+                            // if there are still some left in the user's profile.
+                            numberOfUserTimeslots -= 1;
+
+                            // After removing the timeslot from the user's profile,
+                            // check if there are any timeslots remaining.
+                            if(numberOfUserTimeslots <= 0) {
+                                
+                                // Remove the timelot from the user's database.
+                                UserModel.findOneAndUpdate(
+                                    { _id: user.id },
+                                    { $pull: { userEvents: eventObject } },                   
+                                    function (error, success) {
+                                        if (error) {
+                                            console.log("Error: " + error);
+                                        } else {
+                                            // console.log("User Success: " + success);
+                                        }
+                                    }
+                                );
+                            }
+                        });
+
+                    } else {
+
+                        // ------------------- SINGLE Timeslot Selected -------------------
+                        // Create variables for simplifying the event time slot
+                        // when it is added back to the different data components.
+                        var atLeastOneTimeSplit = atLeastOneTime.split(" ");
+                        var simplifiedTimeSlot = atLeastOneTimeSplit[3] + " " + atLeastOneTimeSplit[4] + " " + atLeastOneTimeSplit[5] + " " + atLeastOneTimeSplit[6] + " " + atLeastOneTimeSplit[7] + " " + atLeastOneTimeSplit[8];
+                        
+                        // Remove the timelot from the user's database.
+                        UserModel.findOneAndUpdate(
+                            { _id: user.id },
+                            { $pull: { timesAttending: atLeastOneTime } },                 
+                            function (error, success) {
+                                if (error) {
+                                    console.log("Error: " + error);
+                                } else {
+                                    // console.log("User Success: " + success);
+                                }
+                            }
+                        );
+
+                        // Add the timeslot that the user cancelled back 
+                        // to the event database that it belongs to.
+                        EventModel.findOneAndUpdate(
+                            { _id: requestedEventId },
+                            { $push: { eventTimeIncrements: simplifiedTimeSlot } },                   
+                            function (error, success) {
+                                if (error) {
+                                    console.log("Error: " + error);
+                                } else {
+                                    // console.log("User Success!!! " + atLeastOneTime); 
+                                }
+                            }
+                        );
+
+                        // Increment the number of volunteers needed for 
+                        // the event after the user cancels their timeslot.
+                        EventModel.findOneAndUpdate(
+                            { _id: requestedEventId }, 
+                            { $inc: { numVolunteersNeeded: 1 } },
+                            function (error, success) {
+                                if (error) {
+                                    console.log("Error: " + error);
+                                } else {
+                                    // console.log("Success: " + success);
+                                }
+                            }
+                        );
+
+                        // Decrement the number of timeslots variable to determine
+                        // if there are still some left in the user's profile.
+                        numberOfUserTimeslots -= 1;
+
+                        // After removing the timeslot from the user's profile,
+                        // check if there are any timeslots remaining.
+                        if(numberOfUserTimeslots == 0) { 
+                            
+                            // Remove the timelot from the user's database.
+                            UserModel.findOneAndUpdate(
+                                { _id: user.id },
+                                { $pull: { userEvents: eventObject } },                   
+                                function (error, success) {
+                                    if (error) {
+                                        console.log("Error: " + error);
+                                    } else {
+                                        // console.log("User Success: " + success);
+                                    }
+                                }
+                            );
+                        }
+                    }
+        
+                    // DELETE LATER --> KEEP FOR NOW.
+                    // // Create a flash message informing the user 
+                    // // that they have cancelled an event timeslot.
+                    // req.flash("sucessCancelled", "You have cancelled your time(s)");
+    
+                    // // Redirect to the user's profile page of the website.
+                    // res.redirect("user_profile");
+                }
+            });
+
+            // Create a flash message informing the user 
+            // that they have cancelled an event timeslot.
+            req.flash("sucessCancelled", "You have cancelled your time(s)");
+
+            // Redirect to the user's profile page of the website.
+            res.redirect("user_profile");
+        }
+
+    } else {
+        req.flash("permissionDenied", "You need an account to complete this action.");
+        res.redirect("/login");
+    }
 });
 
 // ---------------------------------- USER VOLUNTEER SIGN-UP (POST) -------------------------------------------
@@ -1109,7 +1445,7 @@ app.post("/volunteer_event", function(req, res){
 app.post("/volunteer", function(req, res){
 
     // Obtain the specific event id from the webpage 
-    // when the user clicks on the 'volunteer' button.
+    // when the user clicks on the 'sign-up' button.
     const requestedEventId = req.body.eventidentifier;
 
     // Check if the user is authenticated. If user is authenticated, display a
@@ -1126,9 +1462,11 @@ app.post("/volunteer", function(req, res){
         // any checkboxes, reroute them back to the specific_event
         // route and give them an alert message.
         if(atLeastOneBox == undefined) {
+
             req.flash("alreadyVolunteered", "Please select at least one checkbox");
             res.redirect("/events/" + requestedEventId);
             return;
+
         } else {
 
             // Create variables to help add the event 
@@ -1154,7 +1492,7 @@ app.post("/volunteer", function(req, res){
 
                     // Create a function that is used later on to check if any of the times overlap.
                     function checkTimeOverlap(startTime1, endTime1, startTime2, endTime2) {
-                        return ((startTime1) <= (endTime1) && (startTime2) < (endTime2) ? true : false);
+                        return ((startTime1) <= (endTime2) && (startTime2) < (endTime1) ? true : false);
                     }
 
                     // If the user selected multiple time slots, execute accordingly. 

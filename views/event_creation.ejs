@@ -41,7 +41,7 @@
                                 <div class="form-group mt-2">
 
                                     <!-- Use JavaScript to get the current date. This is done to help set the miniumum -->
-                                    <!-- value for the date input. It ensures the ADMIN cannot set a date before the current -->
+                                    <!-- value for the date input. It ensures the ADMIN cannot set a date before current date -->
                                     <% var today = new Date(); %>
                                     <% var dd = today.getDate(); %>
                                     <% var mm = today.getMonth()+1; // January is 0 so need to add 1 to make it 1! %>
@@ -80,14 +80,14 @@
                                 </div>
                                 <div class="form-group mt-2">
                                     <label class="login-register-font control-label" for="description">Description</label>
-                                    <input type="text" class="login-register-font form-control" name="eventdescription"> <!-- NOT BEING REQUIRED MAY CAUSE ERROR!!! -->
+                                    <input type="text" class="login-register-font form-control" name="eventdescription">
                                 </div>
                                 <div class="form-group mt-2">
                                     <label class="login-register-font control-label" for="volunteers">Needed Volunteers</label>
                                     <input type="number" class="login-register-font form-control" name="eventvolunteers" min="0" required>
                                 </div>
                                 <div class="form-group mt-2">
-                                    <label class="login-register-font control-label" for="donations">Donation Goal</label>
+                                    <label class="login-register-font control-label" for="donations">Donation Goal</label> <!-- MAKE THIS FIELD OPTIONAL IN THE FUTURE!!! -->
                                     <input type="number" class="login-register-font form-control" name="eventdonations" min="0" required>
                                 </div>
                                 <button type="submit" class="mt-4 btn btn-lg btn-dark">Create Event</button>

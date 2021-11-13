@@ -23,13 +23,25 @@
 <%- include('./partials/home_header.ejs') %>
 
     <!-- 
-        Include EJS to display any error messages to the user if the
+        Include EJS to display any error messages to the user if they
         attempt to access a page that they are not authorized to access.
     -->
     <% if(permissionDenied.length > 0) { %>
         <div class="incorrect-input">
             <div class="elementToFadeInAndOut message-format">
                 <h1><%= permissionDenied %></h1>
+            </div>
+        </div>
+    <% } %>
+
+    <!-- 
+        Include EJS to display any success messages to the user if they
+        have successfully cancelled one event or multiple event timeslots.
+    -->
+    <% if(sucessCancelled.length > 0) { %>
+        <div class="confirmation">
+            <div class="elementToFadeInAndOut message-format">
+                <h1><%= sucessCancelled %></h1>
             </div>
         </div>
     <% } %>
@@ -162,11 +174,85 @@
 
                                                 <!-- Display the event location, description, volunteer, and donation information -->
                                                 <p> Location: <%= event.eventLocation %> </p>
-                                                <p> Description: <%= event.eventDescription %> </p>
-                                                <p> Volunteers: TELL USER WHAT TIME THEY VOLUNTEERED FOR </p>
+
+                                                <!-- If description is empty, do not display the description -->
+                                                <!-- Use the split function to determine if the description was left blank -->
+                                                <% var descriptionArray = event.eventDescription.split(" "); %>
+                                                <% if(descriptionArray[1] != "") { %>
+
+                                                    <!-- If the description is not blank, obtain the info for it and display -->
+                                                    <% var descriptionString = ""; %>
+                                                    <% for(let i = 1; i < descriptionArray.length; i++) { %>
+                                                        <% descriptionString = descriptionString + " " + descriptionArray[i]; %>
+                                                    <% } %>
+                                                    
+                                                    <!-- Display the description assuming it is not blank -->
+                                                    <p>Description: <%= descriptionString %> </p>
+                                                <% } %>
+
+                                                
+                                                <% // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! %>
+
+
+                                                <!-- If there are no donations contributed to this event, do not display -->
                                                 <% if(event.neededDonations > 0) { // && CHECK IF USER CONTRIBUTED TO THIS EVENT) { %>
                                                     <p> Donations: You have given PUT AMOUNT HERE </p>
                                                 <% } %>
+
+
+                                                <% // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! %>
+
+
+                                                <!-- Check if the user has times that they signed up for in the event. List the times out. -->
+                                                <% if(user.timesAttending.length > 1) { %>
+                                                    <p>Times Attending: </p>
+
+                                                    <!-- FUNCTION: Function to get the value of the time attending -->
+                                                    <% function getResult() { %>
+                                                        <% var value = $('timeattending').getValue(); %>
+                                                    <% } %>
+
+                                                     <!-- Makes POST request to the event cancellation route -->
+                                                    <form class="form-horizontal" action="/cancel_event" method="POST">
+
+                                                        <!-- Create a counter variable that tracks the number of timeslots in each event a user has signed up for -->
+                                                        <% var numTimeSlots = 0; %>
+
+                                                        <!-- Create different time slots that the user can cancel -->
+                                                        <% user.timesAttending.forEach(function(timesAttendingEvent) { %>
+
+                                                            <% // Take the time attending and remove the unique id from the total string for display purposes. %>
+                                                            <% var timeAttendanceSplitTemp = timesAttendingEvent.split(" "); %>
+
+                                                            <% // If the length of the split is greater than 1, the time attending is not an id alone. %>
+                                                            <% if(timeAttendanceSplitTemp.length > 1) { %>
+                                                                
+                                                                <% // Create variables to store the time attendance information: %>
+                                                                <% // The id attached to the time attendance and the time range itself. %>
+                                                                <% var timeAttendanceIentifier = timeAttendanceSplitTemp[3]; %> <% // --> MAY NOT NEED THIS!!! %>
+                                                                <% var timeAttendance = timeAttendanceSplitTemp[4] + " " + timeAttendanceSplitTemp[5] + " " + timeAttendanceSplitTemp[6] + " " + timeAttendanceSplitTemp[7] + " " + timeAttendanceSplitTemp[8]; %>
+
+                                                                <% // If the time being attended matches the event it was from, render it %>
+                                                                <% // within the correct event section in the user profile. %>
+                                                                <% if(event.eventID == timeAttendanceIentifier) { %>
+                                                                    <% // Display the time attending as a checkbox that the user can select. %>
+                                                                    <input type="checkbox" class="myCheckBox" name="timeattending" value="<%= timesAttendingEvent %>">
+                                                                    <p> <%= timeAttendance %> </p>
+                                                                    <% numTimeSlots += 1; %>
+                                                                <% } %>
+
+                                                            <% } %>
+
+                                                        <% }); %>
+
+                                                        <!-- Create hidden input types to obtain the different values that will be processed by the server -->
+                                                        <input type="hidden" id="customId" name="eventidentifier" value="<%= event._id %>" onChange="getResult()">
+                                                        <input type="hidden" id="customId" name="timeattendlength" value="<%= numTimeSlots %>" onChange="getResult()">
+                                                        <button type="submit" class="mt-4 btn btn-lg btn-dark">Cancel Time(s)</button>
+
+                                                    </form>
+                                                <% } %>
+
                                             </div>
                                         </div>
                                     </div>
