@@ -294,69 +294,42 @@ passport.use(new GoogleStrategy({
         var user_ID = mongoose.Types.ObjectId();
         var user_IDString = user_ID.toString();
 
-        // --> MAY HAVE ISSUES HERE; IF ISSUES PERSIST, TRY TO FIX AFTER DEMO 2
-
-
-
+        // Use the "findOne" method to check if the user already
+        // exists in the user database. If the user does not already
+        // exist, then create a new user and add the user to the db.
         UserModel.findOne({
             googleId: profile.id 
         }, function(err, user) {
             if (err) {
                 return cb(err);
             }
-            //No user was found... so create a new user with values from Facebook (all the profile. stuff)
+            // If no user was found, create a new user using the findOrCreate method.
             if (!user) {
-                // user = new UserModel({
-                //     name: profile.displayName,
-                //     email: profile.emails[0].value,
-                //     username: profile.username,
-                //     provider: 'facebook',
-                //     //now in the future searching on User.findOne({'facebook.id': profile.id } will match because of this next line
-                //     facebook: profile._json
-                // });
-                // user.save(function(err) {
-                //     if (err) console.log(err);
-                //     return done(err, user);
-                // });
+ 
+                // Use the method to create a new user for the web app. In this
+                // case, the "find" in the "findOrCreate" is never used for the site.
+                UserModel.findOrCreate({googleId: profile.id, firstName: profile.name.givenName, lastName: profile.name.familyName, picture: profile._json.picture, username: user_ID}, function (err, user) {
 
+                    // If the user has not already been created, update the timesAttending array
+                    // by adding a unique id to it as the first element in order to maintain uniqueness.
+                    if(user.timesAttending.length == 0) {
 
-
-
-
-
-            // Find if user already exists and log in. Otherwise, create new user account for site.
-            UserModel.findOrCreate({googleId: profile.id, firstName: profile.name.givenName, lastName: profile.name.familyName, picture: profile._json.picture, username: user_ID}, function (err, user) {
-
-                // If the user has not already been created, update the timesAttending array
-                // by adding a unique id to it as the first element in order to maintain uniqueness.
-                if(user.timesAttending.length == 0) {
-                    // Remove the timelot from the user's database.
-                    UserModel.findOneAndUpdate(
-                        { _id: user.id },
-                        { $push: { timesAttending: user_IDString } },                   
-                        function (error, success) {
-                            if (error) {
-                                console.log("Error: " + error);
-                            } else {
-                                // console.log("User Success: " + success);
+                        // Add the initial id to the user's timeslots attribute.
+                        UserModel.findOneAndUpdate(
+                            { _id: user.id },
+                            { $push: { timesAttending: user_IDString } },                   
+                            function (error, success) {
+                                if (error) {
+                                    console.log("Error: " + error);
+                                } else {
+                                    // console.log("User Success: " + success);
+                                }
                             }
-                        }
-                    );
-                }
+                        );
+                    }
 
-
-
-
-
-                return cb(err, user);
-            });
-
-
-
-
-
-
-
+                    return cb(err, user);
+                });
 
             } else {
                 //found user. Return
@@ -364,29 +337,7 @@ passport.use(new GoogleStrategy({
             }
         });
 
-
-
-
-
-
-
-// // Create a new instance of the user schema 
-//                 // to pass into the register method.
-//                 const newUser = new UserModel({
-//                     userID: user_ID,
-//                     firstName: req.body.fname,
-//                     lastName: req.body.lname,
-//                     username: req.body.username,
-//                     timesAttending: [user_IDString] 
-//                 });
-
-
-
-
-
-
-
-
+        // MAYBE DELETE LATER. --> KEEP FOR NOW JUST IN CASE.
         // // Find if user already exists and log in. Otherwise, create new user account for site.
         // UserModel.findOrCreate({googleId: profile.id, firstName: profile.name.givenName, lastName: profile.name.familyName, picture: profile._json.picture, username: user_ID}, function (err, user) {
 
@@ -406,11 +357,6 @@ passport.use(new GoogleStrategy({
         //             }
         //         );
         //     }
-
-
-
-
-
         //     return cb(err, user);
         // });
 
