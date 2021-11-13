@@ -28,7 +28,7 @@
 
         <!-- CSS Stylesheets -->
         <link rel="stylesheet" href="/css/bootstrap-social.css">
-        <link rel="stylesheet" href="/css/styles.css">
+        <link rel="stylesheet" href="/css/stylesRefactored.css">
 
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" 
@@ -40,53 +40,51 @@
         </script>
     </head>
 
-    <body class="main-background">     
-
-        <!-- Section for the navbar on the main page -->
-        <section id="header-section">
-            <!-- The div right within the section contains main title, image, and download buttons -->
+    <body>
+        <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
-                <!-- Nav Bar -->
-                <nav id="header-section" class="navbar wrapper navbar-expand-lg navbar-dark fixed-top"> 
-                    <!-- Add the brand name for the navigation bar -->
-                    <a class="navbar-brand aptiv-font-size" href="/home">Team Aptiv</a>
-                    <!-- Collapsable Button -->
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <!-- Collapsable div to contain navigation bar links; content within div can be collapsed -->
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <!-- NOTE: In Bootstrap 5, ml-auto is ms-auto -->
-                        <ul class="navbar-nav ms-auto navbar-links-font-size">
-                            <!-- First navigation bar link -->
-                            <li id="about" class="nav-item">
-                                <a class="nav-link" href="/about">About</a>
-                            </li>
+                <!-- Add the brand name for the navigation bar -->
+                <a class="navbar-brand nav-link" href="/home" id="custom-logo">TA</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+              
+                        <!-- First navigation bar link -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="/events">Events</a>
+                        </li>
 
-                            <!-- Second navigation bar link -->
-                            <li id="events" class="nav-item">
-                                <a class="nav-link" href="/events">Events</a>
-                            </li>
-
-                            <!-- Third navigation bar link -->
-                            <li id="user_profile" class="nav-item">
+                        <!-- Take to unrestricted donation page -->
+                        <!-- <li class="nav-item">
+                            <a class="nav-link" href="/unrestricted_donation">Support us</a>
+                        </li> -->
+                        
+                        <!-- First navigation bar link -->
+                        <li id="about" class="nav-item">
+                            <a class="nav-link" href="/about">Mission</a>
+                        </li>
+                        <!-- Link to user profile -->
+                        <!-- <li class="nav-item">
+                            <a class="nav-link" href="/user_profile">Profile</a>
+                        </li> -->
+                        <!-- Show the format for logged out or logged in -->
+                        <% if(typeof user != 'undefined') { %>
+                            <li class="nav-item">
                                 <a class="nav-link" href="/user_profile">Profile</a>
                             </li>
-
-                            <!-- Show the format for logged out or logged in -->
-                            <% if(typeof user != 'undefined') { %>
-                                <!-- Fourth navigation bar link (logged in) -->
-                                <li id="logout" class="nav-item">
-                                    <a class="nav-link" href="/logout">Logout</a>
-                                </li>
-                            <% } else { %>
-                                <!-- Fourth navigation bar link (logged out) -->
-                                <li id="home" class="nav-item">
-                                    <a class="nav-link" href="/login">Login</a>
-                                </li>
-                            <% } %>
-                        </ul>
-                    </div>
-                </nav>
+                            <!-- Third navigation bar link -->
+                            <!-- <li class="nav-item">
+                                <a class="nav-link" href="/logout">Logout</a>
+                            </li> -->
+                        <% } else { %>
+                            <!-- Third navigation bar link -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="/login">Login</a>
+                            </li>
+                        <% } %>
+                    </ul>
+                </div>
             </div>
-        </section>
+        </nav>

@@ -25,19 +25,119 @@
 
 <%- include('./partials/home_header.ejs') %>
 
-    <!-- Create a container to format the specific event on the page. -->
-    <div class="container mt-5 mb-5">
-        <div class="row">
-            <div class="col-sm-8 mx-auto">
-                <div class="card event-margin-fine-tuning">
+    <div class="specific-event-ejs">
+        <!-- Create a container to format the specific event on the page. -->
+        <div class="container mt-5 mb-5">
+            <div class="row">
+                <div class="col mx-auto">
+                            
+                    <!-- Create a title for the event creation page.-->
+                    <div class="event">
+                        <h1> <%= eventName %> </h1>
+                        <ul>
+                            <li> <%= eventDate %> </li>
+                            <li><%= eventStartTime %> - <%= eventEndTime %> </li>
+                            <li>Location: <%= eventLocation %> </li>
+                            <!-- <li><%= descriptionString %> </li> -->
+
+                            <!-- Use the split function to determine if the description was left blank -->
+                            <% var descriptionArray = eventDescription.split(" "); %>
+                            <% if(descriptionArray[1] != "") { %>
+
+                                <!-- If the description is not blank, obtain the info for it and display -->
+                                <% var descriptionString = ""; %>
+                                <% for(let i = 1; i < descriptionArray.length; i++) { %>
+                                    <% descriptionString = descriptionString + " " + descriptionArray[i]; %>
+                                <% } %>
+                                
+                                <!-- Display the description assuming it is not blank -->
+                                <li>Description: <%= descriptionString %> </li>
+                            <% } %>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <% if (neededDonations > 0) { %>
+                        <!-- Card content for donation information -->
+                        <div class="donate">
+                            <!-- Makes POST request to the donation route -->
+                            <form class="form-horizontal" action="/donate" method="POST">
+                                <label for="donations">Donation Goal: $<%= neededDonations %></label>
+                                <input type="hidden" id="custId" name="eventidetifier" value="<%= eventID %>" onChange="this.form.submit()">
+                                <input type="number" class="login-register-font form-control" name="eventdonation" min="1" max=<%= neededDonations %> required>
+                                <div class="submit-container"><button type="submit" class="mt-2 btn btn-outline-light">Place Donation</button></div>
+                            </form>
+                        </div>
+                    <% } %>
+
+
+                    <% if (numVolunteersNeeded > 0) { %>
+                        <!-- Collapsed content for volunteering information -->
+                        <div class="volunteer">
+                            <!-- FUNCTION 1: Function to get the value of the timeslot, which is the slot time -->
+                            <!-- <% function getResult() { %>
+                                <% var value = $('timeslot').getValue(); %>
+                            <% } %> -->
+
+                            <!-- Makes POST request to the volunteer route -->
+                            <!-- <form class="form-horizontal" action="/volunteer" method="POST">
+                                <label class="">Available Time Slots:</label> -->
+                                <!-- Create different time slots that the user can sign up for -->
+                                <!-- <% eventTimeIncrements.forEach(function(timeSlot) { %>
+                                    <div class="timeslot m-2">
+                                        <input id="<%= timeSlot %>" type="checkbox" class="myCheckBox" name="timeslot" value="<%= timeSlot %>">
+                                        <label for="<%= timeSlot %>"><%= timeSlot %></label>
+                                    </div>
+                                <% }); %>
+                                <input type="hidden" id="custId" name="eventidetifier" value="<%= eventID %>" onChange="getResult()"> 
+                                <div class="submit-container"><button type="submit" class="btn btn-outline-light">Sign Up</button></div>
+                            </form> -->
+
+
+                            <h3 class="">Available time slots:</h3>
+
+                            <!-- FUNCTION: Function to get the value of the timeslot, which is the slot time -->
+                            <% function getResult() { %>
+                                <% var value = $('timeslot').getValue(); %>
+                            <% } %>
+
+                            <!-- Makes POST request to the volunteer route -->
+                            <form class="form-horizontal" action="/volunteer" method="POST">
+
+                                <!-- Create different time slots that the user can sign up for -->
+                                <% eventTimeIncrements.forEach(function(timeSlot) { %>
+
+                                    <% // Take the time and remove the unique id from the total string for display purposes. %>
+                                    <% var timeSlotSplitTemp = timeSlot.split(" "); %>
+
+                                    <% if(timeSlotSplitTemp.length > 1) { %>
+                                        <% var timeSlotSplit = timeSlotSplitTemp[1] + " " + timeSlotSplitTemp[2] + " " + timeSlotSplitTemp[3] + " " + timeSlotSplitTemp[4] +  " " + timeSlotSplitTemp[5]; %>
+                                        <% // Display the time slot as a checkbox that the user can select. %>
+                                        <div class="timeslot mt-2">
+                                            <input type="checkbox" id="<%= timeSlot %>" class="myCheckBox" name="timeslot" value="<%= timeSlot %>">
+                                            <label for="<%= timeSlot %>"><%= timeSlotSplit %></label>
+                                        </div>
+                                    <% } %>
+
+                                <% }); %>
+                                
+                                <input type="hidden" id="custId" name="eventidentifier" value="<%= eventID %>" onChange="getResult()"> 
+                                <input type="hidden" id="custId" name="eventdate" value="<%= eventDate %>" onChange="getResult()"> 
+                                <button type="submit" class="mt-4 btn btn-lg btn-outline-light">Sign Up</button>
+
+                            </form>
+                        </div>
+                    <% } %>
+
                     <!-- 
                         Include EJS display a message informing the user that 
                         they successfully volunteered or donated to an event.
                     -->
                     <% if(successVolunteeredOrDonated.length > 0) { %>
-                        <div class="confirmation">
+                        <div class="confirmation w-75">
                             <div class="elementToFadeInAndOut message-format">
-                                <h2><%= successVolunteeredOrDonated %></h2>
+                                <b><%= successVolunteeredOrDonated %></b>
                             </div>
                         </div>
                     <% } %>
@@ -47,111 +147,21 @@
                         they have already signed up for a particular event.
                     -->
                     <% if(alreadyVolunteered.length > 0) { %>
-                        <div class="incorrect-input">
+                        <div class="incorrect-input w-75">
                             <div class="elementToFadeInAndOut message-format">
-                                <h2><%= alreadyVolunteered %></h2>
+                                <b><%= alreadyVolunteered %></b>
                             </div>
                         </div>
                     <% } %>
-                    <div class="card-body">
-                        <div class="card-text">
-                            
-                            <!-- Create a title for the event creation page.-->
-                            <div class="mb-4">
-                                <h1 class="black-text"> <%= eventName %> </h1>
-                                <h3> <%= eventDate %> </h3>
-                                <p><%= eventStartTime %> - <%= eventEndTime %> </p>
-                                <p>Location: <%= eventLocation %> </p>
-
-                                <!-- If description is empty, do not display the description -->
-                                <!-- Use the split function to determine if the description was left blank -->
-                                <% var descriptionArray = eventDescription.split(" "); %>
-                                <% if(descriptionArray[1] != "") { %>
-
-                                    <!-- If the description is not blank, obtain the info for it and display -->
-                                    <% var descriptionString = ""; %>
-                                    <% for(let i = 1; i < descriptionArray.length; i++) { %>
-                                        <% descriptionString = descriptionString + " " + descriptionArray[i]; %>
-                                    <% } %>
-                                    
-                                    <!-- Display the description assuming it is not blank -->
-                                    <p>Description: <%= descriptionString %> </p>
-                                <% } %>
-
-                                <p>Volunteers Needed: <%= numVolunteersNeeded %> </p>
-                                <p>Donation Goal: $<%= neededDonations %> </p>
-                            </div>
-
-                            <!-- Create two buttons that collapse and show the donate and volunteer information -->
-                            <div class="special btn-group w-50 mx-auto">
-                                <% if(neededDonations > 0) { %>
-                                    <button class="btn btn-outline-dark" type="button" data-bs-toggle="collapse" 
-                                    data-bs-target="#collapseDonations" aria-expanded="false" aria-controls="collapseDonations">Donate</button>
-                                <% } %>
-
-                                <% if(numVolunteersNeeded > 0) { %>
-                                    <button class="btn btn-outline-dark" type="button" data-bs-toggle="collapse" 
-                                    data-bs-target="#collapseVolunteering" aria-expanded="false" aria-controls="collapseVolunteering">Volunteer</button>
-                                <% } %>
-                            </div>
-
-                            <!-- Collapsed content for donation information -->
-                            <div class="collapse" id="collapseDonations">
-                                <!-- Makes POST request to the donation route -->
-                                <form class="form-horizontal" action="/donate" method="POST">
-                                    <div class="form-group mt-2">
-                                        <label class="login-register-font control-label" for="donations">Donation Goal: $<%= neededDonations %></label>
-                                        <input type="hidden" id="custId" name="eventidentifier" value="<%= eventID %>" onChange="this.form.submit()">
-                                        <input type="number" class="login-register-font form-control" name="eventdonation" min="1" max=<%= neededDonations %> required>
-                                    </div>
-                                    <button type="submit" class="mt-4 btn btn-lg btn-dark">Place Donation</button>
-                                </form>
-                            </div>
-          
-                            <!-- Collapsed content for volunteering information -->
-                            <div class="collapse" id="collapseVolunteering">
-                                <h3 class="mt-3">Available time slots:</h3>
-
-                                <!-- FUNCTION: Function to get the value of the timeslot, which is the slot time -->
-                                <% function getResult() { %>
-                                    <% var value = $('timeslot').getValue(); %>
-                                <% } %>
-
-                                <!-- Makes POST request to the volunteer route -->
-                                <form class="form-horizontal" action="/volunteer" method="POST">
-
-                                    <!-- Create different time slots that the user can sign up for -->
-                                    <% eventTimeIncrements.forEach(function(timeSlot) { %>
-
-                                        <% // Take the time and remove the unique id from the total string for display purposes. %>
-                                        <% var timeSlotSplitTemp = timeSlot.split(" "); %>
-
-                                        <% if(timeSlotSplitTemp.length > 1) { %>
-                                            <% var timeSlotSplit = timeSlotSplitTemp[1] + " " + timeSlotSplitTemp[2] + " " + timeSlotSplitTemp[3] + " " + timeSlotSplitTemp[4] +  " " + timeSlotSplitTemp[5]; %>
-                                            <% // Display the time slot as a checkbox that the user can select. %>
-                                            <input type="checkbox" class="myCheckBox" name="timeslot" value="<%= timeSlot %>">
-                                            <p><%= timeSlotSplit %></p>
-                                        <% } %>
-
-                                    <% }); %>
-                                    
-                                    <input type="hidden" id="custId" name="eventidentifier" value="<%= eventID %>" onChange="getResult()"> 
-                                    <input type="hidden" id="custId" name="eventdate" value="<%= eventDate %>" onChange="getResult()"> 
-                                    <button type="submit" class="mt-4 btn btn-lg btn-dark">Sign Up</button>
-
-                                </form>
-                            </div>
-                        </div>
-                    </div>
                 
                     <!-- Button to go back to the other events -->
-                    <div class="d-flex">
+                    <!-- <div class="d-flex">
                         <form action="/back_events" method="POST">
                             <div>
                                 <button type="submit" class="btn btn-outline-dark btn-back"><i class="fas fa-arrow-left"></i> Back to Events</button>
                             </div>
                         </form>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>

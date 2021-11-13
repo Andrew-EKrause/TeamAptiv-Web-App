@@ -20,88 +20,84 @@
 
 <%- include('./partials/home_header.ejs') %>
 
-    <div class="container mt-5 mb-5">
-        <div class="row">
-            <div class="col-sm-8 mx-auto">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-text">
-                            
-                            <!-- Create a title for the event creation page.-->
-                            <div class="mb-4">
-                                <h1 class="black-text">Create a New Event</h1>
-                            </div>
-                            
-                            <!-- Makes POST request to the /login route -->
-                            <form class="form-horizontal" action="/added_event" method="POST">
-                                <div class="form-group">
-                                    <label class="login-register-font control-label" for="title">Event Name</label>
-                                    <input type="title" class="login-register-font form-control" name="eventname" required>
-                                </div>
-                                <div class="form-group mt-2">
-
-                                    <!-- Use JavaScript to get the current date. This is done to help set the miniumum -->
-                                    <!-- value for the date input. It ensures the ADMIN cannot set a date before current date -->
-                                    <% var today = new Date(); %>
-                                    <% var dd = today.getDate(); %>
-                                    <% var mm = today.getMonth()+1; // January is 0 so need to add 1 to make it 1! %>
-                                    <% var yyyy = today.getFullYear(); %>
-
-                                    <% if(dd<10){ %>
-                                    <%  dd='0'+dd %>
-                                    <% } %>
-
-                                    <% if(mm<10){ %>
-                                    <%  mm='0'+mm %>
-                                    <% } %>
-
-                                    <% today = yyyy+'-'+mm+'-'+dd; %>
-
-                                    <!-- Input for the date -->
-                                    <label class="login-register-font control-label" for="date">Date</label>
-                                    <input type="date" class="login-register-font form-control" min=<%= today %> name="eventdate" required>
-                                    
-                                </div>
-                                <div class="form-group mt-2">
-                                    <label class="login-register-font control-label" for="time">Start Time</label>
-                                    <input type="time" class="login-register-font form-control" name="eventstarttime" required>
-                                </div>
-                                <div class="form-group mt-2">
-                                    <label class="login-register-font control-label" for="time">End Time</label>
-                                    <input type="time" class="login-register-font form-control" name="eventendtime" required>
-                                </div>
-                                <!-- <div class="form-group mt-2"> !!! MAYBE DELETE THIS LATER
-                                    <label class="login-register-font control-label" for="time">Time Increments (in minutes)</label>
-                                    <input type="number" class="login-register-font form-control" name="eventtimeincrements" required>
-                                </div> -->
-                                <div class="form-group mt-2">
-                                    <label class="login-register-font control-label" for="location">Location</label>
-                                    <input type="text" class="login-register-font form-control" name="eventlocation" required>
-                                </div>
-                                <div class="form-group mt-2">
-                                    <label class="login-register-font control-label" for="description">Description</label>
-                                    <input type="text" class="login-register-font form-control" name="eventdescription">
-                                </div>
-                                <div class="form-group mt-2">
-                                    <label class="login-register-font control-label" for="volunteers">Needed Volunteers</label>
-                                    <input type="number" class="login-register-font form-control" name="eventvolunteers" min="0" required>
-                                </div>
-                                <div class="form-group mt-2">
-                                    <label class="login-register-font control-label" for="donations">Donation Goal</label> <!-- MAKE THIS FIELD OPTIONAL IN THE FUTURE!!! -->
-                                    <input type="number" class="login-register-font form-control" name="eventdonations" min="0" required>
-                                </div>
-                                <button type="submit" class="mt-4 btn btn-lg btn-dark">Create Event</button>
-                            </form>
-                            
-                            <!-- Cancel button -->
-                            <div class="container mt-4">
-                                <form action="/cancel" method="POST">
-                                    <div>
-                                        <button type="submit" class="btn btn-lg btn-outline-dark"><i class="fas fa-times"></i> Cancel</button>
-                                    </div>
-                                </form>
-                            </div>
+    <div class="event-creation-ejs">
+        <div class="container mt-5 mb-5">
+            <div class="row">
+                <div class="sheet col-sm-8 mx-auto">
+                    <!-- Create a title for the event creation page.-->
+                    <header class="mb-2">
+                        <h1>Create a New Event</h1>
+                    </header>
+                    
+                    <!-- Makes POST request to the /login route -->
+                    <form class="form-horizontal p-2" action="/added_event" method="POST">
+                        <!-- Makes POST request to the /login route -->
+                        <div class="form-group">
+                            <label class="login-register-font control-label" for="title">Event Name</label>
+                            <input type="title" class="login-register-font form-control" name="eventname" required>
                         </div>
+                        <div class="form-group mt-2">
+
+                            <!-- Use JavaScript to get the current date. This is done to help set the miniumum -->
+                            <!-- value for the date input. It ensures the ADMIN cannot set a date before the current -->
+                            <% var today = new Date(); %>
+                            <% var dd = today.getDate(); %>
+                            <% var mm = today.getMonth()+1; // January is 0 so need to add 1 to make it 1! %>
+                            <% var yyyy = today.getFullYear(); %>
+
+                            <% if(dd<10){ %>
+                            <%  dd='0'+dd %>
+                            <% } %>
+
+                            <% if(mm<10){ %>
+                            <%  mm='0'+mm %>
+                            <% } %>
+
+                            <% today = yyyy+'-'+mm+'-'+dd; %>                                    
+           
+                            <!-- Input for the date -->
+                            <label class="login-register-font control-label" for="date">Date</label>
+                            <input type="date" class="login-register-font form-control" min=<%= today %> name="eventdate" required>
+                            
+                        </div>
+                        <div class="form-group mt-2">
+                            <label class="login-register-font control-label" for="time">Start Time</label>
+                            <input type="time" class="login-register-font form-control" name="eventstarttime" required>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label class="login-register-font control-label" for="time">End Time</label>
+                            <input type="time" class="login-register-font form-control" name="eventendtime" required>
+                        </div>
+                        <!-- <div class="form-group mt-2"> !!! MAYBE DELETE THIS LATER
+                            <label class="login-register-font control-label" for="time">Time Increments (in minutes)</label>
+                            <input type="number" class="login-register-font form-control" name="eventtimeincrements" required>
+                        </div> -->
+                        <div class="form-group mt-2">
+                            <label class="login-register-font control-label" for="location">Location</label>
+                            <input type="text" class="login-register-font form-control" name="eventlocation" required>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label class="login-register-font control-label" for="description">Description</label>
+                            <input type="text" class="login-register-font form-control" name="eventdescription"> 
+                        </div>
+                        <div class="form-group mt-2">
+                            <label class="login-register-font control-label" for="volunteers">Needed Volunteers</label>
+                            <input type="number" class="login-register-font form-control" name="eventvolunteers" min="0" required>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label class="login-register-font control-label" for="donations">Donation Goal</label> <!-- MAKE THIS FIELD OPTIONAL IN THE FUTURE!!! -->
+                            <input type="number" class="login-register-font form-control" name="eventdonations" min="0" required>
+                        </div>
+                        <button type="submit" class="mt-4 btn btn-lg btn-outline-light">Create Event</button>
+                    </form>
+
+                    <!-- Cancel button -->
+                    <div class="container mt-4">
+                        <form action="/cancel" method="POST">
+                            <div>
+                                <button type="submit" class="btn btn-lg btn-outline-light"><i class="fas fa-times"></i> Cancel</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

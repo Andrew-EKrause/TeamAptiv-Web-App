@@ -20,72 +20,79 @@
 
 <%- include('./partials/login-register_header.ejs') %>
 
-    <!-- 
-        Include EJS to display any error messages to the user 
-        if they entered in the wrong password information.
-    -->
-    <% if(errors.length > 0) { %>
-        <% for (let i = 0; i < errors.length; i++) { %>
-            <div class="message-format">
-                <div class="card-body elementToFadeInAndOut">
-                    <h1 class="incorrect-input"><%= errors[i] %></h1>
-                </div>
-            </div>
-        <% } %>
-    <% } %>
+    <div class="login-register-ejs">
+        <div class="container mt-5 mb-5">
+            <div class="row">
+                <div class="sheet col-sm-6 mx-auto">
+                    <!-- Header for the login form -->
+                    <header>
+                        <a class="navbar-brand" href="/home">Team Aptiv</a>
+                        <p>Connect | Volunteer | Donate.</p>
+                    </header>
 
-    <!-- 
-        Include EJS to display any error messages to the user if the
-        attempt to access a page that they are not authorized to access.
-        This will also appear if the user tries to volunteer or donate
-        when they are not signed in.
-    -->
-    <% if(permissionDenied.length > 0) { %>
-        <div class="card">
-            <div class="card-body elementToFadeInAndOut message-format">
-                <h1 class="incorrect-input"><%= permissionDenied %></h1>
-            </div>
-        </div>
-    <% } %>
-
-    <div class="container mt-5 mb-5">
-
-        <div class="row">
-            <div class="col-lg-6 col-md-8 col-sm-10 col-xs-12 mx-auto">
-                <div class="card margin-fine-tuning">
-                    <div class="card-body">
-                        <div class="card-text">
-                            <!-- Makes POST request to the /login route -->
-                            <form class="form-horizontal" action="/login" method="POST">
-                                <div class="form-group">
-                                    <label class="login-register-font control-label" for="email">Email</label>
-                                    <input type="email" class="login-register-font form-control" name="username" required>
+                    <!-- 
+                        Include EJS to display any error messages to the user 
+                        if they entered in the wrong password information.
+                    -->
+                    <% if(errors.length > 0) { %>
+                        <% for (let i = 0; i < errors.length; i++) { %>
+                            <div class="message-format">
+                                <div class="card-body elementToFadeInAndOut">
+                                    <h1 class="incorrect-input"><%= errors[i] %></h1>
                                 </div>
-                                <div class="form-group mt-2">
-                                    <label class="login-register-font control-label" for="password">Password</label>
-                                    <input type="password" class="login-register-font form-control" name="password" required>
-                                </div>
-                                <button type="submit" class="mt-3 btn btn-lg btn-dark">Login</button>
-                            </form>
+                            </div>
+                        <% } %>
+                    <% } %>
 
-                            <h5 class="m-3">or<h5>
-                            
-                            <!-- Authentication sign in with Google -->
-                            <div>
-                                <a class="google-link" href="/auth/google" role="button">
-                                    <i class="fab fa-google"></i>
-                                    Sign in with Google
-                                </a>
+                    <!-- 
+                        Include EJS to display any error messages to the user if the
+                        attempt to access a page that they are not authorized to access.
+                        This will also appear if the user tries to volunteer or donate
+                        when they are not signed in.
+                    -->
+                    <% if(permissionDenied.length > 0) { %>
+                        <div class="card">
+                            <div class="card-body elementToFadeInAndOut message-format">
+                                <h1 class="incorrect-input"><%= permissionDenied %></h1>
                             </div>
                         </div>
-                    </div>
+                    <% } %>
 
-                    <!-- Add a link to register if the user does not already have an account -->
-                    <h5>Don't have an account? <a class="reference-link" href="/register">Register Here</a></h5>
+
+                    <main class="p-3">
+                        <!-- Makes POST request to the /login route -->
+                        <form action="/login" method="POST">
+                            <div class="form-group">
+                                <label class="login-register-font control-label" for="email">Email</label>
+                                <input type="email" class="login-register-font form-control" name="username" required>
+                            </div>
+                            <div class="form-group mt-2">
+                                <label class="login-register-font control-label" for="password">Password</label>
+                                <input type="password" class="login-register-font form-control" name="password" required>
+                            </div>
+                            <button type="submit" class="mt-3 btn btn-lg btn-outline-light d-flex mx-auto">Login</button>
+                        </form>
+
+                        
+                        <!-- Authentication sign in with Google -->
+                        <div class="text-center">
+                            <h5 class="m-3">or<h5>
+
+                            <a class="google-link" href="/auth/google" role="button">
+                                <i class="fab fa-google"></i>
+                                Sign in with Google
+                            </a>
+
+                            <!-- Add a link to register if the user does not already have an account -->
+                            <h5>Don't have an account? <a class="reference-link" href="/register">Register Here</a></h5>
+                        </div>
+                    </main>
                 </div>
             </div>
-        </div>
 
+        </div>
     </div>
+
+    
 
 <%- include('./partials/footer.ejs') %>

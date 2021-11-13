@@ -1,0 +1,598 @@
+/*
+    Authors: Andrew Krause, Zach Gephart, Anthony Musbach, Riley Radle
+    Description:
+        This file contains all of the custom styling for the web app.
+            
+    Navigation: 
+        Styles are organized into sections
+            1. General styles (top of file)
+            2. Styles for each page
+            3. ID selected styles (bottom of file)
+
+        Within each section styles should be ordered 
+        based on subjective importance
+
+        To quickly find a section:
+            - Use command/ctrl f
+            - Search for ...
+                * General styles
+                * <page_name>.ejs styles
+                * ID styles
+
+    Class: CS 341, Fall 2021
+ */
+
+ /* Import fonts */
+ @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono&family=Noto+Serif:ital@1&display=swap'); 
+ @import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&display=swap');
+
+/* ====================================================================
+                            GENERAL STYLES
+ ==================================================================== */
+
+    /* Defines global colors */
+    :root {
+        --foreground-color: black;
+        --background-primary: #f0f0f0; /* Background of the body */
+        --background-secondary: white; /* Background of the cards */
+        --theme1: rgb(180, 180, 180); /* This is used for a lot of the box shadows */
+        --theme2: rgb(110, 110, 110);
+        --theme3: white;
+        --theme4: white;
+        --theme5: white;
+
+
+        /* Ex. to use these in another rule: */
+        /* color: var(--light-color); */
+        /* see https://www.w3.org/TR/css-variables/ for full documentation */
+    }
+
+    /* Format content within the body tag of the HTML structure */
+    body {
+        /* padding-top: 6rem; */
+        margin: 0;
+        font-family: 'Merriweather', serif; 
+        background-color: var(--background-primary);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Get rid of the default styling for lists */
+    ul {
+        list-style: none;
+        padding: 0px;
+    }
+
+    /* Aligns the footer to the bottom of the viewport */
+    footer {
+        margin-top: auto;
+        text-align: center;
+    }
+
+    footer i {
+        color: var(--foreground-color);
+    }
+
+    /* ~~~~~~~~~~~~~ General Class Selectors ~~~~~~~~~~~~~ */
+
+    /* Set the background-color of the different cards throughout the site */
+
+    .btn-outline-light {
+        color: var(--foreground-color);
+        border: 1px solid var(--foreground-color);
+    }
+
+    .btn-outline-light:hover {
+        color: var(--background-primary);
+        background-color: var(--foreground-color);
+        border: 1px solid var(--foreground-color);
+    }
+
+    /* Style incorrect login with redish color. */
+    .incorrect-input {
+        background-color: rgb(255, 169, 169);
+        color: rgb(255, 60, 60);
+        border: 2px solid rgb(255, 60, 60);
+    }
+
+    /* Style confirmation message with greenish color. */
+    .confirmation {
+        background-color: rgb(207, 246, 207);
+        color: rgb(145, 182, 145);
+        border: 2px solid rgb(145, 182, 145);
+    }
+
+    /* Fade the error message in and out. */
+    .elementToFadeInAndOut {
+        opacity: 1;
+        animation: fade 0.75s linear;
+    }
+
+    /* Key frames fade. */
+    @keyframes fade {
+    0%,100% { opacity: 0 }
+    100% { opacity: 1 } 
+    }
+
+    /* Format the messages sent to the user. NOT SURE WHAT THIS DOES*/ 
+    .message-format {
+        text-align: center;
+        font-size: 1.5em;
+        width: 100%;
+        border-radius: 1em;
+        padding: .5em;
+    }
+
+ /* ====================================================================
+                            HOME.EJS STYLES
+ ==================================================================== */
+
+    .home-ejs .home-picture {
+        text-align: left;
+        padding-left: 5%;
+        color: var(--foreground-color);
+    }
+
+    /* Styles the main text on the home page */
+    .home-ejs .home-picture h1 {
+        font-size: 5em;
+        font-family: 'Noto Serif';
+    }
+
+    /* Styles the button below the main text on the home page */
+    .home-ejs .home-picture button, .home-picture p {
+        font-size: 1.5em;
+    }
+
+    .home-ejs .home-picture form {
+        display: inline;
+        float: left;
+    }
+
+ /* ====================================================================
+                        HOME_HEADER.EJS STYLES
+ ==================================================================== */
+
+    /* Set font size of the navbar links. */
+    .navbar .navbar-nav .nav-link {
+        padding-right: 1rem;
+        font-size: 1.5rem;
+        color: var(--foreground-color);
+        transition: all .25s;
+    }
+
+    /* Potentially delete */
+    .navbar .navbar-brand {
+        color: var(--foreground-color);
+    }
+
+    .navbar .navbar-nav .nav-link:hover {
+        color: var(--theme2);
+    }
+
+
+ /* ====================================================================
+                    LOGIN.EJS / REGISTER.EJS STYLES
+ ==================================================================== */
+
+    /* Get rid of the default bootstrap padding */
+    .login-register-ejs .row > * {
+        padding: 0;
+    }
+
+    .login-register-ejs {
+        color: var(--foreground-color);
+    }
+    
+    .login-register-ejs .sheet {
+        border-radius: .5em;
+        background-color: var(--background-secondary);
+        box-shadow: 5px 5px 1em var(--theme1);
+        transition: all .5s; 
+    }
+
+    .login-register-ejs .sheet > header {
+        text-align: center;
+        padding: 1em;
+        border-radius: .5em .5em 0 0;
+        background-color: var(--foreground-color);
+        color: var(--background-primary);
+    }
+
+    .login-register-ejs .sheet > header > a {
+        display: block;
+        font-size: 3em;
+        padding: 0;
+        margin-bottom: .25em;
+        color: var(--background-primary);
+        border-bottom: 1px solid var(--foreground-color);
+        transition: all .5s;
+    }
+
+    /* Make the login/register font larger. */
+    .login-register-font {
+        font-size: x-large;
+        /* POTENTIALLY GET RID OF AND SELECT WITH A COMBINATOR AND CARD */
+    }
+
+    /* Adds some padding between the form elements */
+    .form-group {
+        padding: .5em;
+    }
+
+    /* Changes the styles of the inputs in the form */
+    .form-control {
+        background-color: transparent;
+        border: none;
+        border-bottom: 1px solid lightgray;
+    }
+
+    /* Changes style of inputs when they are focused on */
+    .form-control:focus {
+        background-color: transparent;
+        color: #747474;
+    }
+
+    /* Make the anchor tag for the google link have no text decoration */
+    .google-link {
+        text-decoration: none;
+    }
+
+    /* Style the google link logo */
+    .google-link > i {
+        color: var(--theme2);
+        border: 1px solid var(--theme2); /* FIXME */
+        border-radius: 50%;
+        padding: .25em;
+    }
+
+    .login-register-ejs .sheet:hover {
+        box-shadow: 7px 7px 2em var(--theme1);
+    }
+
+    /* Set the hover state of the google link */
+    .google-link:hover {
+        text-decoration: underline;
+    }
+
+    .login-register-ejs .sheet > header a:hover {
+        border-bottom: 1px solid var(--background-primary);
+    }
+
+/* ====================================================================
+                           EVENTS.EJS STYLES
+ ==================================================================== */
+
+    .events-ejs header {
+        color: var(--foreground-color);
+    }
+
+    /* Style the top level heading */
+    .events-ejs header > h1 {
+        font-size: 5em;
+    } 
+
+    /* Style the Volunteer | Donate comment in the header */
+    .events-ejs header > small {
+        font-size: 2em;
+    }
+
+    /*  */
+    .events-ejs .event {
+        margin-top: 1.5em;
+        padding: 1em;
+        border-radius: .5em;
+        background-color: var(--background-secondary);
+        box-shadow: 5px 5px 1em var(--theme1);
+        transition: all .5s;
+    }
+
+    /* Remove the margin above the top card */
+    /* .events-ejs .event:first-of-type {
+        margin-top: 0;
+    } */
+
+    .events-ejs .event > h2 {
+        font-size: 2.5em;
+        border-bottom: 1px solid var(--foreground-color);
+        transition: border .5s;
+    }
+
+    .events-ejs .event > p {
+        margin: 0;
+        font-size: 1.5em;
+        opacity: 0%;
+        transition: opacity .5s;
+    }
+
+    /* Get rid of the underlines for the text on the event cards */
+    .events-ejs .events-list > a {
+        color: var(--foreground-color);
+        text-decoration: none;
+    }
+
+    .events-ejs .event > b {
+        font-size: 1.5em;
+    }
+
+    .events-ejs .event > b > i {
+        padding-left: 1em; 
+        font-size: .75em;
+    }
+
+    /* Set the hover state for the cards */
+    .events-ejs .event:hover {
+        background-color: var(--foreground-color);
+        transform: scale(1.05);
+        color: var(--background-primary);
+    }
+
+    /* Change the bottom border when event is hovered on */
+    .events-ejs .event:hover > h2 {
+        border-bottom: 1px solid var(--background-primary);
+    }
+
+    .events-ejs .event:hover > p {
+        opacity: 100%;
+    }
+
+/* ====================================================================
+                           SPECIFIC_EVENT.EJS STYLES
+ ==================================================================== */
+
+ .specific-event-ejs {
+     color: var(--foreground-color);
+ }
+
+ .specific-event-ejs .event {
+    padding: 1em;
+    width: 90%;
+    height: 100%;
+    border-radius: .5em;
+    box-shadow: 5px 5px 1em var(--theme1); 
+    background-color: var(--background-secondary);
+    transition: all .5s;
+ }
+
+ .specific-event-ejs .event > h1 {
+     font-size: 3em;
+     border-bottom: 1px solid var(--theme1);
+ }
+
+ .specific-event-ejs .event li {
+     font-size: 1.5em;
+     list-style: circle;
+     margin-left: 1em;
+     padding-bottom: .5em;
+ }
+
+ .specific-event-ejs .volunteer, .specific-event-ejs .donate {
+    padding: .75em;
+    width: 70%;
+    margin-bottom: 1.5em;
+    border-radius: .5em;
+    box-shadow: 5px 5px 1em var(--theme1); 
+    background-color: var(--background-secondary);
+    transition: all .5s;
+ }
+
+ /* Make the labels for donating and volunteering the same font size */
+ .specific-event-ejs form > label {
+     font-size: 1.75em;
+     border-bottom: 1px solid var(--theme1);
+ }
+
+ .specific-event-ejs .submit-container {
+     text-align: right;
+ }
+
+ /* Set the hover state of the cards to have a slight animation */
+ .specific-event-ejs .event:hover, .specific-event-ejs .volunteer:hover, 
+    .specific-event-ejs .donate:hover {
+        box-shadow: 7px 7px 2em var(--theme1);
+ }
+    
+
+/* ====================================================================
+                        USER/ADMIN_PROFILE.EJS STYLES
+ ==================================================================== */
+
+    .profile-ejs header {
+        display: flex;
+        padding: 1em;
+        background-color: white;
+        box-shadow: 5px 5px 1em var(--theme1); 
+        border-radius: .5em;
+        transition: all .5s;
+    }
+
+    .profile-ejs header > div {
+        padding-left: 1em;
+        align-self: center;
+    }
+
+    .profile-ejs header h1 {
+        border-bottom: 1px solid var(--theme1);
+        font-size: 4em;
+    }
+
+    .profile-ejs header p {
+        font-size: 1.75em;
+    }
+
+    .profile-ejs .profile-options button {
+        width: 100%;
+        margin-top: 1em;
+        border: none;
+        font-size: 1.5em;
+        text-align: left;
+        background-color: white;
+        box-shadow: 5px 5px 1em var(--theme1); 
+        padding: 1em;
+        border-radius: .5em;
+        transition: all .6s;
+    }
+
+    .profile-ejs .profile-options .fa-chevron-right {
+        float: right;
+        padding-top: .25em;
+     }
+
+     .profile-ejs .profile-options .fa-bolt {
+         padding-right: 2em;
+     }
+
+    .profile-ejs .events-list .event {
+        background-color: white;
+        box-shadow: 5px 5px 1em var(--theme1); 
+        padding: 1em;
+        margin-bottom: 1em;
+        border-radius: .5em;
+        transition: all .6s; 
+    }
+
+    .profile-ejs .events-list .event > button {
+        display: block;
+        width: 100%;
+        text-align: left;
+        font-size: 2em;
+        border: none;
+        border-bottom: 1px solid white;
+        background-color: transparent;
+        transition: all .5s;
+    }
+
+    .profile-ejs .events-list .event li {
+        list-style: circle;
+        margin-left: 1.5em;
+
+    }
+
+    /* Set hover states */
+
+    .profile-ejs header:hover, .profile-ejs .events-list .event:hover{
+        box-shadow: 7px 7px 2em var(--theme1);
+    }
+
+    .profile-ejs .events-list .event > button:hover {
+        border-bottom: 1px solid var(--theme1);
+    }
+
+    .profile-ejs .profile-options button:hover {
+        background-color: var(--foreground-color);
+        color: var(--background-primary);
+        transform: scale(1.05);
+    }
+
+/* ====================================================================
+                        EVENT_CREATION STYLES
+ ==================================================================== */
+
+    /* Get rid of the default padding for the row */
+    .event-creation-ejs .row > * {
+        padding: 0;
+    }
+
+    .event-creation-ejs .sheet {
+        background-color: white;
+        box-shadow: 5px 5px 1em var(--theme1); 
+        border-radius: .5em;
+        transition: all .6s;    
+    }
+
+    .event-creation-ejs .sheet > header {
+        background-color: var(--foreground-color);
+        color: var(--background-primary);
+        padding: 1em;
+        border-radius: .5em .5em 0 0;
+    }
+
+    .event-creation-ejs .sheet:hover {
+        box-shadow: 7px 7px 2em var(--theme1); 
+    }
+
+ /* ====================================================================
+                           ABOUT.EJS STYLES
+ ==================================================================== */
+
+    .about-ejs {
+        color: var(--foreground-color);
+    }
+
+    .about-ejs .mission, .about-ejs .donate {
+        margin: 1.5em;
+        padding: 1em;
+        background-color: var(--background-secondary);
+        box-shadow: 5px 5px 1em var(--theme1); 
+        border-radius: .5em;
+        transition: all .6s;   
+    }
+
+    .about-ejs .mission > h2, .about-ejs .donate > h2 {
+        border-bottom: 1px solid var(--foreground-color);
+    }
+
+    .about-ejs .mission:hover, .about-ejs .donate:hover {
+        box-shadow: 7px 7px 2em var(--theme1); 
+    }
+
+/* ====================================================================
+                                ID STYLES
+ ==================================================================== */
+
+    /* Add color to header section of page. */
+    #header-section {
+        /* background-color: var(--dark-color); */
+        /* WILL PROBABLY BE GETTING RID OF THIS IN FAVOR OF A DIFFERENT STYLING THEME */
+    }
+
+    /* Style and position the header at the top of the login page. */
+    #login-header {
+        /* background-color: var(--dark-color); */
+        /* width: 100%;
+        position: fixed;
+        top: 0; */
+        /* z-index: 1030; */
+    }
+
+    /* Add color to footer section of page. */
+    #footer-section {
+        color: var(--foreground-color);
+    }
+
+    #footer-section p {
+        font-size: .75em;
+    }
+
+    /* Format profile picture for user profile. */
+    #profileImage {
+        width: 10em;
+        overflow: hidden;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        -ms-border-radius: 50%;
+        -o-border-radius: 50%;
+        border-radius: 50%;
+    }
+
+    /* Custom logo that is in the navbar */
+    #custom-logo {
+        font-size: 1.5em;
+        font-family: "Mochiy Pop P One";
+        color: var(--foreground-color);
+        outline: 2px solid var(--foreground-color);
+        border-radius: 1em;
+        transition: all .5s;
+    }
+
+    #custom-logo:hover {
+        background-color: var(--foreground-color);
+        color: var(--background-primary);
+    }
+
+    /* TODO */
+    /* 
+        Once the CSS is looking nice again -> 
+            refactor all common parts for pages into one style rule
+     */

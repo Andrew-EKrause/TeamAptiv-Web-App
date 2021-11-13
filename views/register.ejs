@@ -24,22 +24,27 @@
 
 <%- include('./partials/login-register_header.ejs') %>
 
-    <!-- 
-        Include EJS to display any error messages to the user if
-        they attempt to register with a username that already exists.
-    -->
-    <% if(alreadyCreated.length > 0) { %>
-        <div class="card-body elementToFadeInAndOut message-format">
-            <h1 class="incorrect-input"><%= alreadyCreated %></h1>
-        </div>
-    <% } %>
+    <div class="login-register-ejs">
+        <div class="container mt-5 mb-5">
+            <div class="row">
+                <div class="sheet col-lg-6 col-md-8 col-sm-10 col-xs-12 mx-auto">
+                    <!-- Header for the login form -->
+                    <header>
+                        <a class="navbar-brand" href="/home">Team Aptiv</a>
+                        <p>Connect | Volunteer | Donate.</p>
+                    </header>
 
-    <div class="container mt-5 mb-5">
+                    <!-- 
+                        Include EJS to display any error messages to the user if
+                        they attempt to register with a username that already exists.
+                    -->
+                    <% if(alreadyCreated.length > 0) { %>
+                        <div class="card-body elementToFadeInAndOut message-format">
+                            <h1 class="incorrect-input"><%= alreadyCreated %></h1>
+                        </div>
+                    <% } %>
 
-        <div class="row register-page-format">
-            <div class="col-lg-6 col-md-8 col-sm-10 col-xs-12 mx-auto">
-                <div class="card margin-fine-tuning">
-                    <div class="card-body">
+                    <main class="p-3">
                         <!-- Makes a POST request to the /register route -->
                         <form class="form-horizontal" action="/register" method="POST">
                             <div class="form-group">
@@ -58,36 +63,37 @@
                                 <label class="login-register-font control-label" for="password">Password</label>
                                 <input type="password" class="login-register-font form-control" name="password" required>
                             </div>
-                            <button type="submit" class="mt-3 btn btn-lg btn-dark">Register</button>
+                            <button type="submit" class="mt-3 btn btn-lg btn-outline-light d-flex mx-auto">Register</button>
                         </form>
 
-                        <h5 class="m-3">or<h5>
 
                         <!-- Authentication sign up with Google -->
-                        <div class="">
+                        <div class="text-center">
+                            <h5 class="m-3">or<h5>
+
                             <a class="google-link" href="/auth/google" role="button">
                                 <i class="fab fa-google"></i>
                                 Sign up with Google
                             </a>
+                            <!-- Add a link to login if the user already has an account -->
+                            <h5>Already have an account? <a class="reference-link" href="/login">Login Here</a></h5>
                         </div>
-
-                    </div>
-
-                    <!-- Add a link to login if the user already has an account -->
-                    <h5>Already have an account? <a class="reference-link" href="/login">Login Here</a></h5>
+                    </main>
                 </div>
             </div>
+    
+            <!-- Back button -->
+            <!-- <div class="container mt-4">
+                <form action="/back" method="POST">
+                    <div>
+                        <button type="submit" class="btn btn-lg btn-outline-dark"><i class="fas fa-arrow-left"></i> Back</button>
+                    </div>
+                </form>
+            </div> -->
+            
         </div>
-
-        <!-- Back button -->
-        <!-- <div class="container mt-4">
-            <form action="/back" method="POST">
-                <div>
-                    <button type="submit" class="btn btn-lg btn-outline-dark"><i class="fas fa-arrow-left"></i> Back</button>
-                </div>
-            </form>
-        </div> -->
-        
     </div>
+
+   
 
 <%- include('./partials/footer.ejs') %>
