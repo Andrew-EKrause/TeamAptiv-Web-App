@@ -23,32 +23,22 @@
 
     <!-- REMEMBER, YOU NEED TO UPDATE THIS SO THAT THINGS ARE DISPLAYED APPROPRIATELY!!! -->
     <!-- YOU WILL END UP RESTRUCTURING THIS IN A WAY SIMILAR TO THE USER PROFILE!!! -->
+    <!-- ONCE SOME OF THE DISPLAYS IN THE USER PROFILE ARE FIXED, MAKE THE ADMIN PROFILE -->
+    <!-- LOOK LIKE THE USER PROFILE!!! -->
 
-    <!-- 
-        Include EJS to display a success message to the ADMIN if
-        they successfully created a new event.
+
+   <!-- 
+        Include EJS to display any success messages to the user if they
+        have successfully cancelled one event or multiple event timeslots.
     -->
-    <% if(successCreated.length > 0) { %>
-        <div class="card-body elementToFadeInAndOut message-format">
-            <h1 class="confirmation"><%= successCreated %></h1>
+    <% if(sucessCancelled.length > 0) { %>
+        <div class="confirmation">
+            <div class="elementToFadeInAndOut message-format">
+                <h1><%= sucessCancelled %></h1>
+            </div>
         </div>
     <% } %>
 
-    <!-- 
-        Include EJS to display a failure message to the ADMIN if
-        they failed to create a new event.
-    -->
-    <% if(failureNotCreated.length > 0) { %>
-            <div class="card-body elementToFadeInAndOut message-format">
-                <h1 class="incorrect-input"><%= failureNotCreated %></h1>
-            </div>
-    <% } %>
-
-    <!-- Create a card for showing the user data -->
-        <!-- <div class="row register-page-format"> -->
-            <!-- <div class="col-sm-12 mx-auto"> -->
-                <!-- <div class="card"> -->
-                    <!-- <div class="card-body"> -->
     <div class="profile-ejs">
         <!-- Create a card for showing the user data -->
         <div class="container w-75 mt-3">
@@ -59,7 +49,7 @@
                         <!-- Display ADMIN profile picture; if user did -->
                         <!-- not use OAuth to sign or does not have picture, -->
                         <!-- use default profile image -->
-                        <form action="/user_profile" method="post">
+                        <form action="/admin_profile" method="post">
                             <!-- <div class="mt-3 mb-3" id="profile-container"> --> <!-- CHECK WITH ANDREW THAT THIS WONT MESS WITH STUFF -->
                                 <img id="profileImage" src=<%= user.picture %> alt="Image not Found" onerror=this.src="images/default_pic.png">
                             <!-- </div> -->
@@ -73,7 +63,7 @@
                     </header>
 
                     <div class="profile-options">
-                        <button data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                        <button data-bs-toggle="collapse" data-bs-target="#collapseEvents" aria-expanded="false" aria-controls="collapseEvents">
                             <i class="fas fa-bolt"></i>
                             My Events
                             <i class="fas fa-chevron-right"></i>
@@ -129,6 +119,7 @@
                                     <h1 class="incorrect-input"><%= failureNotCreated %></h1>
                                 </div>
                         <% } %>
+
                     <!-- 
                         Include a section for the events that the user has signed up
                         for to be rendered on the user's profile page
@@ -202,14 +193,89 @@
                                             <!-- The date displayed utilized the function above for simplification -->
                                             <li> <%= simplifyEventDate(event.eventDate) %> </li>
 
-                                            <!-- Display the event location, description, volunteer, and donation information -->
-                                            <li> Location: <%= event.eventLocation %> </li>
-                                            <li> Description: <%= event.eventDescription %> </li>
-                                            <li> Volunteers: TELL USER WHAT TIME THEY VOLUNTEERED FOR </li>
-                                            <% if(event.neededDonations > 0) { // && CHECK IF USER CONTRIBUTED TO THIS EVENT) { %>
-                                                <li> Donations: You have given PUT AMOUNT HERE </li>
-                                            <% } %>
-                                        </ul>
+                                                <!-- Display the event location, description, volunteer, and donation information -->
+                                                <p> Location: <%= event.eventLocation %> </p>
+
+                                                <!-- If description is empty, do not display the description -->
+                                                <!-- Use the split function to determine if the description was left blank -->
+                                                <% var descriptionArray = event.eventDescription.split(" "); %>
+                                                <% if(descriptionArray[1] != "") { %>
+
+                                                    <!-- If the description is not blank, obtain the info for it and display -->
+                                                    <% var descriptionString = ""; %>
+                                                    <% for(let i = 1; i < descriptionArray.length; i++) { %>
+                                                        <% descriptionString = descriptionString + " " + descriptionArray[i]; %>
+                                                    <% } %>
+                                                    
+                                                    <!-- Display the description assuming it is not blank -->
+                                                    <p>Description: <%= descriptionString %> </p>
+                                                <% } %>
+
+                                                
+                                                <% // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! %>
+
+
+                                                <!-- If there are no donations contributed to this event, do not display -->
+                                                <% if(event.neededDonations > 0) { // && CHECK IF USER CONTRIBUTED TO THIS EVENT) { %>
+                                                    <p> Donations: You have given PUT AMOUNT HERE </p>
+                                                <% } %>
+
+
+                                                <% // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! %>
+
+
+                                                <!-- Check if the user has times that they signed up for in the event. List the times out. -->
+                                                <% if(user.timesAttending.length > 1) { %>
+                                                    <p>Times Attending: </p>
+
+                                                    <!-- FUNCTION: Function to get the value of the time attending -->
+                                                    <% function getResult() { %>
+                                                        <% var value = $('timeattending').getValue(); %>
+                                                    <% } %>
+
+                                                     <!-- Makes POST request to the event cancellation route -->
+                                                    <form class="form-horizontal" action="/cancel_event" method="POST">
+
+                                                        <!-- Create a counter variable that tracks the number of timeslots in each event a user has signed up for -->
+                                                        <% var numTimeSlots = 0; %>
+
+                                                        <!-- Create different time slots that the user can cancel -->
+                                                        <% user.timesAttending.forEach(function(timesAttendingEvent) { %>
+
+                                                            <% // Take the time attending and remove the unique id from the total string for display purposes. %>
+                                                            <% var timeAttendanceSplitTemp = timesAttendingEvent.split(" "); %>
+
+                                                            <% // If the length of the split is greater than 1, the time attending is not an id alone. %>
+                                                            <% if(timeAttendanceSplitTemp.length > 1) { %>
+                                                                
+                                                                <% // Create variables to store the time attendance information: %>
+                                                                <% // The id attached to the time attendance and the time range itself. %>
+                                                                <% var timeAttendanceIentifier = timeAttendanceSplitTemp[3]; %> <% // --> MAY NOT NEED THIS!!! %>
+                                                                <% var timeAttendance = timeAttendanceSplitTemp[4] + " " + timeAttendanceSplitTemp[5] + " " + timeAttendanceSplitTemp[6] + " " + timeAttendanceSplitTemp[7] + " " + timeAttendanceSplitTemp[8]; %>
+
+                                                                <% // If the time being attended matches the event it was from, render it %>
+                                                                <% // within the correct event section in the user profile. %>
+                                                                <% if(event.eventID == timeAttendanceIentifier) { %>
+                                                                    <% // Display the time attending as a checkbox that the user can select. %>
+                                                                    <input type="checkbox" class="myCheckBox" name="timeattending" value="<%= timesAttendingEvent %>">
+                                                                    <p> <%= timeAttendance %> </p>
+                                                                    <% numTimeSlots += 1; %>
+                                                                <% } %>
+
+                                                            <% } %>
+
+                                                        <% }); %>
+
+                                                        <!-- Create hidden input types to obtain the different values that will be processed by the server -->
+                                                        <input type="hidden" id="customId" name="eventidentifier" value="<%= event._id %>" onChange="getResult()">
+                                                        <input type="hidden" id="customId" name="timeattendlength" value="<%= numTimeSlots %>" onChange="getResult()">
+                                                        <button type="submit" class="mt-4 btn btn-lg btn-dark">Cancel Time(s)</button>
+
+                                                    </form>
+                                                <% } %>
+
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 

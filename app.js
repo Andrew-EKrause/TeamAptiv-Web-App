@@ -622,7 +622,8 @@ app.get("/admin_profile", function(req, res){
                             user: req.user,
                             listOfUserEvents: listOfUserEvents,
                             successCreated: req.flash("successCreated"),
-                            failureNotCreated: req.flash("failureNotCreated")
+                            failureNotCreated: req.flash("failureNotCreated"),
+                            sucessCancelled: req.flash("sucessCancelled")
                         });
                     }
                 });
@@ -1362,14 +1363,6 @@ app.post("/cancel_event", function(req, res){
                             );
                         }
                     }
-        
-                    // DELETE LATER --> KEEP FOR NOW.
-                    // // Create a flash message informing the user 
-                    // // that they have cancelled an event timeslot.
-                    // req.flash("sucessCancelled", "You have cancelled your time(s)");
-    
-                    // // Redirect to the user's profile page of the website.
-                    // res.redirect("user_profile");
                 }
             });
 

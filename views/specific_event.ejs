@@ -38,7 +38,7 @@
                             <li> <%= eventDate %> </li>
                             <li><%= eventStartTime %> - <%= eventEndTime %> </li>
                             <li>Location: <%= eventLocation %> </li>
-                            <!-- <li><%= descriptionString %> </li> -->
+                            <!-- <li><%= // descriptionString %> </li> -->
 
                             <!-- Use the split function to determine if the description was left blank -->
                             <% var descriptionArray = eventDescription.split(" "); %>
@@ -53,6 +53,8 @@
                                 <!-- Display the description assuming it is not blank -->
                                 <li>Description: <%= descriptionString %> </li>
                             <% } %>
+
+                            <li>Volunteers Needed: <%= numVolunteersNeeded %> </li>
                         </ul>
                     </div>
                 </div>
@@ -64,36 +66,16 @@
                             <!-- Makes POST request to the donation route -->
                             <form class="form-horizontal" action="/donate" method="POST">
                                 <label for="donations">Donation Goal: $<%= neededDonations %></label>
-                                <input type="hidden" id="custId" name="eventidetifier" value="<%= eventID %>" onChange="this.form.submit()">
+                                <input type="hidden" id="custId" name="eventidentifier" value="<%= eventID %>" onChange="this.form.submit()">
                                 <input type="number" class="login-register-font form-control" name="eventdonation" min="1" max=<%= neededDonations %> required>
                                 <div class="submit-container"><button type="submit" class="mt-2 btn btn-outline-light">Place Donation</button></div>
                             </form>
                         </div>
                     <% } %>
 
-
                     <% if (numVolunteersNeeded > 0) { %>
                         <!-- Collapsed content for volunteering information -->
                         <div class="volunteer">
-                            <!-- FUNCTION 1: Function to get the value of the timeslot, which is the slot time -->
-                            <!-- <% function getResult() { %>
-                                <% var value = $('timeslot').getValue(); %>
-                            <% } %> -->
-
-                            <!-- Makes POST request to the volunteer route -->
-                            <!-- <form class="form-horizontal" action="/volunteer" method="POST">
-                                <label class="">Available Time Slots:</label> -->
-                                <!-- Create different time slots that the user can sign up for -->
-                                <!-- <% eventTimeIncrements.forEach(function(timeSlot) { %>
-                                    <div class="timeslot m-2">
-                                        <input id="<%= timeSlot %>" type="checkbox" class="myCheckBox" name="timeslot" value="<%= timeSlot %>">
-                                        <label for="<%= timeSlot %>"><%= timeSlot %></label>
-                                    </div>
-                                <% }); %>
-                                <input type="hidden" id="custId" name="eventidetifier" value="<%= eventID %>" onChange="getResult()"> 
-                                <div class="submit-container"><button type="submit" class="btn btn-outline-light">Sign Up</button></div>
-                            </form> -->
-
 
                             <h3 class="">Available time slots:</h3>
 
@@ -155,13 +137,13 @@
                     <% } %>
                 
                     <!-- Button to go back to the other events -->
-                    <!-- <div class="d-flex">
+                    <div class="d-flex">
                         <form action="/back_events" method="POST">
                             <div>
                                 <button type="submit" class="btn btn-outline-dark btn-back"><i class="fas fa-arrow-left"></i> Back to Events</button>
                             </div>
                         </form>
-                    </div> -->
+                    </div>
                 </div>
             </div>
         </div>

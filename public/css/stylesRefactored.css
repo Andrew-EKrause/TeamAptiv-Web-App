@@ -452,7 +452,7 @@
         transition: all .6s; 
     }
 
-    .profile-ejs .events-list .event > button {
+    .profile-ejs .events-list .collapse .event > button {
         display: block;
         width: 100%;
         text-align: left;
