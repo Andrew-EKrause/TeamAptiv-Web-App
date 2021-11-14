@@ -1347,7 +1347,7 @@ app.post("/cancel_event", function(req, res){
 
                         // After removing the timeslot from the user's profile,
                         // check if there are any timeslots remaining.
-                        if(numberOfUserTimeslots == 0) { 
+                        if(numberOfUserTimeslots <= 0) { 
                             
                             // Remove the timelot from the user's database.
                             UserModel.findOneAndUpdate(

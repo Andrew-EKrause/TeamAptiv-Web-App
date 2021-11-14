@@ -26,18 +26,6 @@
 <%- include('./partials/home_header.ejs') %>
 
     <!-- 
-        Include EJS to display any error messages to the user if they
-        attempt to access a page that they are not authorized to access.
-    -->
-    <% if(permissionDenied.length > 0) { %>
-        <div class="incorrect-input">
-            <div class="elementToFadeInAndOut message-format">
-                <h1><%= permissionDenied %></h1>
-            </div>
-        </div>
-    <% } %>
-
-    <!-- 
         Include EJS to display any success messages to the user if they
         have successfully cancelled one event or multiple event timeslots.
     -->
