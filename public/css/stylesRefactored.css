@@ -452,7 +452,7 @@
         transition: all .6s; 
     }
 
-    .profile-ejs .events-list .collapse .event > button {
+    .profile-ejs .events-list .event > button {
         display: block;
         width: 100%;
         text-align: left;
@@ -463,10 +463,15 @@
         transition: all .5s;
     }
 
-    .profile-ejs .events-list .event li {
+    .profile-ejs .events-list .event > div > ul > li {
         list-style: circle;
         margin-left: 1.5em;
 
+    }
+
+    /* Style the list of timeslots the user is signed up for */
+    .profile-ejs .events-list .event > div > ul > form > ol > li {
+        list-style: none;
     }
 
     /* Set hover states */

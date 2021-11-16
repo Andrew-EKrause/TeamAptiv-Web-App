@@ -74,21 +74,28 @@
 
                     <!-- Create a list that will act a the aria-controls -->
                     <!-- attribute for the collapsible events button -->
-                    <% var multipleCollapseItems = ""; %>
+                    <!-- <% var multipleCollapseItems = ""; %>
                     <% for(let i = 0; i < eventsArrayIds.length; i++) { %>
                         <% if(i == 0) { %>
                             <% multipleCollapseItems = eventsArrayIds[i]; %>
                         <% } else { %>
                             <% multipleCollapseItems = multipleCollapseItems +  " " + eventsArrayIds[i]; %>
                         <% } %>
-                    <% } %>
+                    <% } %> -->
 
                     <div class="profile-options">
-                        <button type="button" data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false" aria-controls="<%= multipleCollapseItems %>">
+                        <!-- <button type="button" data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false" aria-controls="<%= multipleCollapseItems %>">
+                            <i class="fas fa-clipboard-list"></i>
+                            My Events
+                            <i class="fas fa-chevron-right"></i>
+                        </button> -->
+
+                        <button type="button" data-bs-toggle="collapse" data-bs-target="#collapse-events" aria-expanded="false" aria-controls="collapse-events">
                             <i class="fas fa-clipboard-list"></i>
                             My Events
                             <i class="fas fa-chevron-right"></i>
                         </button>
+                        
                             
                         <!-- Add a button for the user to see their HISTORY !!! THIS WILL BE LATER ON IN THE COURSE -->
                         <form action="" method="">
@@ -128,7 +135,7 @@
                         Include a section for the events that the user has signed up
                         for to be rendered on the user's profile page
                     -->
-                    <div class="events-list"> 
+                    <div class="events-list collapse" id="collapse-events"> 
                         <!-- collapse collapse" id="collapseEvents"> -->
                         <!-- Loop through the database and display the events -->
                         <% listOfUserEvents.forEach(function(event) { %>
@@ -137,170 +144,156 @@
                                 <% // event object ID is removed from the user's info in the database. %>
                             <% } else { %>
 
-                                <div class="collapse multi-collapse" id="<%= event.eventID %>">
-                                    <div class="event">
-                                        <!-- Create divs that will make the events be collapsable -->
-                                        <button type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%=event._id%>"
-                                        aria-expanded="false" aria-controls="collapse<%=event._id%>"><%= event.eventName %></button>
+                                <div class="event">
+                                    <!-- Create divs that will make the events be collapsable -->
+                                    <button class="dropdown" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%=event._id%>"
+                                    aria-expanded="false" aria-controls="collapse<%=event._id%>"><%= event.eventName %></button>
 
-                                        <div class="collapse" id="collapse<%=event._id%>">
-                                            <!-- Include a function to simplify the date display -->
-                                            <% function simplifyEventDate(eventDate){ %>
-                                                <% // First split the event into the components that directly %>
-                                                <% // involve the numberical representations of a date. %>
-                                                <% var date = eventDate.toISOString().split("T")[0]; %>
-                                            
-                                                <% // Create variables for workring with %>
-                                                <% // the nubmers in the date variable. %>
-                                                <% var arrayDate = date.split('-'); %>
-                                                <% var day = arrayDate[2]; %>
-                                                <% var getMonth = arrayDate[1]; %>
-                                                <% var month = ""; %>
-                                                <% var year = arrayDate[0]; %>
-                                                <% var simplifiedDate = ""; %>
-                                            
-                                                <% // Use a series of conditionals to determine %>
-                                                <% // what the name of the month is based on the %>
-                                                <% // numerical representation of it. %>
-                                                <% if(getMonth.localeCompare('1') == 0) { %>
-                                                    <% month = 'Jan'; %>
-                                                <% } else if(getMonth.localeCompare('2') == 0) { %>
-                                                    <% month = 'Feb'; %>
-                                                <% } else if(getMonth.localeCompare('3') == 0) { %>
-                                                    <% month = 'Mar'; %>
-                                                <% } else if(getMonth.localeCompare('4') == 0) { %>
-                                                    <% month = 'Apr'; %>
-                                                <% } else if(getMonth.localeCompare('5') == 0) { %>
-                                                    <% month = 'May'; %>
-                                                <% } else if(getMonth.localeCompare('6') == 0) { %>
-                                                    <% month = 'Jun'; %>
-                                                <% } else if(getMonth.localeCompare('7') == 0) { %>
-                                                    <% month = 'Jul'; %>
-                                                <% } else if(getMonth.localeCompare('8') == 0) { %>
-                                                    <% month = 'Aug'; %>
-                                                <% } else if(getMonth.localeCompare('9') == 0) { %>
-                                                    <% month = 'Sep'; %>
-                                                <% } else if(getMonth.localeCompare('10') == 0) { %>
-                                                    <% month = 'Oct'; %>
-                                                <% } else if(getMonth.localeCompare('11') == 0) { %>
-                                                    <% month = 'Nov'; %>
-                                                <% } else if(getMonth.localeCompare('12') == 0) { %>
-                                                    <% month = 'Dec'; %>
-                                                <% } else { %>
-                                                    <% month = 'ERROR'; %>
+                                    <div class="collapse" id="collapse<%=event._id%>">
+                                        <!-- Include a function to simplify the date display -->
+                                        <% function simplifyEventDate(eventDate){ %>
+                                            <% // First split the event into the components that directly %>
+                                            <% // involve the numberical representations of a date. %>
+                                            <% var date = eventDate.toISOString().split("T")[0]; %>
+                                        
+                                            <% // Create variables for workring with %>
+                                            <% // the nubmers in the date variable. %>
+                                            <% var arrayDate = date.split('-'); %>
+                                            <% var day = arrayDate[2]; %>
+                                            <% var getMonth = arrayDate[1]; %>
+                                            <% var month = ""; %>
+                                            <% var year = arrayDate[0]; %>
+                                            <% var simplifiedDate = ""; %>
+                                        
+                                            <% // Use a series of conditionals to determine %>
+                                            <% // what the name of the month is based on the %>
+                                            <% // numerical representation of it. %>
+                                            <% if(getMonth.localeCompare('1') == 0) { %>
+                                                <% month = 'Jan'; %>
+                                            <% } else if(getMonth.localeCompare('2') == 0) { %>
+                                                <% month = 'Feb'; %>
+                                            <% } else if(getMonth.localeCompare('3') == 0) { %>
+                                                <% month = 'Mar'; %>
+                                            <% } else if(getMonth.localeCompare('4') == 0) { %>
+                                                <% month = 'Apr'; %>
+                                            <% } else if(getMonth.localeCompare('5') == 0) { %>
+                                                <% month = 'May'; %>
+                                            <% } else if(getMonth.localeCompare('6') == 0) { %>
+                                                <% month = 'Jun'; %>
+                                            <% } else if(getMonth.localeCompare('7') == 0) { %>
+                                                <% month = 'Jul'; %>
+                                            <% } else if(getMonth.localeCompare('8') == 0) { %>
+                                                <% month = 'Aug'; %>
+                                            <% } else if(getMonth.localeCompare('9') == 0) { %>
+                                                <% month = 'Sep'; %>
+                                            <% } else if(getMonth.localeCompare('10') == 0) { %>
+                                                <% month = 'Oct'; %>
+                                            <% } else if(getMonth.localeCompare('11') == 0) { %>
+                                                <% month = 'Nov'; %>
+                                            <% } else if(getMonth.localeCompare('12') == 0) { %>
+                                                <% month = 'Dec'; %>
+                                            <% } else { %>
+                                                <% month = 'ERROR'; %>
+                                            <% } %>
+                                        
+                                            <% // Create the simplified date and return it. %>
+                                            <% simplifiedDate = month + " " + (day - 1) + ", " + year; %>
+                                            <% return simplifiedDate; %>
+                                        <% } %>
+
+                                        <ul class="mt-1">
+                                            <!-- The date displayed utilized the function above for simplification -->
+                                            <li> <%= simplifyEventDate(event.eventDate) %> </li>
+
+                                            <!-- Display the event location, description, volunteer, and donation information -->
+                                            <li>Location: <%= event.eventLocation %> </li>
+
+                                            <!-- If description is empty, do not display the description -->
+                                            <!-- Use the split function to determine if the description was left blank -->
+                                            <% var descriptionArray = event.eventDescription.split(" "); %>
+                                            <% if(descriptionArray[1] != "") { %>
+
+                                                <!-- If the description is not blank, obtain the info for it and display -->
+                                                <% var descriptionString = ""; %>
+                                                <% for(let i = 1; i < descriptionArray.length; i++) { %>
+                                                    <% descriptionString = descriptionString + " " + descriptionArray[i]; %>
                                                 <% } %>
-                                            
-                                                <% // Create the simplified date and return it. %>
-                                                <% simplifiedDate = month + " " + (day - 1) + ", " + year; %>
-                                                <% return simplifiedDate; %>
+                                                
+                                                <!-- Display the description assuming it is not blank -->
+                                                <li>Description: <%= descriptionString %></li>
                                             <% } %>
 
-                                            <ul class="mt-1">
-                                                <!-- The date displayed utilized the function above for simplification -->
-                                                <li> <%= simplifyEventDate(event.eventDate) %> </li>
-
-                                                    <!-- Display the event location, description, volunteer, and donation information -->
-                                                    <p> Location: <%= event.eventLocation %> </p>
-
-                                                    <!-- If description is empty, do not display the description -->
-                                                    <!-- Use the split function to determine if the description was left blank -->
-                                                    <% var descriptionArray = event.eventDescription.split(" "); %>
-                                                    <% if(descriptionArray[1] != "") { %>
-
-                                                        <!-- If the description is not blank, obtain the info for it and display -->
-                                                        <% var descriptionString = ""; %>
-                                                        <% for(let i = 1; i < descriptionArray.length; i++) { %>
-                                                            <% descriptionString = descriptionString + " " + descriptionArray[i]; %>
-                                                        <% } %>
-                                                        
-                                                        <!-- Display the description assuming it is not blank -->
-                                                        <p>Description: <%= descriptionString %> </p>
-                                                    <% } %>
-
-                                                    
-                                                    <% // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! %>
+                                            
+                                            <% // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! %>
 
 
-                                                    <!-- If there are no donations contributed to this event, do not display -->
-                                                    <% if(event.neededDonations > 0) { // && CHECK IF USER CONTRIBUTED TO THIS EVENT) { %>
-                                                        <p> Donations: You have given PUT AMOUNT HERE </p>
-                                                    <% } %>
+                                            <!-- If there are no donations contributed to this event, do not display -->
+                                            <% if(event.neededDonations > 0) { // && CHECK IF USER CONTRIBUTED TO THIS EVENT) { %>
+                                                <li> Donations: You have given PUT AMOUNT HERE </li>
+                                            <% } %>
 
 
-                                                    <% // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! %>
+                                            <% // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! %>
 
 
-                                                    <!-- Check if the user has times that they signed up for in the event. List the times out. -->
-                                                    <% if(user.timesAttending.length > 1) { %>
-                                                        <p>Times Attending: </p>
+                                            <!-- Check if the user has times that they signed up for in the event. List the times out. -->
+                                            <% if(user.timesAttending.length > 1) { %>
+                                                <li>Times Attending: </li>
 
-                                                        <!-- FUNCTION: Function to get the value of the time attending -->
-                                                        <% function getResult() { %>
-                                                            <% var value = $('timeattending').getValue(); %>
-                                                        <% } %>
+                                                <!-- FUNCTION: Function to get the value of the time attending -->
+                                                <% function getResult() { %>
+                                                    <% var value = $('timeattending').getValue(); %>
+                                                <% } %>
 
-                                                        <!-- Makes POST request to the event cancellation route -->
-                                                        <form class="form-horizontal" action="/cancel_event" method="POST">
+                                                <!-- Makes POST request to the event cancellation route -->
+                                                <form class="form-horizontal" action="/cancel_event" method="POST">
+                                                    <!-- Create a counter variable that tracks the number of timeslots in each event a user has signed up for -->
+                                                    <% var numTimeSlots = 0; %>
 
-                                                            <!-- Create a counter variable that tracks the number of timeslots in each event a user has signed up for -->
-                                                            <% var numTimeSlots = 0; %>
+                                                    <ol>
+                                                        <!-- Create different time slots that the user can cancel -->
+                                                        <% user.timesAttending.forEach(function(timesAttendingEvent) { %>
 
-                                                            <!-- Create different time slots that the user can cancel -->
-                                                            <% user.timesAttending.forEach(function(timesAttendingEvent) { %>
+                                                            <% // Take the time attending and remove the unique id from the total string for display purposes. %>
+                                                            <% var timeAttendanceSplitTemp = timesAttendingEvent.split(" "); %>
 
-                                                                <% // Take the time attending and remove the unique id from the total string for display purposes. %>
-                                                                <% var timeAttendanceSplitTemp = timesAttendingEvent.split(" "); %>
+                                                            <% // If the length of the split is greater than 1, the time attending is not an id alone. %>
+                                                            <% if(timeAttendanceSplitTemp.length > 1) { %>
+                                                                
+                                                                <% // Create variables to store the time attendance information: %>
+                                                                <% // The id attached to the time attendance and the time range itself. %>
+                                                                <% var timeAttendanceIentifier = timeAttendanceSplitTemp[3]; %> <% // --> MAY NOT NEED THIS!!! %>
+                                                                <% var timeAttendance = timeAttendanceSplitTemp[4] + " " + timeAttendanceSplitTemp[5] + " " + timeAttendanceSplitTemp[6] + " " + timeAttendanceSplitTemp[7] + " " + timeAttendanceSplitTemp[8]; %>
 
-                                                                <% // If the length of the split is greater than 1, the time attending is not an id alone. %>
-                                                                <% if(timeAttendanceSplitTemp.length > 1) { %>
-                                                                    
-                                                                    <% // Create variables to store the time attendance information: %>
-                                                                    <% // The id attached to the time attendance and the time range itself. %>
-                                                                    <% var timeAttendanceIentifier = timeAttendanceSplitTemp[3]; %> <% // --> MAY NOT NEED THIS!!! %>
-                                                                    <% var timeAttendance = timeAttendanceSplitTemp[4] + " " + timeAttendanceSplitTemp[5] + " " + timeAttendanceSplitTemp[6] + " " + timeAttendanceSplitTemp[7] + " " + timeAttendanceSplitTemp[8]; %>
-
-                                                                    <% // If the time being attended matches the event it was from, render it %>
-                                                                    <% // within the correct event section in the user profile. %>
-                                                                    <% if(event.eventID == timeAttendanceIentifier) { %>
-                                                                        <% // Display the time attending as a checkbox that the user can select. %>
-                                                                        <input type="checkbox" class="myCheckBox" name="timeattending" value="<%= timesAttendingEvent %>">
-                                                                        <p> <%= timeAttendance %> </p>
-                                                                        <% numTimeSlots += 1; %>
-                                                                    <% } %>
-
+                                                                <% // If the time being attended matches the event it was from, render it %>
+                                                                <% // within the correct event section in the user profile. %>
+                                                                <% if(event.eventID == timeAttendanceIentifier) { %>
+                                                                    <% // Display the time attending as a checkbox that the user can select. %>
+                                                                    <li>
+                                                                        <input type="checkbox" id="<%= timeAttendance %>" name="timeattending" value="<%= timesAttendingEvent %>">
+                                                                        <label for="<%= timeAttendance %>"> <%= timeAttendance %> </label>
+                                                                    </li>
+                                                                    <% numTimeSlots += 1; %>
                                                                 <% } %>
 
-                                                            <% }); %>
+                                                            <% } %>
 
-                                                            <!-- Create hidden input types to obtain the different values that will be processed by the server -->
-                                                            <input type="hidden" id="customId" name="eventidentifier" value="<%= event._id %>" onChange="getResult()">
-                                                            <input type="hidden" id="customId" name="timeattendlength" value="<%= numTimeSlots %>" onChange="getResult()">
-                                                            <button type="submit" class="mt-4 btn btn-lg btn-dark">Cancel Time(s)</button>
+                                                        <% }); %>
+                                                    </ol>
 
-                                                        </form>
-                                                    <% } %>
-
-                                                </div>
-                                            </ul>
-                                        </div>
+                                                    <!-- Create hidden input types to obtain the different values that will be processed by the server -->
+                                                    <input type="hidden" id="customId" name="eventidentifier" value="<%= event._id %>" onChange="getResult()">
+                                                    <input type="hidden" id="customId" name="timeattendlength" value="<%= numTimeSlots %>" onChange="getResult()">
+                                                    <button type="submit" class="mt-4 btn btn-lg btn-outline-light">Cancel Time(s)</button>
+                                                </form>
+                                            <% } %>
+                                        </ul>
                                     </div>
-                                </div>
-                                
+                                </div>                                
                             <% } %>
                         <% }); %>
                     </div>
                 </div>
-
-                <!-- Include a button for going back to the "Events" page -->
-                <!-- <div class="btn-group p-2">
-                    <div class="d-flex">
-                        <form action="/back" method="POST">
-                            <div>
-                                <button type="submit" class="btn btn-outline-dark btn-back"><i class="fas fa-arrow-left"></i> Back</button>
-                            </div>
-                        </form>
-                    </div>
-                </div> -->
             </div>
         </div>
     </div>
