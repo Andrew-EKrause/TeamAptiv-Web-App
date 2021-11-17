@@ -636,7 +636,8 @@ app.get("/admin_profile", function(req, res){
                 user: req.user,
                 listOfUserEvents: listOfUserEvents,
                 successCreated: req.flash("successCreated"),
-                failureNotCreated: req.flash("failureNotCreated")
+                failureNotCreated: req.flash("failureNotCreated"),
+                sucessCancelled: req.flash("sucessCancelled")
             });
         }
 
@@ -725,7 +726,7 @@ function simplifyEventDate(eventDate){
     }
 
     // Create the simplified date and return it.
-    simplifiedDate = month + " " + (day) + ", " + year; // --> ORIGINALLY THIS SAID (day - 1)???
+    simplifiedDate = month + " " + day + ", " + year; // --> ORIGINALLY THIS SAID (day - 1)???
     return simplifiedDate;
 }
 
@@ -1468,13 +1469,13 @@ app.post("/volunteer", function(req, res){
 
                                 // First convert the user time range into start and end times.
                                 var userInfoTimeArray = userInfoTime.split(" - ");
-                                var userInfoTimeStart = convertToMilitaryTime(userInfoTimeArray[0]);
-                                var userInfoTimeEnd = convertToMilitaryTime(userInfoTimeArray[1]);
+                                var userInfoTimeStart = parseFloat(convertToMilitaryTime(userInfoTimeArray[0]), 10);
+                                var userInfoTimeEnd = parseFloat(convertToMilitaryTime(userInfoTimeArray[1]), 10);
 
                                 // Next convert the time(s) signed up for into start and end times.
                                 var timeSignedUpForArray = timeSignedUpFor.split(" - ");
-                                var timeSignedUpForStart = convertToMilitaryTime(timeSignedUpForArray[0]);
-                                var timeSignedUpForEnd = convertToMilitaryTime(timeSignedUpForArray[1]);
+                                var timeSignedUpForStart = parseFloat(convertToMilitaryTime(timeSignedUpForArray[0]), 10);
+                                var timeSignedUpForEnd = parseFloat(convertToMilitaryTime(timeSignedUpForArray[1]), 10);              
 
                                 // Check if any of the times in the user database match the
                                 // time that the user wants to sign up for. This involves
@@ -1510,13 +1511,13 @@ app.post("/volunteer", function(req, res){
 
                             // First convert the user time range into start and end times.
                             var userInfoTimeArray = userInfoTime.split(" - ");
-                            var userInfoTimeStart = convertToMilitaryTime(userInfoTimeArray[0]);
-                            var userInfoTimeEnd = convertToMilitaryTime(userInfoTimeArray[1]);
+                            var userInfoTimeStart = parseFloat(convertToMilitaryTime(userInfoTimeArray[0]), 10);
+                            var userInfoTimeEnd = parseFloat(convertToMilitaryTime(userInfoTimeArray[1]), 10);
 
                             // Next convert the time(s) signed up for into start and end times.
                             var timeSignedUpForArray = timeSignedUpFor.split(" - ");
-                            var timeSignedUpForStart = convertToMilitaryTime(timeSignedUpForArray[0]);
-                            var timeSignedUpForEnd = convertToMilitaryTime(timeSignedUpForArray[1]);
+                            var timeSignedUpForStart = parseFloat(convertToMilitaryTime(timeSignedUpForArray[0]), 10);
+                            var timeSignedUpForEnd = parseFloat(convertToMilitaryTime(timeSignedUpForArray[1]), 10);
 
                             // Check if any of the times in the user database match the
                             // time that the user wants to sign up for. This involves
