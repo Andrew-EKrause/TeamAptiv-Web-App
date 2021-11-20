@@ -23,6 +23,11 @@ This web application was designed for a nonprofit organization as part of an ass
 - W3Schools: https://www.w3schools.com/
 <p>&nbsp;</p>
 
+**Important Assumptions for Project:**
+- ADD ASSUMPTION HERE...
+- ADD ASSUMPTION HERE...
+<p>&nbsp;</p>
+
 ## Collaborators
 
 **_@Author: Andrew Krause_** <br/>
