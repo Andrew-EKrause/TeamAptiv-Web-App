@@ -340,7 +340,7 @@ passport.use(new GoogleStrategy({
                 });
 
             } else {
-                //found user. Return
+                // Found user. Return
                 return cb(err, user);
             }
         });
@@ -1555,9 +1555,10 @@ app.post("/volunteer", function(req, res){
                     console.log(err);
                 } else {
 
+                    // --> NOTE THAT THE FIRST PART OF THE "return" WAS: "(startTime1) <= (endTime2)" <-- IN CASE YOU ENCOUNTER ERRORS IN THE FUTURE!!!
                     // Create a function that is used later on to check if any of the times overlap.
                     function checkTimeOverlap(startTime1, endTime1, startTime2, endTime2) {
-                        return ((startTime1) <= (endTime2) && (startTime2) < (endTime1) ? true : false);
+                        return ((startTime1) < (endTime2) && (startTime2) < (endTime1) ? true : false);
                     }
 
                     // If the user selected multiple time slots, execute accordingly.
@@ -1603,7 +1604,7 @@ app.post("/volunteer", function(req, res){
                                 // Check if any of the times in the user database match the
                                 // time that the user wants to sign up for. This involves
                                 // checking the date of the event as well.
-                                if((userInfoDate == eventDate && userInfoTime == timeSignedUpFor) || (checkTimeOverlap(userInfoTimeStart, userInfoTimeEnd, timeSignedUpForStart, timeSignedUpForEnd) == true)) {
+                                if((userInfoDate == eventDate && userInfoTime == timeSignedUpFor) || (userInfoDate == eventDate && checkTimeOverlap(userInfoTimeStart, userInfoTimeEnd, timeSignedUpForStart, timeSignedUpForEnd) == true)) {
                                     eventConflicts = true;
                                     break loop1;
                                 }
@@ -1645,7 +1646,7 @@ app.post("/volunteer", function(req, res){
                             // Check if any of the times in the user database match the
                             // time that the user wants to sign up for. This involves
                             // checking the date of the event as well.
-                            if((userInfoDate == eventDate && userInfoTime == timeSignedUpFor) || (checkTimeOverlap(userInfoTimeStart, userInfoTimeEnd, timeSignedUpForStart, timeSignedUpForEnd) == true)) {
+                            if((userInfoDate == eventDate && userInfoTime == timeSignedUpFor) || (userInfoDate == eventDate && checkTimeOverlap(userInfoTimeStart, userInfoTimeEnd, timeSignedUpForStart, timeSignedUpForEnd) == true)) {
                                 eventConflicts = true;
                                 break;
                             }
@@ -1892,45 +1893,6 @@ app.post("/donate", function(req, res){
                 }
             }
         );
-
-        ////////////////////////////////////////////////////////////////////////
-        // --> ASK THE GUYS IF THIS FEATURE WHERE AN EVENT IS ADDED TO THE USER PROFILE
-        // --> AFTER THEY DONATE TO IT SHOULD BE KEPT. I DON'T THINK IT IS NEEDED FOR
-        // --> THE SCOPE OF THIS PROJECT. HOWEVER, I CAN TRY TO IMPLEMENT IT IF I HAVE
-        // --> ENOUGH TIME TO DO SO.
-
-        // // Create a variable to represent whether the user
-        // // has already had the event added to their profile or not.
-        // var alreadyAdded = false;
-
-        // // Go through the list of events in the user events attribute
-        // // and check if the event is already in the user db.
-        // listOfUserEvents.forEach(function(eventInUserProfile) {
-
-        //     // Check if the event already exists in the user's events section.
-        //     if(String(eventInUserProfile) == String(requestedEventId)) {
-        //         alreadyAdded = true;
-        //     }
-        // });
-
-        // // If the user has NOT already been added, add the user.
-        // if(alreadyAdded == false) {
-        //     // Add the event to the user's profile so that you can list
-        //     // the event that the user volunteered for in their profile.
-        //     UserModel.findOneAndUpdate(
-        //         { _id: user.id },
-        //         { $push: { userEvents: requestedEventId } },
-        //         function (error, success) {
-        //             if (error) {
-        //                 console.log("Error: " + error);
-        //             } else {
-        //                 //console.log("Success: " + success);
-        //             }
-        //         }
-        //     );
-        // }
-
-        ////////////////////////////////////////////////////////////////////////
 
         // Decrement the number of donations needed for
         // the event.

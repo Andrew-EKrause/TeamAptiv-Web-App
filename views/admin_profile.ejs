@@ -19,6 +19,8 @@
     ...
 -->
 
+<!-- IN EVENT HISTORY, SHOW THE EVENTS THAT THE ADMIN HAS CANCELLED!!! -->
+
 <%- include('./partials/home_header.ejs') %>
 
     <div class="profile-ejs">
@@ -32,16 +34,14 @@
                         <!-- not use OAuth to sign or does not have picture, -->
                         <!-- use default profile image -->
                         <form action="/user_profile" method="post">
-                            <!-- <div class="mt-3 mb-3" id="profile-container"> --> <!-- CHECK WITH ANDREW THAT THIS WONT MESS WITH STUFF -->
-                                <img id="profileImage" src=<%= user.picture %> alt="Image not Found" onerror=this.src="images/default_pic.png">
-                            <!-- </div> -->
+                            <img id="profileImage" src=<%= user.picture %> alt="Image not Found" onerror=this.src="images/default_pic.png">
                         </form>
 
                         <!-- Display ADMIN name and ADMIN status -->
                         <div>
                             <h1><%= user.firstName %> <%= user.lastName %></h1>
                             <p>Status: <%= user.status %></p>
-                            <p>Given Donations: <%= user.givenDonations %></p>
+                            <p>Given Donations: $<%= user.givenDonations %></p>
                         </div>
                     </header>
 
@@ -57,23 +57,8 @@
                         <% } %>
                     <% }); %>
 
-                    <!-- Create a list that will act a the aria-controls -->
-                    <!-- attribute for the collapsible events button ASK RILEY IF YOU CAN DELETE THESE!!! -->
-                    <!-- <% var multipleCollapseItems = ""; %>
-                    <% for(let i = 0; i < eventsArrayIds.length; i++) { %>
-                        <% if(i == 0) { %>
-                            <% multipleCollapseItems = eventsArrayIds[i]; %>
-                        <% } else { %>
-                            <% multipleCollapseItems = multipleCollapseItems +  " " + eventsArrayIds[i]; %>
-                        <% } %>
-                    <% } %> -->
-
+                    <!-- Create a div to contain the buttons on the ADMIN profile -->
                     <div class="profile-options">
-                        <!-- <button type="button" data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false" aria-controls="<%= multipleCollapseItems %>">
-                            <i class="fas fa-clipboard-list"></i>
-                            My Events
-                            <i class="fas fa-chevron-right"></i>
-                        </button> -->
 
                         <!-- Add a button so that the ADMIN can see what events they have signed up for -->
                         <button type="button" data-bs-toggle="collapse" data-bs-target="#collapse-events" aria-expanded="false" aria-controls="collapse-events">
