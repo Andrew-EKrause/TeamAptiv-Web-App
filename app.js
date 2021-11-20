@@ -1556,6 +1556,8 @@ app.post("/volunteer", function(req, res){
                 } else {
 
                     // --> NOTE THAT THE FIRST PART OF THE "return" WAS: "(startTime1) <= (endTime2)" <-- IN CASE YOU ENCOUNTER ERRORS IN THE FUTURE!!!
+                    // --> I THINK YOU DO WANT THE "return" LIKE YOU HAVE IT RIGHT NOW BECAUSE THERE IS AN ISSUE WITH SIGINING UP FOR TIMESLOTS THAT LIE
+                    // --> WITHIN THE SAME EVENT IF THE "<" IN THE FIRST PART OF THE "return" IS "<=" !!!
                     // Create a function that is used later on to check if any of the times overlap.
                     function checkTimeOverlap(startTime1, endTime1, startTime2, endTime2) {
                         return ((startTime1) < (endTime2) && (startTime2) < (endTime1) ? true : false);
