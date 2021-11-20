@@ -60,18 +60,25 @@
                 </div>
 
                 <div class="col">
-                    <% if (neededDonations > 0) { %>
-                        <!-- Card content for donation information -->
-                        <div class="donate">
-                            <!-- Makes POST request to the donation route -->
-                            <form class="form-horizontal" action="/donate" method="POST">
+                    
+                    <!-- Card content for donation information -->
+                    <div class="donate">
+                        <!-- Makes POST request to the donation route -->
+                        <form class="form-horizontal" action="/donate" method="POST">
+
+                            <!-- Display the donations on the page depending on how many donations were received -->
+                            <% if (neededDonations > 0) { %>
                                 <label for="donations">Donation Goal: $<%= neededDonations %></label>
-                                <input type="hidden" id="custId" name="eventidentifier" value="<%= eventID %>" onChange="this.form.submit()">
-                                <input type="number" class="login-register-font form-control" name="eventdonation" min="1" max=<%= neededDonations %> required>
-                                <div class="submit-container"><button type="submit" class="mt-2 btn btn-outline-light">Place Donation</button></div>
-                            </form>
-                        </div>
-                    <% } %>
+                                <p>Received Donations: $<%= numDonations %></p>
+                            <% } else { %>
+                                <label for="donations">Received Donations: $<%= numDonations %></label>
+                            <% } %>
+                            <input type="hidden" id="custId" name="eventidentifier" value="<%= eventID %>" onChange="this.form.submit()">
+                            <input type="number" class="login-register-font form-control" name="eventdonation" min="1" required>
+                            <div class="submit-container"><button type="submit" class="mt-2 btn btn-outline-light">Place Donation</button></div>
+
+                        </form>
+                    </div>
 
                     <% if (numVolunteersNeeded > 0) { %>
                         <!-- Collapsed content for volunteering information -->

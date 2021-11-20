@@ -155,6 +155,9 @@ const userSchema = new mongoose.Schema({
     lastName: String,
     picture: String,
 
+    // Boolean value to determine if the user's account is active.
+    isActive: Boolean,
+
     // Username of user.
     username: {
         type: String,
@@ -171,6 +174,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "Volunteer" 
     },
+
+    // Total number of donations to all events.
+    givenDonations: Number,
 
     // Array of times that the user is attending.
     // Also contains the date of the event.
@@ -214,6 +220,8 @@ const eventSchema = new mongoose.Schema({
     // Labels for the event start and end time.
     eventStartTime: String,
     eventEndTime: String,
+
+    // ADD A BOOLEAN TO DETERMINE IF THE EVENT HAS BEEN CANCELLED OR NOT!!!
 
     // Array for the time slots available.
     eventTimeIncrements: [{
@@ -307,8 +315,8 @@ passport.use(new GoogleStrategy({
             if (!user) {
  
                 // Use the method to create a new user for the web app. In this
-                // case, the "find" in the "findOrCreate" is never used for the site.
-                UserModel.findOrCreate({googleId: profile.id, firstName: profile.name.givenName, lastName: profile.name.familyName, picture: profile._json.picture, username: user_ID}, function (err, user) {
+                // case, the "find" in the "findOrCreate" is never used for the site.                                                                    
+                UserModel.findOrCreate({googleId: profile.id, firstName: profile.name.givenName, lastName: profile.name.familyName, picture: profile._json.picture, isActive: true, givenDonations: 0, username: user_ID}, function (err, user) {
 
                     // If the user has not already been created, update the timesAttending array
                     // by adding a unique id to it as the first element in order to maintain uniqueness.
@@ -359,7 +367,6 @@ passport.use(new GoogleStrategy({
         //     }
         //     return cb(err, user);
         // });
-
     }
 ));
 
@@ -492,71 +499,89 @@ app.get("/register", function(req, res){
 app.get("/user_profile", function(req, res){
 
     // Create an object to store the user information in an object.
-    const user = req.user
+    const user = req.user;
 
     // If the user is authenticated and is admin, redirect to admin page.
     if(req.isAuthenticated() && user.username == ADMIN_NAME) {
 
-        // Redirect the ADMIN profile page and determine if ADMIN is undefined.
-        res.redirect("/admin_profile");
+        // After checking if the user is authenticated and is the ADMIN, determine
+        // if their account is active. If active, redirect to profile. Otherwise,
+        // show an error message to the user.
+        if(user.isActive == true) {
+            // Redirect the ADMIN profile page and determine if ADMIN is undefined.
+            res.redirect("/admin_profile");
+        } else {
+            req.flash("alreadyCreated", "Your account has been deactivated. Contact admin for assistance");
+            res.redirect("/register");
+        }
 
     } else if(req.isAuthenticated()) {
 
-        // Create variables to help with storing  
-        // the events associated with a given user.
-        const userEventIds = user.userEvents;
-        var listOfUserEvents = [];
+        // After checking if the user is authenticated, determine if their account
+        // is active. If the user account is active, redirect to profile. Otherwise,
+        // show an error message to the user.
+        if(user.isActive == true) {
 
-        // If the user has events they have signed up for, display the events
-        // on the user's profile page. However, if the user has not signed up
-        // for any events and has none, simply display the user's profile.
-        if(userEventIds.length > 0) {
+            // Create variables to help with storing  
+            // the events associated with a given user.
+            const userEventIds = user.userEvents;
+            var listOfUserEvents = [];
 
-            // Create variables to track the objects in the database and
-            // to determine when to display the objects in the user profile.
-            var i = 0;
-            j = userEventIds.length;
+            // If the user has events they have signed up for, display the events
+            // on the user's profile page. However, if the user has not signed up
+            // for any events and has none, simply display the user's profile.
+            if(userEventIds.length > 0) {
 
-            // Go through the objects stored in the given user collection and
-            // look them up in the database by their ID. Then add the objects
-            // found as a result of the lookup to a list and pass it to the page.
-            for(i = 0; i < userEventIds.length; i++) {
+                // Create variables to track the objects in the database and
+                // to determine when to display the objects in the user profile.
+                var i = 0;
+                j = userEventIds.length;
 
-                // Use the find by ID function to return the event object for the user.
-                EventModel.findById(userEventIds[i], function(err, results){
-                    if(err) {
-                        console.log(err);
-                    } else {
-                        listOfUserEvents.push(results);
-                        j -= 1;
-                    }
+                // Go through the objects stored in the given user collection and
+                // look them up in the database by their ID. Then add the objects
+                // found as a result of the lookup to a list and pass it to the page.
+                for(i = 0; i < userEventIds.length; i++) {
 
-                    // The counter 'j' determines when the results should be returned
-                    // from the callback function and rendered on the user profile page.
-                    if (j == 0) {
+                    // Use the find by ID function to return the event object for the user.
+                    EventModel.findById(userEventIds[i], function(err, results){
+                        if(err) {
+                            console.log(err);
+                        } else {
+                            listOfUserEvents.push(results);
+                            j -= 1;
+                        }
 
-                        // Render the user profile page and determine if user is undefined.
-                        // Flash an error message if the regular user had previously  
-                        // attempted to access the ADMIN route.
-                        res.render("user_profile", {  
-                            user: req.user,
-                            listOfUserEvents: listOfUserEvents,
-                            permissionDenied: req.flash("permissionDenied") ,
-                            sucessCancelled: req.flash("sucessCancelled")
+                        // The counter 'j' determines when the results should be returned
+                        // from the callback function and rendered on the user profile page.
+                        if (j == 0) {
 
-                        });
-                    }
+                            // Render the user profile page and determine if user is undefined.
+                            // Flash an error message if the regular user had previously  
+                            // attempted to access the ADMIN route.
+                            res.render("user_profile", {  
+                                user: req.user,
+                                listOfUserEvents: listOfUserEvents,
+                                permissionDenied: req.flash("permissionDenied") ,
+                                sucessCancelled: req.flash("sucessCancelled")
+
+                            });
+                        }
+                    });
+                }
+
+            } else {
+                res.render("user_profile", {  
+                    user: req.user,
+                    listOfUserEvents: listOfUserEvents,
+                    permissionDenied: req.flash("permissionDenied"),
+                    sucessCancelled: req.flash("sucessCancelled")
+
                 });
             }
 
         } else {
-            res.render("user_profile", {  
-                user: req.user,
-                listOfUserEvents: listOfUserEvents,
-                permissionDenied: req.flash("permissionDenied"),
-                sucessCancelled: req.flash("sucessCancelled")
-
-            });
+            req.flash("alreadyCreated", "Your account has been deactivated. Contact admin for assistance");
+            res.redirect("/register");
         }
 
     } else {
@@ -578,67 +603,77 @@ app.get("/logout", function(req, res){
 app.get("/admin_profile", function(req, res){
 
     // Create an object to store the user information in an object.
-    const user = req.user
+    const user = req.user;
 
     // If the user is authenticated AND their status is set to
     // "Admin", then they can access the admin profile page.
     if(req.isAuthenticated() && user.username == ADMIN_NAME) {
 
-        // Create variables to help with storing  
-        // the events associated with an ADMIN.
-        const userEventIds = user.userEvents;
-        var listOfUserEvents = [];
+        // After checking if the user is authenticated and is the ADMIN, determine
+        // if their account is active. If active, redirect to profile. Otherwise,
+        // show an error message to the user.
+        if(user.isActive == true) {
+            
+            // Create variables to help with storing  
+            // the events associated with an ADMIN.
+            const userEventIds = user.userEvents;
+            var listOfUserEvents = [];
 
-        // If the ADMIN has events they have signed up for, display the events
-        // on the ADMIN's profile page. However, if the ADMIN has not signed up
-        // for any events and has none, simply display the ADMIN's profile.
-        if(userEventIds.length > 0) {
+            // If the ADMIN has events they have signed up for, display the events
+            // on the ADMIN's profile page. However, if the ADMIN has not signed up
+            // for any events and has none, simply display the ADMIN's profile.
+            if(userEventIds.length > 0) {
 
-            // Create variables to track the objects in the database and
-            // to determine when to display the objects in the ADMIN profile.
-            var i = 0;
-            var j = userEventIds.length;
+                // Create variables to track the objects in the database and
+                // to determine when to display the objects in the ADMIN profile.
+                var i = 0;
+                var j = userEventIds.length;
 
-            // Go through the objects stored in the given ADMIN collection and
-            // look them up in the database by their ID. Then add the objects
-            // found as a result of the lookup to a list and pass it to the page.
-            for(i = 0; i < userEventIds.length; i++) {
+                // Go through the objects stored in the given ADMIN collection and
+                // look them up in the database by their ID. Then add the objects
+                // found as a result of the lookup to a list and pass it to the page.
+                for(i = 0; i < userEventIds.length; i++) {
 
-                // Use the find by ID function to return the event object for the ADMIN.
-                EventModel.findById(userEventIds[i], function(err, results){
-                    if(err) {
-                        console.log(err);
-                    } else {
-                        listOfUserEvents.push(results);
-                        j -= 1;
-                    }
+                    // Use the find by ID function to return the event object for the ADMIN.
+                    EventModel.findById(userEventIds[i], function(err, results){
+                        if(err) {
+                            console.log(err);
+                        } else {
+                            listOfUserEvents.push(results);
+                            j -= 1;
+                        }
 
-                    // The counter 'j' determines when the results should be returned
-                    // from the callback function and rendered on the user profile page.
-                    if (j == 0) {
+                        // The counter 'j' determines when the results should be returned
+                        // from the callback function and rendered on the user profile page.
+                        if (j == 0) {
 
-                        // Render the ADMIN profile page and determine if ADMIN is undefined.
-                        res.render("admin_profile", {  
-                            user: req.user,
-                            listOfUserEvents: listOfUserEvents,
-                            successCreated: req.flash("successCreated"),
-                            failureNotCreated: req.flash("failureNotCreated"),
-                            sucessCancelled: req.flash("sucessCancelled")
-                        });
-                    }
-                });
-            }
+                            // Render the ADMIN profile page and determine if ADMIN is undefined.
+                            res.render("admin_profile", {  
+                                user: req.user,
+                                listOfUserEvents: listOfUserEvents,
+                                successCreated: req.flash("successCreated"),
+                                failureNotCreated: req.flash("failureNotCreated"),
+                                sucessCancelled: req.flash("sucessCancelled")
+                            });
+                        }
+                    });
+                }
 
             // If there are no events for the admin, then
             // render the admin profile on the screen.
+            } else {
+                res.render("admin_profile", {  
+                    user: req.user,
+                    listOfUserEvents: listOfUserEvents,
+                    successCreated: req.flash("successCreated"),
+                    failureNotCreated: req.flash("failureNotCreated"),
+                    sucessCancelled: req.flash("sucessCancelled")
+                });
+            }
+
         } else {
-            res.render("admin_profile", {  
-                user: req.user,
-                listOfUserEvents: listOfUserEvents,
-                successCreated: req.flash("successCreated"),
-                failureNotCreated: req.flash("failureNotCreated"),
-                sucessCancelled: req.flash("sucessCancelled")
-            });
+            req.flash("alreadyCreated", "Your account has been deactivated. Contact admin for assistance");
+            res.redirect("/register");
         }
 
     // Otherwise, if the user is authenticated, redirect them to
@@ -651,8 +686,8 @@ app.get("/admin_profile", function(req, res){
     // If the user is not authenticated, redirect them to the
     // login page and flash an error message.
     } else {
-        req.flash("permissionDenied", "You cannot access that page"); // <-- !!! NOT WORKING
-        res.redirect("/login");
+        req.flash("alreadyCreated", "You cannot access that page"); 
+        res.redirect("/register");
         return;
     }
 });
@@ -835,6 +870,7 @@ app.get("/events/:eventId", function(req, res){
             eventDescription: event.eventDescription,
             numVolunteersNeeded: event.numVolunteersNeeded,
             neededDonations: event.neededDonations,
+            numDonations: event.numDonations,
             successVolunteeredOrDonated: req.flash("successVolunteeredOrDonated"),
             alreadyVolunteered: req.flash("alreadyVolunteered"),
         });
@@ -868,6 +904,10 @@ app.post("/donate_org", function(req, res){
     const organizationID = req.body.orgidentifier;
     const addedDonation = req.body.orgdonation;
 
+    // Create variables to update donations given by the user.
+    var user = req.user;
+    var userStatus = user.status;
+
     // Check if the user has an account. Otherwise, redirect to login.
     if(req.isAuthenticated()) {
 
@@ -878,6 +918,38 @@ app.post("/donate_org", function(req, res){
                 res.redirect("/about");
             }
         });
+
+        // Check if the user already has the status of "Volunteer and Donor".
+        // If not, then make the user have the status of "Volunteer and Donor".
+        if(userStatus == "Volunteer") {
+
+            // Set the status of the user to "Volunteer and Donor".
+            UserModel.findOneAndUpdate(
+                { _id: user.id },
+                { $set: { status: "Volunteer, Donor" } },
+                function (error, success) {
+                    if (error) {
+                        console.log("Error: " + error);
+                    } else {
+                        //console.log("Success: " + success);
+                    }
+                }
+            );
+        }
+
+        // Increment the total number of donations given by the user.
+        UserModel.findOneAndUpdate(
+            { _id: user.id },
+            { $inc: { givenDonations: addedDonation} },                   
+            function (error, success) {
+                if (error) {
+                    console.log("Error: " + error);
+                } else {
+                    // console.log("User Success: " + success);
+                }
+            }
+        );
+
     } else {
         res.redirect("/login");
     }
@@ -917,8 +989,10 @@ app.post("/register", function(req, res){
                     userID: user_ID,
                     firstName: req.body.fname,
                     lastName: req.body.lname,
+                    isActive: true,
                     username: req.body.username,
                     status: "Admin",
+                    givenDonations: 0,
                     timesAttending: [user_IDString]
                 });
 
@@ -942,7 +1016,9 @@ app.post("/register", function(req, res){
                     userID: user_ID,
                     firstName: req.body.fname,
                     lastName: req.body.lname,
+                    isActive: true,
                     username: req.body.username,
+                    givenDonations: 0,
                     timesAttending: [user_IDString]
                 });
 
@@ -970,7 +1046,7 @@ app.post("/login", passport.authenticate("local", {
 }), (req, res, next) => {
 
     // Create an object to store the user information in an object.
-    const user = req.user
+    const user = req.user;
 
     // Check if the username is the ADMIN username.
     if(user.username == ADMIN_NAME) {
@@ -1058,6 +1134,12 @@ app.post("/added_event", function(req, res){
     // parameter), is passed into this function.
     var makeTimeIntervals = function (startTime, endTime, increment) {
        
+        // Create a counter variable, i, for the do-while loop.
+        // Also creat two variables for helping to form the timeslots.
+        var i = 0;
+        var increaseHr = 0;
+        var remainder = 0;
+
         // If the increment entered by the admin is zero, return
         // the range as from the start time to the end time.
         if(increment == 0) {
@@ -1067,32 +1149,72 @@ app.post("/added_event", function(req, res){
 
         } else {
 
+            // Split the string values and parse the information 
+            // to convert it into numerical values.
             startTime = startTime.toString().split(':');
             endTime = endTime.toString().split(':');
             increment = parseInt(increment, 10);
        
-            var pad = function (n) { return (n < 10) ? '0' + n.toString() : n; },
-                startHr = parseInt(startTime[0], 10),
-                startMin = parseInt(startTime[1], 10),
-                endHr = parseInt(endTime[0], 10),
-                endMin = parseInt(endTime[1], 10),
-                currentHr = startHr,
-                currentMin = startMin,
-                previous = currentHr + ':' + pad(currentMin),
-                current = '',
-                r = [];
+            // Create a function that is stored in a variable to 
+            // convert the numerical time range back into a string.
+            var pad = function (n) { 
+                return (n < 10) ? '0' + n.toString() : n; 
+            },
+
+            // Assign the variables as you loop through the time
+            // in the process of creating the time increments.
+            startHr = parseInt(startTime[0], 10),
+            startMin = parseInt(startTime[1], 10),
+            endHr = parseInt(endTime[0], 10),
+            endMin = parseInt(endTime[1], 10),
+            currentHr = startHr,
+            currentMin = startMin,
+            previous = currentHr + ':' + pad(currentMin),
+            current = '',
+            r = [];
        
+            // Utilize a do-while loop to parse the timeslot information.
             do {
+                // Increment the minutes to continue 
+                // the timeslot converstion process.
                 currentMin += increment;
-                if ((currentMin % 60) === 0 || currentMin > 60) {
-                    currentMin = (currentMin === 60) ? 0 : currentMin - 60;
-                    currentHr += 1;
+
+                // Check if the minutes are evenly divisible by 60. If not,
+                // peform a different operation that takes the remainder minutes.
+                if ((currentMin % 60) === 0) {
+
+                    // Since the value is a number divisible by 60, the
+                    // variables are structured to change using constant
+                    // data values.
+                    increaseHr = currentMin / 60;
+                    currentMin = 0;
+                    currentHr += increaseHr;
+
+                } else if(currentMin > 60) {
+
+                    // Determine how many times the value of 60 can fit inside of
+                    // the currentMin variable and adjust the other variables accordingly.
+                    remainder = Math.floor(currentMin / 60);
+                    currentMin = currentMin - (60 * remainder);
+                    currentHr += remainder;
+
+                } else {
+                    currentMin = currentMin + 0;
                 }
+
+                // Call the function to create an increment and  
+                // push it into the array of time increments.
                 current = currentHr + ':' + pad(currentMin);
                 r.push(previous + ' - ' + current);
                 previous = current;
-            } while (currentHr !== endHr);
-           
+
+                // Increment the counter variable, i.
+                i += 1;
+
+            } while (currentHr !== endHr && i < req.body.eventvolunteers); 
+
+                // Return the array of timeslot increments that will be
+                // converted into standard time by a separate function.
                 return r;
         }
     };
@@ -1104,8 +1226,9 @@ app.post("/added_event", function(req, res){
     var convertVolunteerTimeIncrements = [];
     convertVolunteerTimeIncrements.push(event_IDString);
 
-    let i = 0;
-    for (i = 0; i < volunteerTimeIncrements.length; i++) {
+    // Loop through the volunteer time increments array 
+    // and convert the values into standard time.
+    for (let i = 0; i < volunteerTimeIncrements.length; i++) {
 
         // Convert the time ranges to standard time.  
         var splitStartAndEnd = volunteerTimeIncrements[i].split(' - ');
@@ -1757,36 +1880,57 @@ app.post("/donate", function(req, res){
             );
         }
 
-        // Create a variable to represent whether the user
-        // has already had the event added to their profile or not.
-        var alreadyAdded = false;
-
-        // Go through the list of events in the user events attribute
-        // and check if the event is already in the user db.
-        listOfUserEvents.forEach(function(eventInUserProfile) {
-
-            // Check if the event already exists in the user's events section.
-            if(String(eventInUserProfile) == String(requestedEventId)) {
-                alreadyAdded = true;
-            }
-        });
-
-        // If the user has NOT already been added, add the user.
-        if(alreadyAdded == false) {
-            // Add the event to the user's profile so that you can list
-            // the event that the user volunteered for in their profile.
-            UserModel.findOneAndUpdate(
-                { _id: user.id },
-                { $push: { userEvents: requestedEventId } },
-                function (error, success) {
-                    if (error) {
-                        console.log("Error: " + error);
-                    } else {
-                        //console.log("Success: " + success);
-                    }
+        // Increment the total number of donations given by the user.
+        UserModel.findOneAndUpdate(
+            { _id: user.id },
+            { $inc: { givenDonations:  req.body.eventdonation} },                   
+            function (error, success) {
+                if (error) {
+                    console.log("Error: " + error);
+                } else {
+                    // console.log("User Success: " + success);
                 }
-            );
-        }
+            }
+        );
+
+        ////////////////////////////////////////////////////////////////////////
+        // --> ASK THE GUYS IF THIS FEATURE WHERE AN EVENT IS ADDED TO THE USER PROFILE
+        // --> AFTER THEY DONATE TO IT SHOULD BE KEPT. I DON'T THINK IT IS NEEDED FOR
+        // --> THE SCOPE OF THIS PROJECT. HOWEVER, I CAN TRY TO IMPLEMENT IT IF I HAVE
+        // --> ENOUGH TIME TO DO SO.
+
+        // // Create a variable to represent whether the user
+        // // has already had the event added to their profile or not.
+        // var alreadyAdded = false;
+
+        // // Go through the list of events in the user events attribute
+        // // and check if the event is already in the user db.
+        // listOfUserEvents.forEach(function(eventInUserProfile) {
+
+        //     // Check if the event already exists in the user's events section.
+        //     if(String(eventInUserProfile) == String(requestedEventId)) {
+        //         alreadyAdded = true;
+        //     }
+        // });
+
+        // // If the user has NOT already been added, add the user.
+        // if(alreadyAdded == false) {
+        //     // Add the event to the user's profile so that you can list
+        //     // the event that the user volunteered for in their profile.
+        //     UserModel.findOneAndUpdate(
+        //         { _id: user.id },
+        //         { $push: { userEvents: requestedEventId } },
+        //         function (error, success) {
+        //             if (error) {
+        //                 console.log("Error: " + error);
+        //             } else {
+        //                 //console.log("Success: " + success);
+        //             }
+        //         }
+        //     );
+        // }
+
+        ////////////////////////////////////////////////////////////////////////
 
         // Decrement the number of donations needed for
         // the event.

@@ -25,18 +25,6 @@
 
 <%- include('./partials/home_header.ejs') %>
 
-    <!-- 
-        Include EJS to display any success messages to the user if they
-        have successfully cancelled one event or multiple event timeslots.
-    -->
-    <% if(sucessCancelled.length > 0) { %>
-        <div class="confirmation">
-            <div class="elementToFadeInAndOut message-format">
-                <h1><%= sucessCancelled %></h1>
-            </div>
-        </div>
-    <% } %>
-
     <div class="profile-ejs">
         <!-- Create a card for showing the user data -->
         <div class="container w-75 mt-3">
@@ -44,7 +32,7 @@
 
                 <div class="col">
                     <header>
-                        <!-- Display ADMIN profile picture; if user did -->
+                        <!-- Display user profile picture; if user did -->
                         <!-- not use OAuth to sign or does not have picture, -->
                         <!-- use default profile image -->
                         <form action="/user_profile" method="post">
@@ -53,10 +41,11 @@
                             <!-- </div> -->
                         </form>
 
-                        <!-- Display ADMIN name and ADMIN status -->
+                        <!-- Display user name and user status -->
                         <div>
                             <h1><%= user.firstName %> <%= user.lastName %></h1>
                             <p>Status: <%= user.status %></p>
+                            <p>Given Donations: <%= user.givenDonations %></p>
                         </div>
                     </header>
 
@@ -73,7 +62,7 @@
                     <% }); %>
 
                     <!-- Create a list that will act a the aria-controls -->
-                    <!-- attribute for the collapsible events button -->
+                    <!-- attribute for the collapsible events button ASK RILEY IF YOU CAN DELETE THESE!!! -->
                     <!-- <% var multipleCollapseItems = ""; %>
                     <% for(let i = 0; i < eventsArrayIds.length; i++) { %>
                         <% if(i == 0) { %>
@@ -90,6 +79,7 @@
                             <i class="fas fa-chevron-right"></i>
                         </button> -->
 
+                        <!-- Add a button so that the user can see what events they have signed up for -->
                         <button type="button" data-bs-toggle="collapse" data-bs-target="#collapse-events" aria-expanded="false" aria-controls="collapse-events">
                             <i class="fas fa-clipboard-list"></i>
                             My Events
@@ -106,6 +96,7 @@
                             </button>
                         </form>
 
+                        <!-- Add a button so that the user can logout of their account -->
                         <form action="/logout" method="POST">
                             <button type="submit">
                                 <i class="fas fa-sign-out-alt"></i>
@@ -119,17 +110,29 @@
                 <!-- Add a column class in order to help make the page responsive -->
                 <div class="col">
 
-                        <!-- 
-                            Include EJS to display any error messages to the user if the
-                            attempt to access a page that they are not authorized to access.
-                        -->
-                        <% if(permissionDenied.length > 0) { %>
-                            <div class="incorrect-input">
-                                <div class="elementToFadeInAndOut message-format">
-                                    <h1><%= permissionDenied %></h1>
-                                </div>
+                    <!-- 
+                        Include EJS to display any success messages to the user if they
+                        have successfully cancelled one event or multiple event timeslots.
+                    -->
+                    <% if(sucessCancelled.length > 0) { %>
+                        <div class="confirmation">
+                            <div class="elementToFadeInAndOut message-format">
+                                <h1><%= sucessCancelled %></h1>
                             </div>
-                        <% } %>
+                        </div>
+                    <% } %>
+
+                    <!-- 
+                        Include EJS to display any error messages to the user if the
+                        attempt to access a page that they are not authorized to access.
+                    -->
+                    <% if(permissionDenied.length > 0) { %>
+                        <div class="incorrect-input">
+                            <div class="elementToFadeInAndOut message-format">
+                                <h1><%= permissionDenied %></h1>
+                            </div>
+                        </div>
+                    <% } %>
                         
                     <!-- 
                         Include a section for the events that the user has signed up
@@ -224,19 +227,10 @@
                                             <% } %>
 
                                             
-                                            <% // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! %>
+                                            <!-- THIS IS WHERE YOU WERE PLANNING ON LISTING HOW MUCH A USER HAD DONATED TO AN EVENT!!! -->
 
 
-                                            <!-- If there are no donations contributed to this event, do not display -->
-                                            <% if(event.neededDonations > 0) { // && CHECK IF USER CONTRIBUTED TO THIS EVENT) { %>
-                                                <li> Donations: You have given PUT AMOUNT HERE </li>
-                                            <% } %>
-
-
-                                            <% // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! %>
-
-
-                                            <!-- Check if the user has times that they signed up for in the event. List the times out. -->
+                                            <!-- Check if the user has times that they signed up for in the event. List the times out -->
                                             <% if(user.timesAttending.length > 1) { %>
                                                 <li>Times Attending: </li>
 
