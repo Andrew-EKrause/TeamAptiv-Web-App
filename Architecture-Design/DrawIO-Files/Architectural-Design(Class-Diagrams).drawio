@@ -45,8 +45,8 @@
                 <mxCell id="13" value="Admin" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="70" y="180" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="14" value="newEvent()&lt;br&gt;cancel_event()&lt;br&gt;create_user()&lt;br&gt;deactivate_user()&lt;br&gt;view_events()" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="70" y="240" width="120" height="100" as="geometry"/>
+                <mxCell id="14" value="newEvent()&lt;br&gt;cancel_event()&lt;br&gt;create_user()&lt;br&gt;deactivate_user()&lt;br&gt;view_events()&lt;br&gt;volunteer()&lt;br&gt;donate()&lt;br&gt;login()" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="70" y="240" width="120" height="139" as="geometry"/>
                 </mxCell>
                 <mxCell id="16" value="Event" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="640" y="180" width="140" height="60" as="geometry"/>
