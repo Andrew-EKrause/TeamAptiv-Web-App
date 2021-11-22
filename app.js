@@ -1872,7 +1872,7 @@ app.post("/donate", function(req, res){
             // Set the status of the user to "Volunteer and Donor".
             UserModel.findOneAndUpdate(
                 { _id: user.id },
-                { $set: { status: "Volunteer, Donor" } },
+                { $set: { status: "Donor" } },
                 function (error, success) {
                     if (error) {
                         console.log("Error: " + error);
