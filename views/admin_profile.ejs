@@ -69,7 +69,7 @@
 
                         <!-- Add a button so that the ADMIN can see the users of the site !!! IMPLEMENT THIS SOON -->
                         <form action="" method="">
-                            <button type="submit" class="btn">
+                            <button type="button" data-bs-toggle="collapse" data-bs-target="#collapse-users" aria-expanded="false" aria-controls="collapse-users">
                                 <i class="fas fa-users"></i>
                                 See Users
                                 <i class="fas fa-chevron-right"></i>
@@ -116,6 +116,19 @@
                         <div class="confirmation">
                             <div class="elementToFadeInAndOut message-format">
                                 <h1><%= sucessCancelled %></h1>
+                            </div>
+                        </div>
+                    <% } %>
+
+                    <!-- 
+                        Include EJS to display an error message if the ADMIN
+                        attempts to complete an action that is impossible to 
+                        complete.
+                    -->
+                    <% if(permissionDenied.length > 0) { %>
+                        <div class="incorrect-input">
+                            <div class="elementToFadeInAndOut message-format">
+                                <h1><%= permissionDenied %></h1>
                             </div>
                         </div>
                     <% } %>
@@ -232,10 +245,6 @@
                                                 <li>Description: <%= descriptionString %></li>
                                             <% } %>
 
-                                            
-                                            <!-- THIS IS WHERE YOU WERE PLANNING ON LISTING HOW MUCH A USER HAD DONATED TO AN EVENT!!! -->
-
-
                                             <!-- Check if the ADMIN has times that they signed up for in the event. List the times out -->
                                             <% if(user.timesAttending.length > 1) { %>
                                                 <li>Times Attending: </li>
@@ -290,6 +299,67 @@
                                         </ul>
                                     </div>
                                 </div>                                
+                            <% } %>
+                        <% }); %>
+                    </div>
+
+                    <!-- 
+                        Include a section for the for the ADMIN to view the 
+                        users that are registered with the Team Aptiv website.
+                    -->
+                    <div class="events-list collapse" id="collapse-users"> 
+                        <!-- collapse collapse" id="collapseEvents"> -->
+                        <!-- Loop through the database and display the events -->
+                        <% listOfUsers.forEach(function(user) { %>
+                            <% if(user == null) { %>
+                                <% // For now, do nothing. In the future, trigger a request so that the %>
+                                <% // event object ID is removed from the ADMIN's info in the database. %>
+                            <% } else { %>
+
+                                <!-- If the user is not the ADMIN, list the user out on the ADMIN's profile -->
+                                <% if(user.status != "Admin") { %>
+                                    <div class="event">
+                                        <!-- Create divs that will make the events be collapsable -->
+                                        <button class="dropdown" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%=user._id%>"
+                                        aria-expanded="false" aria-controls="collapse<%=user._id%>"><%= user.firstName + " " + user.lastName %></button>
+
+                                        <div class="collapse" id="collapse<%=user._id%>">
+                                            <!-- List out information about the user. -->
+                                            <ul class="mt-1">
+
+                                                <!-- Display the event location, description, volunteer, and donation information -->
+                                                <li>Username: <%= user.username %> </li>
+                                                <li>Status: <%= user.status %> </li>
+                                                <li>Total Donations: $<%= user.givenDonations %> </li>
+                                                <li>Total Volunteer Hours: TOTAL HOURS HERE </li>
+                                                <!-- !!! ASK THE OTHER GUYS IF YOU SHOULD LIST OUT THE EVENTS/TIMESLOTS THAT THE USERS ARE CURRENTLY SIGNED UP FOR!!! -->
+
+                                                
+                                                <!-- FUNCTION: Function to get the value of the user identifier -->
+                                                <% function getUser() { %>
+                                                    <% var value = $('timeattending').getValue(); %>
+                                                <% } %>
+                                                
+                                                <!-- Include a conditional to determine which button to display to the ADMIN -->
+                                                <% if(user.isActive == true) { %>
+                                                    <!-- Makes POST request to the user deactivation route -->
+                                                    <form class="form-horizontal" action="/deactivate_account" method="POST">
+                                                        <!-- Create hidden input types to obtain the different values that will be processed by the server -->
+                                                        <input type="hidden" id="customId" name="useridentifier" value="<%= user._id %>" onChange="getUser()">
+                                                        <button type="submit" class="mt-4 btn btn-lg btn-outline-light">Deactivate Account</button>
+                                                    </form>
+                                                <% } else { %>
+                                                    <!-- Makes POST request to the user activation route -->
+                                                    <form class="form-horizontal" action="/activate_account" method="POST">
+                                                        <!-- Create hidden input types to obtain the different values that will be processed by the server -->
+                                                        <input type="hidden" id="customId" name="useridentifier" value="<%= user._id %>" onChange="getUser()">
+                                                        <button type="submit" class="mt-4 btn btn-lg btn-outline-light">Activate Account</button>
+                                                    </form>
+                                                <% } %>
+                                            </ul>
+                                        </div>
+                                    </div>      
+                                <% } %>                          
                             <% } %>
                         <% }); %>
                     </div>

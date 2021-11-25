@@ -344,29 +344,6 @@ passport.use(new GoogleStrategy({
                 return cb(err, user);
             }
         });
-
-        // MAYBE DELETE LATER. --> KEEP FOR NOW JUST IN CASE.
-        // // Find if user already exists and log in. Otherwise, create new user account for site.
-        // UserModel.findOrCreate({googleId: profile.id, firstName: profile.name.givenName, lastName: profile.name.familyName, picture: profile._json.picture, username: user_ID}, function (err, user) {
-
-        //     // If the user has not already been created, update the timesAttending array
-        //     // by adding a unique id to it as the first element in order to maintain uniqueness.
-        //     if(user.timesAttending.length == 0) {
-        //           // Remove the timelot from the user's database.
-        //           UserModel.findOneAndUpdate(
-        //             { _id: user.id },
-        //             { $push: { timesAttending: user_IDString } },                   
-        //             function (error, success) {
-        //                 if (error) {
-        //                     console.log("Error: " + error);
-        //                 } else {
-        //                     // console.log("User Success: " + success);
-        //                 }
-        //             }
-        //         );
-        //     }
-        //     return cb(err, user);
-        // });
     }
 ));
 
@@ -561,7 +538,7 @@ app.get("/user_profile", function(req, res){
                             res.render("user_profile", {  
                                 user: req.user,
                                 listOfUserEvents: listOfUserEvents,
-                                permissionDenied: req.flash("permissionDenied") ,
+                                permissionDenied: req.flash("permissionDenied"),
                                 sucessCancelled: req.flash("sucessCancelled")
 
                             });
@@ -618,58 +595,137 @@ app.get("/admin_profile", function(req, res){
             // the events associated with an ADMIN.
             const userEventIds = user.userEvents;
             var listOfUserEvents = [];
+            
+            // Create a variable for storing the user data to be 
+            // passed to the front end for the ADMIN profile.
+            // Also create a counter variable for the callback.
+            var listOfUsers;
 
-            // If the ADMIN has events they have signed up for, display the events
-            // on the ADMIN's profile page. However, if the ADMIN has not signed up
-            // for any events and has none, simply display the ADMIN's profile.
-            if(userEventIds.length > 0) {
+            // Find all of the users in the database and add them
+            // to a variable that will be passed to the ADMIN
+            // profile page.
+            UserModel.find({}, function(err, users){
+                
+                // Obtain the user data from the database.
+                if(err) {
+                    console.log(err);
+                } else {
 
-                // Create variables to track the objects in the database and
-                // to determine when to display the objects in the ADMIN profile.
-                var i = 0;
-                var j = userEventIds.length;
+                    // Create a variable for storing the users in the database.
+                    listOfUsers = users;
 
-                // Go through the objects stored in the given ADMIN collection and
-                // look them up in the database by their ID. Then add the objects
-                // found as a result of the lookup to a list and pass it to the page.
-                for(i = 0; i < userEventIds.length; i++) {
+                    // If the ADMIN has events they have signed up for, display the events
+                    // on the ADMIN's profile page. However, if the ADMIN has not signed up
+                    // for any events and has none, simply display the ADMIN's profile.
+                    if(userEventIds.length > 0) {
 
-                    // Use the find by ID function to return the event object for the ADMIN.
-                    EventModel.findById(userEventIds[i], function(err, results){
-                        if(err) {
-                            console.log(err);
-                        } else {
-                            listOfUserEvents.push(results);
-                            j -= 1;
-                        }
+                        // Create variables to track the objects in the database and
+                        // to determine when to display the objects in the ADMIN profile.
+                        var i = 0;
+                        var j = userEventIds.length;
 
-                        // The counter 'j' determines when the results should be returned
-                        // from the callback function and rendered on the user profile page.
-                        if (j == 0) {
+                        // Go through the objects stored in the given ADMIN collection and
+                        // look them up in the database by their ID. Then add the objects
+                        // found as a result of the lookup to a list and pass it to the page.
+                        for(i = 0; i < userEventIds.length; i++) {
 
-                            // Render the ADMIN profile page and determine if ADMIN is undefined.
-                            res.render("admin_profile", {  
-                                user: req.user,
-                                listOfUserEvents: listOfUserEvents,
-                                successCreated: req.flash("successCreated"),
-                                failureNotCreated: req.flash("failureNotCreated"),
-                                sucessCancelled: req.flash("sucessCancelled")
+                            // Use the find by ID function to return the event object for the ADMIN.
+                            EventModel.findById(userEventIds[i], function(err, results){
+                                if(err) {
+                                    console.log(err);
+                                } else {
+                                    listOfUserEvents.push(results);
+                                    j -= 1;
+                                }
+
+                                // The counter 'j' determines when the results should be returned
+                                // from the callback function and rendered on the user profile page.
+                                if (j == 0) {
+
+                                    // Render the ADMIN profile page and determine if ADMIN is undefined.
+                                    res.render("admin_profile", {  
+                                        user: req.user,
+                                        listOfUserEvents: listOfUserEvents,
+                                        listOfUsers: listOfUsers,
+                                        successCreated: req.flash("successCreated"),
+                                        failureNotCreated: req.flash("failureNotCreated"),
+                                        sucessCancelled: req.flash("sucessCancelled"),
+                                        permissionDenied: req.flash("permissionDenied")
+                                    });
+                                }
                             });
                         }
-                    });
-                }
 
-            // If there are no events for the admin, then
-            // render the admin profile on the screen.
-            } else {
-                res.render("admin_profile", {  
-                    user: req.user,
-                    listOfUserEvents: listOfUserEvents,
-                    successCreated: req.flash("successCreated"),
-                    failureNotCreated: req.flash("failureNotCreated"),
-                    sucessCancelled: req.flash("sucessCancelled")
-                });
-            }
+                    // If there are no events for the admin, then
+                    // render the admin profile on the screen.
+                    } else {
+                        console.log(listOfUsers);
+                        res.render("admin_profile", {  
+                            user: req.user,
+                            listOfUserEvents: listOfUserEvents,
+                            listOfUsers: listOfUsers,
+                            successCreated: req.flash("successCreated"),
+                            failureNotCreated: req.flash("failureNotCreated"),
+                            sucessCancelled: req.flash("sucessCancelled"),
+                            permissionDenied: req.flash("permissionDenied")
+                        });
+                    }
+                }
+            });
+
+            // --> KEEP FOR NOW; DELETE LATER!!!
+            // // If the ADMIN has events they have signed up for, display the events
+            // // on the ADMIN's profile page. However, if the ADMIN has not signed up
+            // // for any events and has none, simply display the ADMIN's profile.
+            // if(userEventIds.length > 0) {
+
+            //     // Create variables to track the objects in the database and
+            //     // to determine when to display the objects in the ADMIN profile.
+            //     var i = 0;
+            //     var j = userEventIds.length;
+
+            //     // Go through the objects stored in the given ADMIN collection and
+            //     // look them up in the database by their ID. Then add the objects
+            //     // found as a result of the lookup to a list and pass it to the page.
+            //     for(i = 0; i < userEventIds.length; i++) {
+
+            //         // Use the find by ID function to return the event object for the ADMIN.
+            //         EventModel.findById(userEventIds[i], function(err, results){
+            //             if(err) {
+            //                 console.log(err);
+            //             } else {
+            //                 listOfUserEvents.push(results);
+            //                 j -= 1;
+            //             }
+
+            //             // The counter 'j' determines when the results should be returned
+            //             // from the callback function and rendered on the user profile page.
+            //             if (j == 0) {
+
+            //                 // Render the ADMIN profile page and determine if ADMIN is undefined.
+            //                 res.render("admin_profile", {  
+            //                     user: req.user,
+            //                     listOfUserEvents: listOfUserEvents,
+            //                     successCreated: req.flash("successCreated"),
+            //                     failureNotCreated: req.flash("failureNotCreated"),
+            //                     sucessCancelled: req.flash("sucessCancelled")
+            //                 });
+            //             }
+            //         });
+            //     }
+
+            // // If there are no events for the admin, then
+            // // render the admin profile on the screen.
+            // } else {
+            //     console.log(listOfUsers);
+            //     res.render("admin_profile", {  
+            //         user: req.user,
+            //         listOfUserEvents: listOfUserEvents,
+            //         successCreated: req.flash("successCreated"),
+            //         failureNotCreated: req.flash("failureNotCreated"),
+            //         sucessCancelled: req.flash("sucessCancelled")
+            //     });
+            // }
 
         } else {
             req.flash("alreadyCreated", "Your account has been deactivated. Contact admin for assistance");
@@ -761,7 +817,7 @@ function simplifyEventDate(eventDate){
     }
 
     // Create the simplified date and return it.
-    simplifiedDate = month + " " + day + ", " + year; // --> ORIGINALLY THIS SAID (day - 1)???
+    simplifiedDate = month + " " + day + ", " + year;
     return simplifiedDate;
 }
 
@@ -1285,10 +1341,72 @@ app.post("/cancel", function(req, res){
 });
 
 
+
+// Create a post request for when the ADMIN wants to DEACTIVATE
+// a user account. This operation will send a confirmation message.
+app.post("/deactivate_account", function(req, res){
+    
+    // Create a variable for storing the user id in.
+    var changeUser = req.body.useridentifier;
+
+    // Change the value representing whether or 
+    // not the user's account is active to false.
+    UserModel.findOneAndUpdate(
+        { _id: changeUser },
+        { $set: { isActive: false} },                   
+        function (error, success) {
+            if (error) {
+                console.log("Error: " + error);
+            } else {
+                // console.log("User Success: " + success);
+            }
+        }
+    );
+
+    // Create a flash message informing the ADMIN 
+    // that they have deactivated the user. 
+    req.flash("sucessCancelled", "You have deactivated the user account.");
+
+    // Redirect to the user's profile page of the website.
+    res.redirect("admin_profile");
+});
+
+
+
+// Create a post request for when the ADMIN wants to ACTIVATE
+// a user account. This operation will send a confirmation message.
+app.post("/activate_account", function(req, res){
+    
+    // Create a variable for storing the user id in.
+    var changeUser = req.body.useridentifier;
+
+    // Change the value representing whether or 
+    // not the user's account is active to false.
+    UserModel.findOneAndUpdate(
+        { _id: changeUser },
+        { $set: { isActive: true} },                   
+        function (error, success) {
+            if (error) {
+                console.log("Error: " + error);
+            } else {
+                // console.log("User Success: " + success);
+            }
+        }
+    );
+
+    // Create a flash message informing the ADMIN 
+    // that they have deactivated the user. 
+    req.flash("sucessCancelled", "You have activated the user account.");
+
+    // Redirect to the user's profile page of the website.
+    res.redirect("admin_profile");
+});
+
+
 // ---------------------------------- USER EVENT CANCELLATION (POST) -------------------------------------------
 
 
-// Create a post request for the user to volunteer for an event.
+// Create a post request for the user to cancel an event timeslot.
 app.post("/cancel_event", function(req, res){
 
     // Obtain the specific event id from the webpage 
@@ -1492,7 +1610,7 @@ app.post("/cancel_event", function(req, res){
 
             // Create a flash message informing the user 
             // that they have cancelled an event timeslot.
-            req.flash("sucessCancelled", "You have cancelled your time(s)");
+            req.flash("sucessCancelled", "You have cancelled your time(s). See your event history.");
 
             // Redirect to the user's profile page of the website.
             res.redirect("user_profile");
