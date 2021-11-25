@@ -962,10 +962,12 @@ app.post("/donate_org", function(req, res){
 
     // Create variables to update donations given by the user.
     var user = req.user;
-    var userStatus = user.status;
 
     // Check if the user has an account. Otherwise, redirect to login.
     if(req.isAuthenticated()) {
+
+        // Create a variable to represent the user status.
+        var userStatus = user.status;
 
         // Update the total donations to the organization.
         OrgModel.findOneAndUpdate({orgID: organizationID}, {$inc: {receivedDonations: addedDonation}}, function(err, foundDonation){
