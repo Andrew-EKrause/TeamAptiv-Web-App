@@ -1611,7 +1611,7 @@ app.post("/cancel_event", function(req, res){
 
             // Create a flash message informing the user 
             // that they have cancelled an event timeslot.
-            req.flash("sucessCancelled", "You have cancelled your time(s). See your event history.");
+            req.flash("sucessCancelled", "You have cancelled your time(s).");
 
             // Redirect to the user's profile page of the website.
             res.redirect("user_profile");
