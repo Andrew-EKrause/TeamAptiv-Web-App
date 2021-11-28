@@ -37,11 +37,12 @@
                             <img id="profileImage" src=<%= user.picture %> alt="Image not Found" onerror=this.src="images/default_pic.png">
                         </form>
 
-                        <!-- Display ADMIN name and ADMIN status -->
+                        <!-- Display ADMIN name, status, given donations, and the Team Aptiv received donations -->
                         <div>
                             <h1><%= user.firstName %> <%= user.lastName %></h1>
                             <p>Status: <%= user.status %></p>
-                            <p>Given Donations: $<%= user.givenDonations %></p>
+                            <p>My Donations: $<%= user.givenDonations %></p>
+                            <p>User Donations to Org: $<%= orgInfo[0].receivedDonations %></p>
                         </div>
                     </header>
 

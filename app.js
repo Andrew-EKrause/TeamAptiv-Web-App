@@ -641,18 +641,45 @@ app.get("/admin_profile", function(req, res){
                                 // The counter 'j' determines when the results should be returned
                                 // from the callback function and rendered on the user profile page.
                                 if (j == 0) {
-
-                                    // Render the ADMIN profile page and determine if ADMIN is undefined.
-                                    res.render("admin_profile", {  
-                                        user: req.user,
-                                        listOfUserEvents: listOfUserEvents,
-                                        listOfUsers: listOfUsers,
-                                        successCreated: req.flash("successCreated"),
-                                        failureNotCreated: req.flash("failureNotCreated"),
-                                        sucessCancelled: req.flash("sucessCancelled"),
-                                        permissionDenied: req.flash("permissionDenied")
+                                    
+                                    // Obtain the information from the organization data model so
+                                    // that the admin can view the donations made to the Team Aptiv
+                                    // organization.
+                                    OrgModel.find({}, function(err, orgInfo){
+                                        if(err) {
+                                            console.log(err);
+                                        } else {
+                                            // Render the ADMIN profile page and determine if ADMIN is undefined.
+                                            res.render("admin_profile", {  
+                                                user: req.user,
+                                                listOfUserEvents: listOfUserEvents,
+                                                listOfUsers: listOfUsers,
+                                                orgInfo: orgInfo,
+                                                successCreated: req.flash("successCreated"),
+                                                failureNotCreated: req.flash("failureNotCreated"),
+                                                sucessCancelled: req.flash("sucessCancelled"),
+                                                permissionDenied: req.flash("permissionDenied")
+                                            });
+                                        }
                                     });
                                 }
+
+                                // --> KEEP THIS FOR NOW; MAYBE DELETE LATER!!!
+                                // // The counter 'j' determines when the results should be returned
+                                // // from the callback function and rendered on the user profile page.
+                                // if (j == 0) {
+
+                                //     // Render the ADMIN profile page and determine if ADMIN is undefined.
+                                //     res.render("admin_profile", {  
+                                //         user: req.user,
+                                //         listOfUserEvents: listOfUserEvents,
+                                //         listOfUsers: listOfUsers,
+                                //         successCreated: req.flash("successCreated"),
+                                //         failureNotCreated: req.flash("failureNotCreated"),
+                                //         sucessCancelled: req.flash("sucessCancelled"),
+                                //         permissionDenied: req.flash("permissionDenied")
+                                //     });
+                                // }
                             });
                         }
 
