@@ -49,7 +49,6 @@
 
     /* Format content within the body tag of the HTML structure */
     body {
-        /* padding-top: 6rem; */
         margin: 0;
         font-family: 'Merriweather', serif; 
         background-color: var(--background-primary);
@@ -115,7 +114,7 @@
     100% { opacity: 1 } 
     }
 
-    /* Format the messages sent to the user. NOT SURE WHAT THIS DOES*/ 
+    /* Format the messages sent to the user */ 
     .message-format {
         text-align: center;
         font-size: 1.5em;
@@ -145,10 +144,10 @@
         font-size: 1.5em;
     }
 
-    .home-ejs .home-picture form {
-        display: inline;
-        float: left;
+    .home-ejs .home-picture .buttons {
+        display: flex;
     }
+
 
  /* ====================================================================
                         HOME_HEADER.EJS STYLES
@@ -167,7 +166,23 @@
         color: var(--foreground-color);
     }
 
-    .navbar .navbar-nav .nav-link:hover {
+    /* Right align the collapsed navbar links */
+    .nav-item {
+        text-align: right;
+    }
+
+    /* Set the color of the hamburger menu icon */
+    .navbar .navbar-toggler {
+        color: var(--foreground-color);
+        transition: all .25s;
+    }
+
+    .navbar .navbar-toggler i {
+        font-size: 1.5em;
+    }
+
+    .navbar .navbar-nav .nav-link:hover,
+    .navbar .navbar-toggler:hover {
         color: var(--theme2);
     }
 
@@ -264,21 +279,36 @@
                            EVENTS.EJS STYLES
  ==================================================================== */
 
+    .events-ejs {
+        width: 80%;
+        margin: auto;
+    }
+
     .events-ejs header {
         color: var(--foreground-color);
+        position: fixed;
+        font-variant: small-caps;
+        left: clamp(1em, 5vw, 5em);
+        bottom: 0;
+        transform: translateY(-45vh);
     }
 
     /* Style the top level heading */
     .events-ejs header > h1 {
-        font-size: 5em;
+        font-size: clamp(2em, 7vw, 5em);
+        line-height: 75%;
     } 
+
+    .events-ejs .events-list {
+        width: 50%;
+        float: right;
+    }
 
     /* Style the Volunteer | Donate comment in the header */
     .events-ejs header > small {
-        font-size: 2em;
+        font-size: clamp(1.5em, 3vw, 2em);
     }
 
-    /*  */
     .events-ejs .event {
         margin-top: 1.5em;
         padding: 1em;
@@ -287,11 +317,6 @@
         box-shadow: 5px 5px 1em var(--theme1);
         transition: all .5s;
     }
-
-    /* Remove the margin above the top card */
-    /* .events-ejs .event:first-of-type {
-        margin-top: 0;
-    } */
 
     .events-ejs .event > h2 {
         font-size: 2.5em;
@@ -343,11 +368,16 @@
 
  .specific-event-ejs {
      color: var(--foreground-color);
- }
+     width: 80%;
+     margin: auto;
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+  }
 
  .specific-event-ejs .event {
     padding: 1em;
     width: 90%;
+    margin: auto;
     height: 100%;
     border-radius: .5em;
     box-shadow: 5px 5px 1em var(--theme1); 
@@ -378,9 +408,13 @@
  }
 
  /* Make the labels for donating and volunteering the same font size */
- .specific-event-ejs form > label {
+ .specific-event-ejs .volunteer-donate .form-title {
      font-size: 1.75em;
      border-bottom: 1px solid var(--theme1);
+ }
+
+ .specific-event-ejs .volunteer .form-title {
+     display: inline;
  }
 
  .specific-event-ejs .submit-container {
@@ -525,13 +559,32 @@
         color: var(--foreground-color);
     }
 
+    .about-ejs .wrapper {
+        width: 80%;
+        margin: auto;
+    }
+
+    .about-ejs .main {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
     .about-ejs .mission, .about-ejs .donate {
+        /* flex: 1; */
         margin: 1.5em;
         padding: 1em;
         background-color: var(--background-secondary);
         box-shadow: 5px 5px 1em var(--theme1); 
         border-radius: .5em;
         transition: all .6s;   
+    }
+
+    .donate {
+        height: fit-content;
+    }
+
+    .help {
+        margin: .5em 1.5em;
     }
 
     .about-ejs .mission > h2, .about-ejs .donate > h2 {

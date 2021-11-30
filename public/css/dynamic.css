@@ -1,0 +1,63 @@
+@media (max-width: 50em) {
+
+/* ====================================================================
+                            HOME.EJS STYLES
+ ==================================================================== */
+
+    .home-ejs .home-picture {
+        text-align: center;
+        padding: 0;
+    }
+
+    .home-ejs .home-picture .buttons {
+        justify-content: center;
+    }
+
+/* ====================================================================
+                        EVENTS.EJS STYLES
+==================================================================== */
+
+    .events-ejs header {
+        position: static;
+        transform: none;
+        text-align: center;
+    }
+
+    .events-ejs .events-list {
+        float: none;
+        margin: auto;
+        width: 75%;
+    }
+
+    .events-ejs header > h1 {
+        font-size: clamp(4em, 10vw, 6em);
+    } 
+
+/* ====================================================================
+                        SPECIFIC_EVENT.EJS STYLES
+==================================================================== */
+
+    .specific-event-ejs {
+        display: block;
+        margin: auto;
+    }
+
+    .specific-event-ejs > *, 
+    .specific-event-ejs .volunteer-donate > div {
+        margin-bottom: 1em;
+    }
+
+    .specific-event-ejs .volunteer-donate > div,
+    .specific-event-ejs .event {
+        margin-inline: auto;
+        width: 100%;
+    }
+
+
+/* ====================================================================
+                    ABOUT.EJS STYLES
+==================================================================== */
+    .about-ejs .main {
+        display: block;
+    }
+}

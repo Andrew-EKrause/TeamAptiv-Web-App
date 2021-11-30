@@ -25,19 +25,21 @@
 
 <div class="home-ejs my-auto">
     <!-- Section for the picture on the webpage -->
-    <section class="container-fluid home-picture">
-        <div class="row">
+    <section class="home-picture">
+        <header>
             <h1>Team Aptiv</h1>
             <p>Connecting You With Your Community</p>
-        </div>
+        </header>
 
         <!-- Create a form to process when user clicks "Find Events" button -->
-        <form action="/find_events" method="POST">
-            <button type="submit" class="mb-4 me-1 btn btn-outline-light btn-lg">Find Events</button>
-        </form>
-        <form action="/about">
-            <button type="submit" class="mb-4 ms-1 btn btn-outline-light btn-lg">Support Us</button>
-        </form>
+        <div class="buttons">
+            <form action="/find_events" method="POST">
+                <button type="submit" class="mb-4 me-1 btn btn-outline-light btn-lg">Find Events</button>
+            </form>
+            <form action="/about">
+                <button type="submit" class="mb-4 ms-1 btn btn-outline-light btn-lg">Support Us</button>
+            </form>
+        </div>
     </section>
 </div>
 

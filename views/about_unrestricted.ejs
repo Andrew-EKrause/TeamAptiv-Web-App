@@ -12,9 +12,9 @@
 
 <%- include('./partials/home_header.ejs') %>
     <div class="about-ejs">
-        <div class="container">
-            <div class="row">
-                <div class="col mission">
+        <div class="wrapper">
+            <div class="main">
+                <div class="mission">
                     <h2>Our Mission</h2>
 
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
@@ -36,7 +36,7 @@
                     </p>
                     </div>
 
-                <div class="col donate">
+                <div class="donate">
                     <h2>Donate to Team Aptiv</h2>
                     <!-- Send a message to the user alterting them that they made an unrestricted donation-->
                     <% if(thanksForDonation.length > 0) { %>
@@ -56,29 +56,16 @@
                             </div>
                             <button type="submit" class="mt-4 btn btn-lg btn-outline-light">Place Donation</button>
                         </form>
-                    <% }); %>
+                    <% }); %>  
                 </div>
+              
             </div>
 
-            <div class="row mx-auto mt-3">
+            <div class="help">
                 <!-- Create a form to process when user clicks "Donate" button -->
                 <h2>Having trouble with the site?</h2>
                 <!-- Create a link for downloading the user help manual -->
                 <span><a href="/download_help">Download Help Manual for Website</a></span>
-            </div>
-
-
-            <!-- Create a div with a form for donating to the organization -->
-            <div class="row mt-4">
-
-                <!-- Create a form for donating to Team Aptiv -->
-                <!-- <form action="/donate_org" method="POST">
-                    <div class="col-lg-2 col-md-4 col-sm-6 col-xs-8 mx-auto">
-                        <input type="hidden" id="custId" name="orgdonation" value="" onChange="this.form.submit()">
-                        <button type="submit" class="mb-4 btn btn-dark btn-lg">Donate</button>
-                    </div>
-                </form> -->
-                </div>
             </div>
         </div>
     </div>

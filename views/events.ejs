@@ -21,14 +21,14 @@
 
     <div class="events-ejs my-auto">
         <!-- List of programs/events -->
-        <div class="container mt-4 mb-4">
-            <div class="row">
-                <header class="col my-auto fixed">
+        <!-- <div class="container mt-3"> -->
+            <!-- <div class=""> -->
+                <header>
                     <h1>Get Involved</h1>
                     <small>Volunteer | Donate</small>
                 </header>
 
-                <section class="col events-list">
+                <section class="events-list mb-5">
                     <!-- Loop through the database and display the events -->
                     <% events.forEach(function(event) { %>
                         
@@ -97,11 +97,11 @@
 
                     <% }); %>
                 </section>
-            </div>
+            <!-- </div> -->
 
             <!-- Include a section for the events to be posted -->
         
-        </div>
+        <!-- </div> -->
     </div>
     
  <%- include('./partials/footer.ejs') %>

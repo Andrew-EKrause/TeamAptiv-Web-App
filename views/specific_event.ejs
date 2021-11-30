@@ -25,11 +25,11 @@
 
 <%- include('./partials/home_header.ejs') %>
 
-    <div class="specific-event-ejs">
+    <div class="specific-event-ejs mt-3">
         <!-- Create a container to format the specific event on the page. -->
-        <div class="container mt-5 mb-5">
-            <div class="row">
-                <div class="col mx-auto">
+        <!-- <div class="container mt-5 mb-5"> -->
+            <!-- <div class="row"> -->
+                <div>
                             
                     <!-- Create a title for the event creation page.-->
                     <div class="event">
@@ -53,13 +53,11 @@
                                 <!-- Display the description assuming it is not blank -->
                                 <li>Description: <%= descriptionString %> </li>
                             <% } %>
-
-                            <li>Volunteers Needed: <%= numVolunteersNeeded %> </li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="col">
+                <div class="volunteer-donate">
                     
                     <!-- Card content for donation information -->
                     <div class="donate">
@@ -71,7 +69,7 @@
                                 <label for="donations">Donation Goal: $<%= neededDonations %></label>
                                 <p>Received Donations: $<%= numDonations %></p>
                             <% } else { %>
-                                <label for="donations">Received Donations: $<%= numDonations %></label>
+                                <label for="donations" class="form-title">Received Donations: $<%= numDonations %></label>
                             <% } %>
                             <input type="hidden" id="custId" name="eventidentifier" value="<%= eventID %>" onChange="this.form.submit()">
                             <input type="number" class="login-register-font form-control" name="eventdonation" min="1" required>
@@ -84,7 +82,7 @@
                         <!-- Collapsed content for volunteering information -->
                         <div class="volunteer">
 
-                            <h3 class="">Available time slots:</h3>
+                            <h3 class="form-title">Available time slots:</h3>
 
                             <!-- FUNCTION: Function to get the value of the timeslot, which is the slot time -->
                             <% function getResult() { %>
@@ -113,7 +111,7 @@
                                 
                                 <input type="hidden" id="custId" name="eventidentifier" value="<%= eventID %>" onChange="getResult()"> 
                                 <input type="hidden" id="custId" name="eventdate" value="<%= eventDate %>" onChange="getResult()"> 
-                                <button type="submit" class="mt-4 btn btn-lg btn-outline-light">Sign Up</button>
+                                <div class="submit-container"><button type="submit" class="mt-4 btn btn-outline-light">Sign Up</button></div>
                             </form>
                         </div>
                     <% } %>
@@ -146,13 +144,13 @@
                     <div class="d-flex">
                         <form action="/back_events" method="POST">
                             <div>
-                                <button type="submit" class="btn btn-outline-dark btn-back"><i class="fas fa-arrow-left"></i> Back to Events</button>
+                                <button type="submit" class="btn btn-outline-dark"><i class="fas fa-arrow-left"></i> Back to Events</button>
                             </div>
                         </form>
                     </div>
                 </div>
-            </div>
-        </div>
+            <!-- </div> -->
+        <!-- </div> -->
     </div>
 
 <%- include('./partials/footer.ejs') %>
