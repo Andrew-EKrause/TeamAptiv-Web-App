@@ -488,7 +488,7 @@ app.get("/user_profile", function(req, res){
             // Redirect the ADMIN profile page and determine if ADMIN is undefined.
             res.redirect("/admin_profile");
         } else {
-            req.flash("alreadyCreated", "Your account has been deactivated. Contact admin for assistance");
+            req.flash("alreadyCreated", "Your account has been deactivated. Contact admin at email@address for assistance");
             res.redirect("/register");
         }
 
@@ -557,7 +557,7 @@ app.get("/user_profile", function(req, res){
             }
 
         } else {
-            req.flash("alreadyCreated", "Your account has been deactivated. Contact admin for assistance");
+            req.flash("alreadyCreated", "Your account has been deactivated. Contact admin at email@address for assistance");
             res.redirect("/register");
         }
 
@@ -641,25 +641,51 @@ app.get("/admin_profile", function(req, res){
                                 // The counter 'j' determines when the results should be returned
                                 // from the callback function and rendered on the user profile page.
                                 if (j == 0) {
-
-                                    // Render the ADMIN profile page and determine if ADMIN is undefined.
-                                    res.render("admin_profile", {  
-                                        user: req.user,
-                                        listOfUserEvents: listOfUserEvents,
-                                        listOfUsers: listOfUsers,
-                                        successCreated: req.flash("successCreated"),
-                                        failureNotCreated: req.flash("failureNotCreated"),
-                                        sucessCancelled: req.flash("sucessCancelled"),
-                                        permissionDenied: req.flash("permissionDenied")
+                                    
+                                    // Obtain the information from the organization data model so
+                                    // that the admin can view the donations made to the Team Aptiv
+                                    // organization.
+                                    OrgModel.find({}, function(err, orgInfo){
+                                        if(err) {
+                                            console.log(err);
+                                        } else {
+                                            // Render the ADMIN profile page and determine if ADMIN is undefined.
+                                            res.render("admin_profile", {  
+                                                user: req.user,
+                                                listOfUserEvents: listOfUserEvents,
+                                                listOfUsers: listOfUsers,
+                                                orgInfo: orgInfo,
+                                                successCreated: req.flash("successCreated"),
+                                                failureNotCreated: req.flash("failureNotCreated"),
+                                                sucessCancelled: req.flash("sucessCancelled"),
+                                                permissionDenied: req.flash("permissionDenied")
+                                            });
+                                        }
                                     });
                                 }
+
+                                // --> KEEP THIS FOR NOW; MAYBE DELETE LATER!!!
+                                // // The counter 'j' determines when the results should be returned
+                                // // from the callback function and rendered on the user profile page.
+                                // if (j == 0) {
+
+                                //     // Render the ADMIN profile page and determine if ADMIN is undefined.
+                                //     res.render("admin_profile", {  
+                                //         user: req.user,
+                                //         listOfUserEvents: listOfUserEvents,
+                                //         listOfUsers: listOfUsers,
+                                //         successCreated: req.flash("successCreated"),
+                                //         failureNotCreated: req.flash("failureNotCreated"),
+                                //         sucessCancelled: req.flash("sucessCancelled"),
+                                //         permissionDenied: req.flash("permissionDenied")
+                                //     });
+                                // }
                             });
                         }
 
                     // If there are no events for the admin, then
                     // render the admin profile on the screen.
                     } else {
-                        console.log(listOfUsers);
                         res.render("admin_profile", {  
                             user: req.user,
                             listOfUserEvents: listOfUserEvents,
@@ -728,7 +754,7 @@ app.get("/admin_profile", function(req, res){
             // }
 
         } else {
-            req.flash("alreadyCreated", "Your account has been deactivated. Contact admin for assistance");
+            req.flash("alreadyCreated", "Your account has been deactivated. Contact admin at email@address for assistance");
             res.redirect("/register");
         }
 
@@ -962,10 +988,12 @@ app.post("/donate_org", function(req, res){
 
     // Create variables to update donations given by the user.
     var user = req.user;
-    var userStatus = user.status;
 
     // Check if the user has an account. Otherwise, redirect to login.
     if(req.isAuthenticated()) {
+
+        // Create a variable to represent the user status.
+        var userStatus = user.status;
 
         // Update the total donations to the organization.
         OrgModel.findOneAndUpdate({orgID: organizationID}, {$inc: {receivedDonations: addedDonation}}, function(err, foundDonation){
@@ -1610,7 +1638,7 @@ app.post("/cancel_event", function(req, res){
 
             // Create a flash message informing the user 
             // that they have cancelled an event timeslot.
-            req.flash("sucessCancelled", "You have cancelled your time(s). See your event history.");
+            req.flash("sucessCancelled", "You have cancelled your time(s).");
 
             // Redirect to the user's profile page of the website.
             res.redirect("user_profile");
