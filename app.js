@@ -355,6 +355,44 @@ passport.use(new GoogleStrategy({
 
 // Default route, which is the home page.
 app.get("/", function(req, res){
+
+    // NOTES: (YOU MAY END UP JUST LEAVING THIS AS IT IS)
+    // --> SEE IF YOU CAN PREVENT THE USER FROM TYPING IN A ROUTE AND ACCESSING 
+    // --> ANY INFORMATION BEFORE THE ORG MODEL IS CREATED.
+    // --> JUST KEEP THIS IN MIND: A CHECK TO SEE IF THE ORG MODEL WAS CREATED
+    // --> TRIGGERS WHENEVER THE USER ACCESSES THE "/" ROUTE OR THE "HOME" ROUTE.
+    // --> IF THE USER SOMEHOW GETS TO A DIFFERENT ROUTE WITHOUT ACCESSING EITHER
+    // --> OF THE TWO ROUTES ABOVE FRIST, YOU MIGHT GET AN ERROR FOR THE ORG MODEL
+    // --> IF IT DOES NOT ALREADY EXIST. 
+
+    // Determine how many documents exist in the org model.
+    // Create ONE org document if there are none that exist.
+    OrgModel.find().count(function(err, count){
+
+        // If the count is greater than zero, the org already exists.
+        // Otherwise, create a new org and add that org to the database.
+        if(count > 0) {
+            return;
+        } else {
+
+            // Create a new identifier for the organization object.
+            var org_ID = mongoose.Types.ObjectId();
+
+            // Create the new organization data model.
+            const newOrg = new OrgModel({
+                orgID: org_ID,
+                orgName: TEAM_APTIV,
+                receivedDonations: 0
+            });
+
+            // Save the new organization to the database.
+            newOrg.save(function(err, result){
+                if (err){
+                    console.log(err);
+                }
+            });
+        }
+    });
     // Render the home page and determine if user is undefined.
     res.render("home", { user: req.user });
 });
@@ -577,6 +615,7 @@ app.get("/logout", function(req, res){
 // Create a route for the admin profile. For this route, include some
 // layers of security so that the user cannot access the Admin profile
 // unless they are the admin.
+// --> MAKE SURE THAT YOU CHECK THIS AND MAKE SURE THAT IT IS ERROR-FREE!!!
 app.get("/admin_profile", function(req, res){
 
     // Create an object to store the user information in an object.
@@ -663,95 +702,36 @@ app.get("/admin_profile", function(req, res){
                                         }
                                     });
                                 }
-
-                                // --> KEEP THIS FOR NOW; MAYBE DELETE LATER!!!
-                                // // The counter 'j' determines when the results should be returned
-                                // // from the callback function and rendered on the user profile page.
-                                // if (j == 0) {
-
-                                //     // Render the ADMIN profile page and determine if ADMIN is undefined.
-                                //     res.render("admin_profile", {  
-                                //         user: req.user,
-                                //         listOfUserEvents: listOfUserEvents,
-                                //         listOfUsers: listOfUsers,
-                                //         successCreated: req.flash("successCreated"),
-                                //         failureNotCreated: req.flash("failureNotCreated"),
-                                //         sucessCancelled: req.flash("sucessCancelled"),
-                                //         permissionDenied: req.flash("permissionDenied")
-                                //     });
-                                // }
                             });
                         }
 
                     // If there are no events for the admin, then
                     // render the admin profile on the screen.
                     } else {
-                        res.render("admin_profile", {  
-                            user: req.user,
-                            listOfUserEvents: listOfUserEvents,
-                            listOfUsers: listOfUsers,
-                            successCreated: req.flash("successCreated"),
-                            failureNotCreated: req.flash("failureNotCreated"),
-                            sucessCancelled: req.flash("sucessCancelled"),
-                            permissionDenied: req.flash("permissionDenied")
+
+                        // Obtain the information from the organization data model so
+                        // that the admin can view the donations made to the Team Aptiv
+                        // organization.
+                        OrgModel.find({}, function(err, orgInfo){
+                            if(err) {
+                                console.log(err);
+                            } else {
+                                // Render the ADMIN profile page and determine if ADMIN is undefined.
+                                res.render("admin_profile", {  
+                                    user: req.user,
+                                    listOfUserEvents: listOfUserEvents,
+                                    listOfUsers: listOfUsers,
+                                    orgInfo: orgInfo,
+                                    successCreated: req.flash("successCreated"),
+                                    failureNotCreated: req.flash("failureNotCreated"),
+                                    sucessCancelled: req.flash("sucessCancelled"),
+                                    permissionDenied: req.flash("permissionDenied")
+                                });
+                            }
                         });
                     }
                 }
             });
-
-            // --> KEEP FOR NOW; DELETE LATER!!!
-            // // If the ADMIN has events they have signed up for, display the events
-            // // on the ADMIN's profile page. However, if the ADMIN has not signed up
-            // // for any events and has none, simply display the ADMIN's profile.
-            // if(userEventIds.length > 0) {
-
-            //     // Create variables to track the objects in the database and
-            //     // to determine when to display the objects in the ADMIN profile.
-            //     var i = 0;
-            //     var j = userEventIds.length;
-
-            //     // Go through the objects stored in the given ADMIN collection and
-            //     // look them up in the database by their ID. Then add the objects
-            //     // found as a result of the lookup to a list and pass it to the page.
-            //     for(i = 0; i < userEventIds.length; i++) {
-
-            //         // Use the find by ID function to return the event object for the ADMIN.
-            //         EventModel.findById(userEventIds[i], function(err, results){
-            //             if(err) {
-            //                 console.log(err);
-            //             } else {
-            //                 listOfUserEvents.push(results);
-            //                 j -= 1;
-            //             }
-
-            //             // The counter 'j' determines when the results should be returned
-            //             // from the callback function and rendered on the user profile page.
-            //             if (j == 0) {
-
-            //                 // Render the ADMIN profile page and determine if ADMIN is undefined.
-            //                 res.render("admin_profile", {  
-            //                     user: req.user,
-            //                     listOfUserEvents: listOfUserEvents,
-            //                     successCreated: req.flash("successCreated"),
-            //                     failureNotCreated: req.flash("failureNotCreated"),
-            //                     sucessCancelled: req.flash("sucessCancelled")
-            //                 });
-            //             }
-            //         });
-            //     }
-
-            // // If there are no events for the admin, then
-            // // render the admin profile on the screen.
-            // } else {
-            //     console.log(listOfUsers);
-            //     res.render("admin_profile", {  
-            //         user: req.user,
-            //         listOfUserEvents: listOfUserEvents,
-            //         successCreated: req.flash("successCreated"),
-            //         failureNotCreated: req.flash("failureNotCreated"),
-            //         sucessCancelled: req.flash("sucessCancelled")
-            //     });
-            // }
 
         } else {
             req.flash("alreadyCreated", "Your account has been deactivated. Contact admin at email@address for assistance");
@@ -1071,10 +1051,10 @@ app.post("/register", function(req, res){
                 // specifically for the ADMIN.
                 const adminUser = new UserModel({
                     userID: user_ID,
-                    firstName: req.body.fname,
-                    lastName: req.body.lname,
+                    firstName: req.body.fname.trim(), // --> KEEP AN EYE ON THIS TRIM FUNCTION!!!
+                    lastName: req.body.lname.trim(),
                     isActive: true,
-                    username: req.body.username,
+                    username: req.body.username.trim(),
                     status: "Admin",
                     givenDonations: 0,
                     timesAttending: [user_IDString]
@@ -1098,10 +1078,10 @@ app.post("/register", function(req, res){
                 // to pass into the register method.
                 const newUser = new UserModel({
                     userID: user_ID,
-                    firstName: req.body.fname,
-                    lastName: req.body.lname,
+                    firstName: req.body.fname.trim(), // --> KEEP AN EYE ON THIS TRIM FUNCTION!!!
+                    lastName: req.body.lname.trim(),
                     isActive: true,
-                    username: req.body.username,
+                    username: req.body.username.trim(),
                     givenDonations: 0,
                     timesAttending: [user_IDString]
                 });
