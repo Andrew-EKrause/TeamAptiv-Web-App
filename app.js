@@ -145,7 +145,7 @@ const userSchema = new mongoose.Schema({
     userID: {
         type: String,
         unique: true,
-        sparse: true 
+        sparse: true
     },
 
     // MAY HAVE TO CREATE ANOTHER ID FIELD...
@@ -162,7 +162,7 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         unique: true,
-        sparse: true 
+        sparse: true
     },
 
     // Password and google identification number of user.
@@ -172,7 +172,7 @@ const userSchema = new mongoose.Schema({
     // Status of user. Default status is "Volunteer"
     status: {
         type: String,
-        default: "Volunteer" 
+        default: "Volunteer"
     },
 
     // Total number of donations to all events.
@@ -201,7 +201,7 @@ const orgSchema = new mongoose.Schema({
     // Create organization id, name, and received donations.
     orgID: String,
     orgName: String,
-    receivedDonations: Number 
+    receivedDonations: Number
 });
 
 // Create a mongoose schema for the events in the database.
@@ -306,7 +306,7 @@ passport.use(new GoogleStrategy({
         // exists in the user database. If the user does not already
         // exist, then create a new user and add the user to the db.
         UserModel.findOne({
-            googleId: profile.id 
+            googleId: profile.id
         }, function(err, user) {
             if (err) {
                 return cb(err);
@@ -325,7 +325,7 @@ passport.use(new GoogleStrategy({
                         // Add the initial id to the user's timeslots attribute.
                         UserModel.findOneAndUpdate(
                             { _id: user.id },
-                            { $push: { timesAttending: user_IDString } },                   
+                            { $push: { timesAttending: user_IDString } },                  
                             function (error, success) {
                                 if (error) {
                                     console.log("Error: " + error);
@@ -355,6 +355,35 @@ passport.use(new GoogleStrategy({
 
 // Default route, which is the home page.
 app.get("/", function(req, res){
+
+    // Determine how many documents exist in the org model.
+    // Create ONE org document if there are none that exist.
+    OrgModel.find().count(function(err, count){
+
+        // If the count is greater than zero, the org already exists.
+        // Otherwise, create a new org and add that org to the database.
+        if(count > 0) {
+            return;
+        } else {
+
+            // Create a new identifier for the organization object.
+            var org_ID = mongoose.Types.ObjectId();
+
+            // Create the new organization data model.
+            const newOrg = new OrgModel({
+                orgID: org_ID,
+                orgName: TEAM_APTIV,
+                receivedDonations: 0
+            });
+
+            // Save the new organization to the database.
+            newOrg.save(function(err, result){
+                if (err){
+                    console.log(err);
+                }
+            });
+        }
+    });
     // Render the home page and determine if user is undefined.
     res.render("home", { user: req.user });
 });
@@ -577,6 +606,7 @@ app.get("/logout", function(req, res){
 // Create a route for the admin profile. For this route, include some
 // layers of security so that the user cannot access the Admin profile
 // unless they are the admin.
+// --> MAKE SURE THAT YOU DEBUG THIS!!! THERE A BUNCH OF VALIDATION CHECKS THAT YOU WILL NEED TO MAKE!!!
 app.get("/admin_profile", function(req, res){
 
     // Create an object to store the user information in an object.
@@ -590,13 +620,13 @@ app.get("/admin_profile", function(req, res){
         // if their account is active. If active, redirect to profile. Otherwise,
         // show an error message to the user.
         if(user.isActive == true) {
-            
+           
             // Create variables to help with storing  
             // the events associated with an ADMIN.
             const userEventIds = user.userEvents;
             var listOfUserEvents = [];
-            
-            // Create a variable for storing the user data to be 
+           
+            // Create a variable for storing the user data to be
             // passed to the front end for the ADMIN profile.
             // Also create a counter variable for the callback.
             var listOfUsers;
@@ -605,7 +635,7 @@ app.get("/admin_profile", function(req, res){
             // to a variable that will be passed to the ADMIN
             // profile page.
             UserModel.find({}, function(err, users){
-                
+               
                 // Obtain the user data from the database.
                 if(err) {
                     console.log(err);
@@ -641,7 +671,7 @@ app.get("/admin_profile", function(req, res){
                                 // The counter 'j' determines when the results should be returned
                                 // from the callback function and rendered on the user profile page.
                                 if (j == 0) {
-                                    
+                                   
                                     // Obtain the information from the organization data model so
                                     // that the admin can view the donations made to the Team Aptiv
                                     // organization.
@@ -686,15 +716,38 @@ app.get("/admin_profile", function(req, res){
                     // If there are no events for the admin, then
                     // render the admin profile on the screen.
                     } else {
-                        res.render("admin_profile", {  
-                            user: req.user,
-                            listOfUserEvents: listOfUserEvents,
-                            listOfUsers: listOfUsers,
-                            successCreated: req.flash("successCreated"),
-                            failureNotCreated: req.flash("failureNotCreated"),
-                            sucessCancelled: req.flash("sucessCancelled"),
-                            permissionDenied: req.flash("permissionDenied")
+
+                        // Obtain the information from the organization data model so
+                        // that the admin can view the donations made to the Team Aptiv
+                        // organization.
+                        OrgModel.find({}, function(err, orgInfo){
+                            if(err) {
+                                console.log(err);
+                            } else {
+                                // Render the ADMIN profile page and determine if ADMIN is undefined.
+                                res.render("admin_profile", {  
+                                    user: req.user,
+                                    listOfUserEvents: listOfUserEvents,
+                                    listOfUsers: listOfUsers,
+                                    orgInfo: orgInfo,
+                                    successCreated: req.flash("successCreated"),
+                                    failureNotCreated: req.flash("failureNotCreated"),
+                                    sucessCancelled: req.flash("sucessCancelled"),
+                                    permissionDenied: req.flash("permissionDenied")
+                                });
+                            }
                         });
+
+                        // --> KEEP FOR NOW; MAYBE DELETE LATER!!!
+                        // res.render("admin_profile", {  
+                        //     user: req.user,
+                        //     listOfUserEvents: listOfUserEvents,
+                        //     listOfUsers: listOfUsers,
+                        //     successCreated: req.flash("successCreated"),
+                        //     failureNotCreated: req.flash("failureNotCreated"),
+                        //     sucessCancelled: req.flash("sucessCancelled"),
+                        //     permissionDenied: req.flash("permissionDenied")
+                        // });
                     }
                 }
             });
@@ -768,7 +821,7 @@ app.get("/admin_profile", function(req, res){
     // If the user is not authenticated, redirect them to the
     // login page and flash an error message.
     } else {
-        req.flash("alreadyCreated", "You cannot access that page"); 
+        req.flash("alreadyCreated", "You cannot access that page");
         res.redirect("/register");
         return;
     }
@@ -1024,7 +1077,7 @@ app.post("/donate_org", function(req, res){
         // Increment the total number of donations given by the user.
         UserModel.findOneAndUpdate(
             { _id: user.id },
-            { $inc: { givenDonations: addedDonation} },                   
+            { $inc: { givenDonations: addedDonation} },                  
             function (error, success) {
                 if (error) {
                     console.log("Error: " + error);
@@ -1071,10 +1124,10 @@ app.post("/register", function(req, res){
                 // specifically for the ADMIN.
                 const adminUser = new UserModel({
                     userID: user_ID,
-                    firstName: req.body.fname,
-                    lastName: req.body.lname,
+                    firstName: req.body.fname.trim(), // --> KEEP AN EYE ON THIS TRIM FUNCTION!!!
+                    lastName: req.body.lname.trim(),
                     isActive: true,
-                    username: req.body.username,
+                    username: req.body.username.trim(),
                     status: "Admin",
                     givenDonations: 0,
                     timesAttending: [user_IDString]
@@ -1098,10 +1151,10 @@ app.post("/register", function(req, res){
                 // to pass into the register method.
                 const newUser = new UserModel({
                     userID: user_ID,
-                    firstName: req.body.fname,
-                    lastName: req.body.lname,
+                    firstName: req.body.fname.trim(), // --> KEEP AN EYE ON THIS TRIM FUNCTION!!!
+                    lastName: req.body.lname.trim(),
                     isActive: true,
-                    username: req.body.username,
+                    username: req.body.username.trim(),
                     givenDonations: 0,
                     timesAttending: [user_IDString]
                 });
@@ -1233,16 +1286,16 @@ app.post("/added_event", function(req, res){
 
         } else {
 
-            // Split the string values and parse the information 
+            // Split the string values and parse the information
             // to convert it into numerical values.
             startTime = startTime.toString().split(':');
             endTime = endTime.toString().split(':');
             increment = parseInt(increment, 10);
        
-            // Create a function that is stored in a variable to 
+            // Create a function that is stored in a variable to
             // convert the numerical time range back into a string.
-            var pad = function (n) { 
-                return (n < 10) ? '0' + n.toString() : n; 
+            var pad = function (n) {
+                return (n < 10) ? '0' + n.toString() : n;
             },
 
             // Assign the variables as you loop through the time
@@ -1259,7 +1312,7 @@ app.post("/added_event", function(req, res){
        
             // Utilize a do-while loop to parse the timeslot information.
             do {
-                // Increment the minutes to continue 
+                // Increment the minutes to continue
                 // the timeslot converstion process.
                 currentMin += increment;
 
@@ -1295,7 +1348,7 @@ app.post("/added_event", function(req, res){
                 // Increment the counter variable, i.
                 i += 1;
 
-            } while (currentHr !== endHr && i < req.body.eventvolunteers); 
+            } while (currentHr !== endHr && i < req.body.eventvolunteers);
 
                 // Return the array of timeslot increments that will be
                 // converted into standard time by a separate function.
@@ -1310,7 +1363,7 @@ app.post("/added_event", function(req, res){
     var convertVolunteerTimeIncrements = [];
     convertVolunteerTimeIncrements.push(event_IDString);
 
-    // Loop through the volunteer time increments array 
+    // Loop through the volunteer time increments array
     // and convert the values into standard time.
     for (let i = 0; i < volunteerTimeIncrements.length; i++) {
 
@@ -1373,15 +1426,15 @@ app.post("/cancel", function(req, res){
 // Create a post request for when the ADMIN wants to DEACTIVATE
 // a user account. This operation will send a confirmation message.
 app.post("/deactivate_account", function(req, res){
-    
+   
     // Create a variable for storing the user id in.
     var changeUser = req.body.useridentifier;
 
-    // Change the value representing whether or 
+    // Change the value representing whether or
     // not the user's account is active to false.
     UserModel.findOneAndUpdate(
         { _id: changeUser },
-        { $set: { isActive: false} },                   
+        { $set: { isActive: false} },                  
         function (error, success) {
             if (error) {
                 console.log("Error: " + error);
@@ -1391,8 +1444,8 @@ app.post("/deactivate_account", function(req, res){
         }
     );
 
-    // Create a flash message informing the ADMIN 
-    // that they have deactivated the user. 
+    // Create a flash message informing the ADMIN
+    // that they have deactivated the user.
     req.flash("sucessCancelled", "You have deactivated the user account.");
 
     // Redirect to the user's profile page of the website.
@@ -1404,15 +1457,15 @@ app.post("/deactivate_account", function(req, res){
 // Create a post request for when the ADMIN wants to ACTIVATE
 // a user account. This operation will send a confirmation message.
 app.post("/activate_account", function(req, res){
-    
+   
     // Create a variable for storing the user id in.
     var changeUser = req.body.useridentifier;
 
-    // Change the value representing whether or 
+    // Change the value representing whether or
     // not the user's account is active to false.
     UserModel.findOneAndUpdate(
         { _id: changeUser },
-        { $set: { isActive: true} },                   
+        { $set: { isActive: true} },                  
         function (error, success) {
             if (error) {
                 console.log("Error: " + error);
@@ -1422,8 +1475,8 @@ app.post("/activate_account", function(req, res){
         }
     );
 
-    // Create a flash message informing the ADMIN 
-    // that they have deactivated the user. 
+    // Create a flash message informing the ADMIN
+    // that they have deactivated the user.
     req.flash("sucessCancelled", "You have activated the user account.");
 
     // Redirect to the user's profile page of the website.
@@ -1437,12 +1490,12 @@ app.post("/activate_account", function(req, res){
 // Create a post request for the user to cancel an event timeslot.
 app.post("/cancel_event", function(req, res){
 
-    // Obtain the specific event id from the webpage 
+    // Obtain the specific event id from the webpage
     // when the user clicks on the 'cancel-time(s)' button.
     const requestedEventId = req.body.eventidentifier;
 
-    // Create a variable to act as a counter. If the counter 
-    // ends up being a certain value, remove the actual event 
+    // Create a variable to act as a counter. If the counter
+    // ends up being a certain value, remove the actual event
     // from the user's profile.
     var numberOfUserTimeslots = req.body.timeattendlength;
 
@@ -1455,11 +1508,11 @@ app.post("/cancel_event", function(req, res){
         // timeslot(s) are being removed from.
         var atLeastOneTime = req.body.timeattending;
 
-        // Create a variable for the event object itself in order to 
+        // Create a variable for the event object itself in order to
         // remove the actual event object if neccessary.
         var eventObject = req.body.eventidentifier;
-        
-        // First check and see if the user selected at least 
+       
+        // First check and see if the user selected at least
         // one checkbox. If the user did not select any
         // checkboxes, reroute them back to the user_profile page.
         if(atLeastOneTime == undefined) {
@@ -1469,14 +1522,14 @@ app.post("/cancel_event", function(req, res){
             return;
 
         } else {
-            
-            // Create variables to help add the event 
+           
+            // Create variables to help add the event
             // to the user collection in the database.
             var user = req.user;
 
              // First find the user who wants to volunteer for a particular event.
              UserModel.findById(user._id, function(err, userInfo) {
-                
+               
                 // If there is an error, log the error. Otherwise, perform validation.
                 if(err) {
                     console.log(err);
@@ -1485,7 +1538,7 @@ app.post("/cancel_event", function(req, res){
                     // ------------------- CANCEL Times User Wants to Get Rid Of -------------------
                     // Check whether the user selected one or multiple timeslots to remove.
                     if(Array.isArray(atLeastOneTime) == true) {
-                        
+                       
                         // ------------------- MULTIPLE Timeslots Selected -------------------
                         // Go thorugh each timeslot that was selected by the user
                         // to be cancelled, and remove it from the user profile
@@ -1501,7 +1554,7 @@ app.post("/cancel_event", function(req, res){
                             // Remove the timelot from the user's database.
                             UserModel.findOneAndUpdate(
                                 { _id: user.id },
-                                { $pull: { timesAttending: timeSlot } },                   
+                                { $pull: { timesAttending: timeSlot } },                  
                                 function (error, success) {
                                     if (error) {
                                         console.log("Error: " + error);
@@ -1511,24 +1564,24 @@ app.post("/cancel_event", function(req, res){
                                 }
                             );
 
-                            // Add the timeslot that the user cancelled back 
+                            // Add the timeslot that the user cancelled back
                             // to the event database that it belongs to.
                             EventModel.findOneAndUpdate(
                                 { _id: requestedEventId },
-                                { $push: { eventTimeIncrements: simplifiedTimeSlot } },                   
+                                { $push: { eventTimeIncrements: simplifiedTimeSlot } },                  
                                 function (error, success) {
                                     if (error) {
                                         console.log("Error: " + error);
                                     } else {
-                                        // console.log("User Success!!! " + timeSlot); 
+                                        // console.log("User Success!!! " + timeSlot);
                                     }
                                 }
                             );
 
-                            // Increment the number of volunteers needed for 
+                            // Increment the number of volunteers needed for
                             // the event after the user cancels their timeslot.
                             EventModel.findOneAndUpdate(
-                                { _id: requestedEventId }, 
+                                { _id: requestedEventId },
                                 { $inc: { numVolunteersNeeded: 1 } },
                                 function (error, success) {
                                     if (error) {
@@ -1546,11 +1599,11 @@ app.post("/cancel_event", function(req, res){
                             // After removing the timeslot from the user's profile,
                             // check if there are any timeslots remaining.
                             if(numberOfUserTimeslots <= 0) {
-                                
+                               
                                 // Remove the timelot from the user's database.
                                 UserModel.findOneAndUpdate(
                                     { _id: user.id },
-                                    { $pull: { userEvents: eventObject } },                   
+                                    { $pull: { userEvents: eventObject } },                  
                                     function (error, success) {
                                         if (error) {
                                             console.log("Error: " + error);
@@ -1569,11 +1622,11 @@ app.post("/cancel_event", function(req, res){
                         // when it is added back to the different data components.
                         var atLeastOneTimeSplit = atLeastOneTime.split(" ");
                         var simplifiedTimeSlot = atLeastOneTimeSplit[3] + " " + atLeastOneTimeSplit[4] + " " + atLeastOneTimeSplit[5] + " " + atLeastOneTimeSplit[6] + " " + atLeastOneTimeSplit[7] + " " + atLeastOneTimeSplit[8];
-                        
+                       
                         // Remove the timelot from the user's database.
                         UserModel.findOneAndUpdate(
                             { _id: user.id },
-                            { $pull: { timesAttending: atLeastOneTime } },                 
+                            { $pull: { timesAttending: atLeastOneTime } },                
                             function (error, success) {
                                 if (error) {
                                     console.log("Error: " + error);
@@ -1583,24 +1636,24 @@ app.post("/cancel_event", function(req, res){
                             }
                         );
 
-                        // Add the timeslot that the user cancelled back 
+                        // Add the timeslot that the user cancelled back
                         // to the event database that it belongs to.
                         EventModel.findOneAndUpdate(
                             { _id: requestedEventId },
-                            { $push: { eventTimeIncrements: simplifiedTimeSlot } },                   
+                            { $push: { eventTimeIncrements: simplifiedTimeSlot } },                  
                             function (error, success) {
                                 if (error) {
                                     console.log("Error: " + error);
                                 } else {
-                                    // console.log("User Success!!! " + atLeastOneTime); 
+                                    // console.log("User Success!!! " + atLeastOneTime);
                                 }
                             }
                         );
 
-                        // Increment the number of volunteers needed for 
+                        // Increment the number of volunteers needed for
                         // the event after the user cancels their timeslot.
                         EventModel.findOneAndUpdate(
-                            { _id: requestedEventId }, 
+                            { _id: requestedEventId },
                             { $inc: { numVolunteersNeeded: 1 } },
                             function (error, success) {
                                 if (error) {
@@ -1617,12 +1670,12 @@ app.post("/cancel_event", function(req, res){
 
                         // After removing the timeslot from the user's profile,
                         // check if there are any timeslots remaining.
-                        if(numberOfUserTimeslots <= 0) { 
-                            
+                        if(numberOfUserTimeslots <= 0) {
+                           
                             // Remove the timelot from the user's database.
                             UserModel.findOneAndUpdate(
                                 { _id: user.id },
-                                { $pull: { userEvents: eventObject } },                   
+                                { $pull: { userEvents: eventObject } },                  
                                 function (error, success) {
                                     if (error) {
                                         console.log("Error: " + error);
@@ -1636,7 +1689,7 @@ app.post("/cancel_event", function(req, res){
                 }
             });
 
-            // Create a flash message informing the user 
+            // Create a flash message informing the user
             // that they have cancelled an event timeslot.
             req.flash("sucessCancelled", "You have cancelled your time(s).");
 
@@ -1655,7 +1708,7 @@ app.post("/cancel_event", function(req, res){
 // Create a post request for the user to volunteer for an event.
 app.post("/volunteer", function(req, res){
 
-    // Obtain the specific event id from the webpage 
+    // Obtain the specific event id from the webpage
     // when the user clicks on the 'sign-up' button.
     const requestedEventId = req.body.eventidentifier;
 
@@ -2032,7 +2085,7 @@ app.post("/donate", function(req, res){
         // Increment the total number of donations given by the user.
         UserModel.findOneAndUpdate(
             { _id: user.id },
-            { $inc: { givenDonations:  req.body.eventdonation} },                   
+            { $inc: { givenDonations:  req.body.eventdonation} },                  
             function (error, success) {
                 if (error) {
                     console.log("Error: " + error);

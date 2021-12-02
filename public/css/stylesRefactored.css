@@ -23,8 +23,7 @@
  */
 
  /* Import fonts */
- @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono&family=Noto+Serif:ital@1&display=swap'); 
- @import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&display=swap');
+ @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono&family=Noto+Serif:ital@1&display=swap&family=Mochiy+Pop+P+One&display=swap&family=Gochi+Hand&display=swap'); 
 
 /* ====================================================================
                             GENERAL STYLES
@@ -32,7 +31,7 @@
 
     /* Defines global colors */
     :root {
-        --foreground-color: black;
+        --foreground-color: rgb(31, 31, 31);
         --background-primary: #f0f0f0; /* Background of the body */
         --background-secondary: white; /* Background of the cards */
         --theme1: rgb(180, 180, 180); /* This is used for a lot of the box shadows */
@@ -59,7 +58,7 @@
 
     /* Get rid of the default styling for lists */
     ul {
-        list-style: none;
+        list-style: circle;
         padding: 0px;
     }
 
@@ -90,28 +89,34 @@
 
     /* Style incorrect login with redish color. */
     .incorrect-input {
+        position: static;
         background-color: rgb(255, 169, 169);
         color: rgb(255, 60, 60);
         border: 2px solid rgb(255, 60, 60);
+        animation: fade 2s forwards;
     }
 
     /* Style confirmation message with greenish color. */
     .confirmation {
+        position: static;
         background-color: rgb(207, 246, 207);
         color: rgb(145, 182, 145);
         border: 2px solid rgb(145, 182, 145);
+        animation: fade 2s forwards;
     }
 
     /* Fade the error message in and out. */
-    .elementToFadeInAndOut {
+    /* .elementToFadeInAndOut {
+        position: static;
         opacity: 1;
-        animation: fade 0.75s linear;
-    }
+        animation: fade 3s forwards;
+    } */
 
     /* Key frames fade. */
     @keyframes fade {
-    0%,100% { opacity: 0 }
-    100% { opacity: 1 } 
+    0% { opacity: 0; }
+    50% { opacity: 1;}
+    100% { opacity: 0; position: fixed; pointer-events: none; } 
     }
 
     /* Format the messages sent to the user */ 
@@ -432,96 +437,102 @@
                         USER/ADMIN_PROFILE.EJS STYLES
  ==================================================================== */
 
-    .profile-ejs header {
+    .profile-ejs .profile {
+        width: clamp(30em, 60vw, 60em); 
+        position: relative;
+        margin: auto;   
+        box-shadow: 5px 5px 1em var(--theme1); 
+        background-color: var(--background-secondary);
+        border-radius: .5em;
+        transition: box-shadow .25s;
+    }
+
+    .profile-ejs .profile:hover {
+        box-shadow: 5px 5px 2em var(--theme1);
+    }
+
+    /* Sytles for the profile header */
+    .profile-ejs .profile > header {
+        display: flex;
+        align-items: center;
+        padding: 1em;
+        background-color: var(--foreground-color);
+        border-bottom: 5px solid var(--theme1);
+        border-radius: .5em .5em 0 0;
+    }
+
+    .profile-ejs .profile > header .user-info {
+        padding-left: 1em;
+        color: var(--background-primary);
+    }
+
+    .profile-ejs .profile > header .user-info > h1 {
+        font-size: clamp(3rem, 7vw, 4rem);
+        border-bottom: 1px solid var(--background-primary);
+    }
+
+    .profile-ejs .profile > header .icons {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 1em;
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        line-height: 75%;
+        font-family: "Gochi Hand";
+        text-align: right;
+    }
+
+    .profile-ejs .profile > header .user-info > * {
+        margin: 0;
+    }
+
+    /* Styles for the profile content */
+    .profile-ejs .profile-content {
         display: flex;
         padding: 1em;
-        background-color: white;
-        box-shadow: 5px 5px 1em var(--theme1); 
-        border-radius: .5em;
-        transition: all .5s;
     }
 
-    .profile-ejs header > div {
-        padding-left: 1em;
-        align-self: center;
-    }
-
-    .profile-ejs header h1 {
-        border-bottom: 1px solid var(--theme1);
-        font-size: 4em;
-    }
-
-    .profile-ejs header p {
-        font-size: 1.75em;
-    }
-
-    .profile-ejs .profile-options button {
-        width: 100%;
-        margin-top: 1em;
+    .profile-ejs .profile-content .profile-nav button {
+        position: relative;
+        margin-bottom: .5em;
         border: none;
-        font-size: 1.5em;
-        text-align: left;
-        background-color: white;
-        box-shadow: 5px 5px 1em var(--theme1); 
-        padding: 1em;
-        border-radius: .5em;
-        transition: all .6s;
-    }
-
-    .profile-ejs .profile-options .fa-chevron-right {
-        float: right;
-        padding-top: .25em;
-     }
-
-     .profile-ejs .profile-options .fa-bolt {
-         padding-right: 2em;
-     }
-
-    .profile-ejs .events-list .event {
-        background-color: white;
-        box-shadow: 5px 5px 1em var(--theme1); 
-        padding: 1em;
-        margin-bottom: 1em;
-        border-radius: .5em;
-        transition: all .6s; 
-    }
-
-    .profile-ejs .events-list .event > button {
-        display: block;
-        width: 100%;
-        text-align: left;
-        font-size: 2em;
-        border: none;
-        border-bottom: 1px solid white;
         background-color: transparent;
-        transition: all .5s;
+        font-size: 1.25rem;
     }
 
-    .profile-ejs .events-list .event > div > ul > li {
-        list-style: circle;
-        margin-left: 1.5em;
-
+    .profile-ejs .profile-content .right-content {
+        width: 70%;
+        margin: auto;
     }
 
-    /* Style the list of timeslots the user is signed up for */
-    .profile-ejs .events-list .event > div > ul > form > ol > li {
-        list-style: none;
+    .profile-ejs .profile-content .event {
+        position: relative;
+        padding: 1em 1em 3em 1em;
+        margin-bottom: .5em;
+        border-radius: .5em;
+        border: 1px solid var(--theme1);
+        transition: all .25s;
     }
 
-    /* Set hover states */
+    .profile-ejs .profile-content .event:hover {
+        box-shadow: 2px 2px .5em var(--theme1);
+        border-color: var(--background-secondary);
+    }
+ 
 
-    .profile-ejs header:hover, .profile-ejs .events-list .event:hover{
-        box-shadow: 7px 7px 2em var(--theme1);
+    .profile-ejs .profile-content .event > h2 {
+        width: fit-content;
+        border-bottom: 1px solid var(--foreground-color);
     }
 
-    .profile-ejs .events-list .event > button:hover {
-        border-bottom: 1px solid var(--theme1);
+    .profile-ejs .profile-content .event > ul {
+        margin: 0 1em;
     }
 
-    .profile-ejs .profile-options button:hover {
-        background-color: var(--foreground-color);
-        color: var(--background-primary);
-        transform: scale(1.05);
+    .profile-ejs .profile-content .event button {
+        position: absolute;
+        bottom: .5em;
+        right: .5em;
     }
 
 /* ====================================================================
@@ -598,21 +609,6 @@
 /* ====================================================================
                                 ID STYLES
  ==================================================================== */
-
-    /* Add color to header section of page. */
-    #header-section {
-        /* background-color: var(--dark-color); */
-        /* WILL PROBABLY BE GETTING RID OF THIS IN FAVOR OF A DIFFERENT STYLING THEME */
-    }
-
-    /* Style and position the header at the top of the login page. */
-    #login-header {
-        /* background-color: var(--dark-color); */
-        /* width: 100%;
-        position: fixed;
-        top: 0; */
-        /* z-index: 1030; */
-    }
 
     /* Add color to footer section of page. */
     #footer-section {
