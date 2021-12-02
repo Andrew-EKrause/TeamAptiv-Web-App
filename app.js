@@ -1647,6 +1647,12 @@ app.post("/cancel_event", function(req, res){
 
 
 
+
+
+
+        
+
+        // --> THIS IS THE ORIGINAL CODE THAT YOU ARE MODIFYING ABOVE.
         // // Create variables for the checkbox(s) or timeslot(s) to be cancelled.
         // // Also obtain the event identifier for the particular event in which the
         // // timeslot(s) are being removed from.
