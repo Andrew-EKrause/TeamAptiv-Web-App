@@ -84,7 +84,6 @@ require('dotenv').config();
 // Require packages for the server that were installed.
 const express = require("express");
 const flash = require("connect-flash");
-// const popupS = require("popups"); // --> WORRY ABOUT THIS LATER
 const ejs = require("ejs");
 const _ = require("lodash");
 const mongoose = require("mongoose");
@@ -97,7 +96,6 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const LocalStrategy = require("passport-local");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const findOrCreate = require("mongoose-findorcreate");
-// const { times } = require('async'); // --> NOT USING THIS FOR NOW
 
 // Create a string for the current ADMIN username.
 const ADMIN_NAME = "$ADMIN$@ACCOUNT-2023";
@@ -221,7 +219,9 @@ const eventSchema = new mongoose.Schema({
     eventStartTime: String,
     eventEndTime: String,
 
-    // ADD A BOOLEAN TO DETERMINE IF THE EVENT HAS BEEN CANCELLED OR NOT!!!
+    // Boolean value to determine if the event 
+    // has been cancelled by the ADMIN or not.
+    eventActive: Boolean,
 
     // Array for the time slots available.
     eventTimeIncrements: [{
@@ -992,7 +992,7 @@ app.post("/donate_org", function(req, res){
             // Set the status of the user to "Volunteer and Donor".
             UserModel.findOneAndUpdate(
                 { _id: user.id },
-                { $set: { status: "Volunteer, Donor" } },
+                { $set: { status: "Donor" } },
                 function (error, success) {
                     if (error) {
                         console.log("Error: " + error);
@@ -1456,9 +1456,9 @@ app.post("/cancel_event", function(req, res){
             // to the user collection in the database.
             var user = req.user;
 
-             // First find the user who wants to volunteer for a particular event.
-             UserModel.findById(user._id, function(err, userInfo) {
-               
+            // First find the user who wants to volunteer for a particular event.
+            UserModel.findById(user._id, function(err, userInfo) {
+                
                 // If there is an error, log the error. Otherwise, perform validation.
                 if(err) {
                     console.log(err);
