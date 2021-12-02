@@ -55,9 +55,37 @@
 
 
 /* ====================================================================
-                    ABOUT.EJS STYLES
+                            ABOUT.EJS STYLES
 ==================================================================== */
     .about-ejs .main {
         display: block;
+    }
+
+/* ====================================================================
+                    USER/ADMIN_PROFILE.EJS STYLES
+==================================================================== */
+
+    .profile-ejs .profile > header .icons {
+        position: static;
+        padding: .5em 0;
+        text-align: left;
+    }
+
+    .profile-ejs .profile-content .profile-nav button > span {
+        display: none;
+    }
+
+    .profile-ejs .profile-content .profile-nav button > i {
+        font-size: 1.75rem;
+        width: 100%;
+    }
+
+    /* If we are in mobile view, don't have button animation */
+    .profile-ejs .profile-nav button:hover::before {
+        transform: scaleX(0%);
+    }
+
+    .profile-ejs .profile-content .right-content {
+        width: 80%;
     }
 }

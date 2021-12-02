@@ -120,11 +120,9 @@
                         they successfully volunteered or donated to an event.
                     -->
                     <% if(successVolunteeredOrDonated.length > 0) { %>
-                        <div class="confirmation w-75">
-                            <div class="elementToFadeInAndOut message-format">
-                                <b><%= successVolunteeredOrDonated %></b>
-                            </div>
-                        </div>
+                        <div class="confirmation message-format">
+                            <b><%= successVolunteeredOrDonated %></b>
+                         </div>
                     <% } %>
 
                     <!-- 
@@ -132,11 +130,9 @@
                         they have already signed up for a particular event.
                     -->
                     <% if(alreadyVolunteered.length > 0) { %>
-                        <div class="incorrect-input w-75">
-                            <div class="elementToFadeInAndOut message-format">
-                                <b><%= alreadyVolunteered %></b>
-                            </div>
-                        </div>
+                        <div class="incorrect-input message-format">
+                            <b><%= alreadyVolunteered %></b>
+                         </div>
                     <% } %>
                 
                     <!-- Button to go back to the other events -->

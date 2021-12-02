@@ -25,28 +25,84 @@
 
     <div class="profile-ejs">
         <!-- Create a card for showing the ADMIN data -->
-        <div class="container w-75 mt-3">
-            <div class="row">
+        <div class="profile">
+            <header>
+                <!-- Display user profile picture; if ADMIN did -->
+                <!-- not use OAuth to sign or does not have picture, -->
+                <!-- use default profile image -->
+                <form action="/user_profile" method="post">
+                    <img id="profileImage" src=<%= user.picture %> alt="Image not Found" onerror=this.src="images/default_pic.png">
+                </form>
 
-                <div class="col">
-                    <header>
-                        <!-- Display user profile picture; if ADMIN did -->
-                        <!-- not use OAuth to sign or does not have picture, -->
-                        <!-- use default profile image -->
-                        <form action="/user_profile" method="post">
-                            <img id="profileImage" src=<%= user.picture %> alt="Image not Found" onerror=this.src="images/default_pic.png">
-                        </form>
+                <!-- Display ADMIN name, status, given donations, and the Team Aptiv received donations -->
+                <div class="user-info">
+                    <h1><%= user.firstName %></h1>
+                    <div class="icons">
+                        <div><%= user.status %></div>
+                        <div>$<%= user.givenDonations %></div>
+                    </div>
+                </div>
+            </header>
 
-                        <!-- Display ADMIN name, status, given donations, and the Team Aptiv received donations -->
-                        <div>
-                            <h1><%= user.firstName %> <%= user.lastName %></h1>
-                            <p>Status: <%= user.status %></p>
-                            <p>My Donations: $<%= user.givenDonations %></p>
-                            <% if(orgInfo != undefined) { %>
-                                <p>User Donations to Org: $<%= orgInfo[0].receivedDonations %></p>
-                            <% } %>
-                        </div>
-                    </header>
+            <div class="profile-content">
+                 <!-- Create a div to contain the buttons on the ADMIN profile -->
+                <nav class="profile-nav">
+
+                    <!-- Add a button so that the ADMIN can see the users of the site !!! IMPLEMENT THIS SOON -->
+                    <form action="" method="">
+                        <button type="button" class="users-toggler">
+                            <i class="fas fa-user"></i>
+                            <span>See Users</span>
+                        </button>
+                    </form>
+
+                    <!-- Add a button so that the ADMIN can see what events they have signed up for -->
+                    <button type="button" class="events-toggler">
+                        <i class="fas fa-clipboard-list"></i>
+                        <span>My Events</span>
+                    </button>
+
+                    <!-- Add a button for the ADMIN to view the cancelled events on their profile page -->
+                    <form action="" method="">
+                        <button type="submit">
+                            <i class="far fa-calendar-times"></i>
+                            <span>Cancelled</span>
+                        </button>
+                    </form>
+
+                    <!-- Add a button for the ADMIN to see their HISTORY !!! THIS WILL LIKELY BE IMPLEMENTED LATER ON -->
+                    <!-- <form action="" method="">
+                        <button type="submit" class="btn">
+                            <i class="fas fa-history"></i>
+                            See Event History
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </form> -->
+
+                    <!-- Add a button so that the ADMIN can create a new event -->
+                    <form action="/create_event" method="POST">
+                        <button type="submit">
+                            <i class="fas fa-calendar-plus"></i>
+                            <span>Create Event</span>
+                        </button>
+                    </form>
+
+                    <!-- Create a button to access the settings -->
+                    <button type="button" class="settings-toggler">
+                        <i class="fas fa-sliders-h"></i>
+                        <span>Settings</span>
+                    </button>
+
+                    <!-- Add a button so that the ADMIN can logout of their account -->
+                    <form action="/logout" method="POST">
+                        <button type="submit">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </button>
+                    </form>
+                </nav>
+
+                <div class="right-content">
 
                     <!-- Obtain an array of identification numbers in order to list all of the -->
                     <!-- events that the ADMIN has has signed up for under the "Events" button -->
@@ -59,66 +115,6 @@
                             <% eventsArrayIds.push(event.eventID); %>
                         <% } %>
                     <% }); %>
-
-                    <!-- Create a div to contain the buttons on the ADMIN profile -->
-                    <div class="profile-options">
-
-                        <!-- Add a button so that the ADMIN can see what events they have signed up for -->
-                        <button type="button" data-bs-toggle="collapse" data-bs-target="#collapse-events" aria-expanded="false" aria-controls="collapse-events">
-                            <i class="fas fa-clipboard-list"></i>
-                            My Events
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-
-                        <!-- Add a button for the ADMIN to view the cancelled events on their profile page -->
-                        <form action="" method="">
-                            <button type="submit" class="btn">
-                                <i class="far fa-calendar-times"></i>
-                                Cancelled Events
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                        </form>
-
-                        <!-- Add a button for the ADMIN to see their HISTORY !!! THIS WILL LIKELY BE IMPLEMENTED LATER ON -->
-                        <!-- <form action="" method="">
-                            <button type="submit" class="btn">
-                                <i class="fas fa-history"></i>
-                                See Event History
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                        </form> -->
-
-                         <!-- Add a button so that the ADMIN can create a new event -->
-                         <form action="/create_event" method="POST">
-                            <button type="submit">
-                                <i class="fas fa-calendar-plus"></i>
-                                Create New Event
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                        </form>
-
-                        <!-- Add a button so that the ADMIN can see the users of the site !!! IMPLEMENT THIS SOON -->
-                        <form action="" method="">
-                            <button type="button" data-bs-toggle="collapse" data-bs-target="#collapse-users" aria-expanded="false" aria-controls="collapse-users">
-                                <i class="fas fa-users"></i>
-                                See Users
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                        </form>
-
-                        <!-- Add a button so that the ADMIN can logout of their account -->
-                        <form action="/logout" method="POST">
-                            <button type="submit">
-                                <i class="fas fa-sign-out-alt"></i>
-                                Logout
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                        </form>
-                    </div>
-                </div>
-                
-                <!-- Add a column class in order to help make the page responsive -->
-                <div class="col">
 
                     <!-- 
                         Include EJS to display any success messages to the ADMIN if they
@@ -164,13 +160,12 @@
                                 <h1 class="incorrect-input"><%= failureNotCreated %></h1>
                             </div>
                     <% } %>
-                        
+
                     <!-- 
                         Include a section for the events that the ADMIN has signed up
                         for to be rendered on the user's profile page
                     -->
-                    <div class="events-list collapse" id="collapse-events"> 
-                        <!-- collapse collapse" id="collapseEvents"> -->
+                    <div id="events-list" data-visible="false"> 
                         <!-- Loop through the database and display the events -->
                         <% listOfUserEvents.forEach(function(event) { %>
                             <% if(event == null) { %>
@@ -178,138 +173,132 @@
                                 <% // event object ID is removed from the ADMIN's info in the database. %>
                             <% } else { %>
 
-                                <div class="event">
-                                    <!-- Create divs that will make the events be collapsable -->
-                                    <button class="dropdown" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%=event._id%>"
-                                    aria-expanded="false" aria-controls="collapse<%=event._id%>"><%= event.eventName %></button>
+                                <div class="event" data-visible="false">
+                                    <!-- Include a function to simplify the date display -->
+                                    <% function simplifyEventDate(eventDate){ %>
+                                        <% // First split the event into the components that directly %>
+                                        <% // involve the numberical representations of a date. %>
+                                        <% var date = eventDate.toISOString().split("T")[0]; %>
+                                    
+                                        <% // Create variables for workring with %>
+                                        <% // the nubmers in the date variable. %>
+                                        <% var arrayDate = date.split('-'); %>
+                                        <% var day = arrayDate[2]; %>
+                                        <% var getMonth = arrayDate[1]; %>
+                                        <% var month = ""; %>
+                                        <% var year = arrayDate[0]; %>
+                                        <% var simplifiedDate = ""; %>
+                                    
+                                        <% // Use a series of conditionals to determine %>
+                                        <% // what the name of the month is based on the %>
+                                        <% // numerical representation of it. %>
+                                        <% if(getMonth.localeCompare('1') == 0) { %>
+                                            <% month = 'Jan'; %>
+                                        <% } else if(getMonth.localeCompare('2') == 0) { %>
+                                            <% month = 'Feb'; %>
+                                        <% } else if(getMonth.localeCompare('3') == 0) { %>
+                                            <% month = 'Mar'; %>
+                                        <% } else if(getMonth.localeCompare('4') == 0) { %>
+                                            <% month = 'Apr'; %>
+                                        <% } else if(getMonth.localeCompare('5') == 0) { %>
+                                            <% month = 'May'; %>
+                                        <% } else if(getMonth.localeCompare('6') == 0) { %>
+                                            <% month = 'Jun'; %>
+                                        <% } else if(getMonth.localeCompare('7') == 0) { %>
+                                            <% month = 'Jul'; %>
+                                        <% } else if(getMonth.localeCompare('8') == 0) { %>
+                                            <% month = 'Aug'; %>
+                                        <% } else if(getMonth.localeCompare('9') == 0) { %>
+                                            <% month = 'Sep'; %>
+                                        <% } else if(getMonth.localeCompare('10') == 0) { %>
+                                            <% month = 'Oct'; %>
+                                        <% } else if(getMonth.localeCompare('11') == 0) { %>
+                                            <% month = 'Nov'; %>
+                                        <% } else if(getMonth.localeCompare('12') == 0) { %>
+                                            <% month = 'Dec'; %>
+                                        <% } else { %>
+                                            <% month = 'ERROR'; %>
+                                        <% } %>
+                                    
+                                        <% // Create the simplified date and return it. %>
+                                        <% simplifiedDate = month + " " + day + ", " + year; %>
+                                        <% return simplifiedDate; %>
+                                    <% } %>
 
-                                    <div class="collapse" id="collapse<%=event._id%>">
-                                        <!-- Include a function to simplify the date display -->
-                                        <% function simplifyEventDate(eventDate){ %>
-                                            <% // First split the event into the components that directly %>
-                                            <% // involve the numberical representations of a date. %>
-                                            <% var date = eventDate.toISOString().split("T")[0]; %>
-                                        
-                                            <% // Create variables for workring with %>
-                                            <% // the nubmers in the date variable. %>
-                                            <% var arrayDate = date.split('-'); %>
-                                            <% var day = arrayDate[2]; %>
-                                            <% var getMonth = arrayDate[1]; %>
-                                            <% var month = ""; %>
-                                            <% var year = arrayDate[0]; %>
-                                            <% var simplifiedDate = ""; %>
-                                        
-                                            <% // Use a series of conditionals to determine %>
-                                            <% // what the name of the month is based on the %>
-                                            <% // numerical representation of it. %>
-                                            <% if(getMonth.localeCompare('1') == 0) { %>
-                                                <% month = 'Jan'; %>
-                                            <% } else if(getMonth.localeCompare('2') == 0) { %>
-                                                <% month = 'Feb'; %>
-                                            <% } else if(getMonth.localeCompare('3') == 0) { %>
-                                                <% month = 'Mar'; %>
-                                            <% } else if(getMonth.localeCompare('4') == 0) { %>
-                                                <% month = 'Apr'; %>
-                                            <% } else if(getMonth.localeCompare('5') == 0) { %>
-                                                <% month = 'May'; %>
-                                            <% } else if(getMonth.localeCompare('6') == 0) { %>
-                                                <% month = 'Jun'; %>
-                                            <% } else if(getMonth.localeCompare('7') == 0) { %>
-                                                <% month = 'Jul'; %>
-                                            <% } else if(getMonth.localeCompare('8') == 0) { %>
-                                                <% month = 'Aug'; %>
-                                            <% } else if(getMonth.localeCompare('9') == 0) { %>
-                                                <% month = 'Sep'; %>
-                                            <% } else if(getMonth.localeCompare('10') == 0) { %>
-                                                <% month = 'Oct'; %>
-                                            <% } else if(getMonth.localeCompare('11') == 0) { %>
-                                                <% month = 'Nov'; %>
-                                            <% } else if(getMonth.localeCompare('12') == 0) { %>
-                                                <% month = 'Dec'; %>
-                                            <% } else { %>
-                                                <% month = 'ERROR'; %>
+                                    <ul class="mt-1">
+                                        <!-- The date displayed utilized the function above for simplification -->
+                                        <li> <%= simplifyEventDate(event.eventDate) %> </li>
+
+                                        <!-- Display the event location, description, volunteer, and donation information -->
+                                        <li>Location: <%= event.eventLocation %> </li>
+
+                                        <!-- If description is empty, do not display the description -->
+                                        <!-- Use the split function to determine if the description was left blank -->
+                                        <% var descriptionArray = event.eventDescription.split(" "); %>
+                                        <% if(descriptionArray[1] != "") { %>
+
+                                            <!-- If the description is not blank, obtain the info for it and display -->
+                                            <% var descriptionString = ""; %>
+                                            <% for(let i = 1; i < descriptionArray.length; i++) { %>
+                                                <% descriptionString = descriptionString + " " + descriptionArray[i]; %>
                                             <% } %>
-                                        
-                                            <% // Create the simplified date and return it. %>
-                                            <% simplifiedDate = month + " " + day + ", " + year; %>
-                                            <% return simplifiedDate; %>
+                                            
+                                            <!-- Display the description assuming it is not blank -->
+                                            <li>Description: <%= descriptionString %></li>
                                         <% } %>
 
-                                        <ul class="mt-1">
-                                            <!-- The date displayed utilized the function above for simplification -->
-                                            <li> <%= simplifyEventDate(event.eventDate) %> </li>
+                                        <!-- Check if the ADMIN has times that they signed up for in the event. List the times out -->
+                                        <% if(user.timesAttending.length > 1) { %>
+                                            <li>Times Attending: </li>
 
-                                            <!-- Display the event location, description, volunteer, and donation information -->
-                                            <li>Location: <%= event.eventLocation %> </li>
-
-                                            <!-- If description is empty, do not display the description -->
-                                            <!-- Use the split function to determine if the description was left blank -->
-                                            <% var descriptionArray = event.eventDescription.split(" "); %>
-                                            <% if(descriptionArray[1] != "") { %>
-
-                                                <!-- If the description is not blank, obtain the info for it and display -->
-                                                <% var descriptionString = ""; %>
-                                                <% for(let i = 1; i < descriptionArray.length; i++) { %>
-                                                    <% descriptionString = descriptionString + " " + descriptionArray[i]; %>
-                                                <% } %>
-                                                
-                                                <!-- Display the description assuming it is not blank -->
-                                                <li>Description: <%= descriptionString %></li>
+                                            <!-- FUNCTION: Function to get the value of the time attending -->
+                                            <% function getResult() { %>
+                                                <% var value = $('timeattending').getValue(); %>
                                             <% } %>
 
-                                            <!-- Check if the ADMIN has times that they signed up for in the event. List the times out -->
-                                            <% if(user.timesAttending.length > 1) { %>
-                                                <li>Times Attending: </li>
+                                            <!-- Makes POST request to the event cancellation route -->
+                                            <form class="form-horizontal" action="/cancel_event" method="POST">
+                                                <!-- Create a counter variable that tracks the number of timeslots in each event a user has signed up for -->
+                                                <% var numTimeSlots = 0; %>
 
-                                                <!-- FUNCTION: Function to get the value of the time attending -->
-                                                <% function getResult() { %>
-                                                    <% var value = $('timeattending').getValue(); %>
-                                                <% } %>
+                                                <ol>
+                                                    <!-- Create different time slots that the ADMIN can cancel -->
+                                                    <% user.timesAttending.forEach(function(timesAttendingEvent) { %>
 
-                                                <!-- Makes POST request to the event cancellation route -->
-                                                <form class="form-horizontal" action="/cancel_event" method="POST">
-                                                    <!-- Create a counter variable that tracks the number of timeslots in each event a user has signed up for -->
-                                                    <% var numTimeSlots = 0; %>
+                                                        <% // Take the time attending and remove the unique id from the total string for display purposes. %>
+                                                        <% var timeAttendanceSplitTemp = timesAttendingEvent.split(" "); %>
 
-                                                    <ol>
-                                                        <!-- Create different time slots that the ADMIN can cancel -->
-                                                        <% user.timesAttending.forEach(function(timesAttendingEvent) { %>
+                                                        <% // If the length of the split is greater than 1, the time attending is not an id alone. %>
+                                                        <% if(timeAttendanceSplitTemp.length > 1) { %>
+                                                            
+                                                            <% // Create variables to store the time attendance information: %>
+                                                            <% // The id attached to the time attendance and the time range itself. %>
+                                                            <% var timeAttendanceIentifier = timeAttendanceSplitTemp[3]; %> <% // --> MAY NOT NEED THIS!!! %>
+                                                            <% var timeAttendance = timeAttendanceSplitTemp[4] + " " + timeAttendanceSplitTemp[5] + " " + timeAttendanceSplitTemp[6] + " " + timeAttendanceSplitTemp[7] + " " + timeAttendanceSplitTemp[8]; %>
 
-                                                            <% // Take the time attending and remove the unique id from the total string for display purposes. %>
-                                                            <% var timeAttendanceSplitTemp = timesAttendingEvent.split(" "); %>
-
-                                                            <% // If the length of the split is greater than 1, the time attending is not an id alone. %>
-                                                            <% if(timeAttendanceSplitTemp.length > 1) { %>
-                                                                
-                                                                <% // Create variables to store the time attendance information: %>
-                                                                <% // The id attached to the time attendance and the time range itself. %>
-                                                                <% var timeAttendanceIentifier = timeAttendanceSplitTemp[3]; %> <% // --> MAY NOT NEED THIS!!! %>
-                                                                <% var timeAttendance = timeAttendanceSplitTemp[4] + " " + timeAttendanceSplitTemp[5] + " " + timeAttendanceSplitTemp[6] + " " + timeAttendanceSplitTemp[7] + " " + timeAttendanceSplitTemp[8]; %>
-
-                                                                <% // If the time being attended matches the event it was from, render it %>
-                                                                <% // within the correct event section in the user profile. %>
-                                                                <% if(event.eventID == timeAttendanceIentifier) { %>
-                                                                    <% // Display the time attending as a checkbox that the user can select. %>
-                                                                    <li>
-                                                                        <input type="checkbox" id="<%= timeAttendance %>" name="timeattending" value="<%= timesAttendingEvent %>">
-                                                                        <label for="<%= timeAttendance %>"> <%= timeAttendance %> </label>
-                                                                    </li>
-                                                                    <% numTimeSlots += 1; %>
-                                                                <% } %>
-
+                                                            <% // If the time being attended matches the event it was from, render it %>
+                                                            <% // within the correct event section in the user profile. %>
+                                                            <% if(event.eventID == timeAttendanceIentifier) { %>
+                                                                <% // Display the time attending as a checkbox that the user can select. %>
+                                                                <li>
+                                                                    <input type="checkbox" id="<%= timeAttendance %>" name="timeattending" value="<%= timesAttendingEvent %>">
+                                                                    <label for="<%= timeAttendance %>"> <%= timeAttendance %> </label>
+                                                                </li>
+                                                                <% numTimeSlots += 1; %>
                                                             <% } %>
 
-                                                        <% }); %>
-                                                    </ol>
+                                                        <% } %>
 
-                                                    <!-- Create hidden input types to obtain the different values that will be processed by the server -->
-                                                    <input type="hidden" id="customId" name="eventidentifier" value="<%= event._id %>" onChange="getResult()">
-                                                    <input type="hidden" id="customId" name="timeattendlength" value="<%= numTimeSlots %>" onChange="getResult()">
-                                                    <button type="submit" class="mt-4 btn btn-lg btn-outline-light">Cancel Time(s)</button>
-                                                </form>
-                                            <% } %>
-                                        </ul>
-                                    </div>
+                                                    <% }); %>
+                                                </ol>
+
+                                                <!-- Create hidden input types to obtain the different values that will be processed by the server -->
+                                                <input type="hidden" id="customId" name="eventidentifier" value="<%= event._id %>" onChange="getResult()">
+                                                <input type="hidden" id="customId" name="timeattendlength" value="<%= numTimeSlots %>" onChange="getResult()">
+                                                <button type="submit" class="mt-4 btn btn-lg btn-outline-light">Cancel Time(s)</button>
+                                            </form>
+                                        <% } %>
+                                    </ul>
                                 </div>                                
                             <% } %>
                         <% }); %>
@@ -319,8 +308,14 @@
                         Include a section for the for the ADMIN to view the 
                         users that are registered with the Team Aptiv website.
                     -->
-                    <div class="events-list collapse" id="collapse-users"> 
-                        <!-- collapse collapse" id="collapseEvents"> -->
+                    <div id="users-list" data-visible="true"> 
+                        <!-- Show to total user donations -->
+                        <% if(orgInfo != undefined) { %>
+                            <div class="total-donations">
+                                User Donations to Aptiv: $<%= orgInfo[0].receivedDonations %>
+                            </div>
+                        <% } %>
+
                         <!-- Loop through the database and display the events -->
                         <% listOfUsers.forEach(function(user) { %>
                             <% if(user == null) { %>
@@ -330,52 +325,64 @@
 
                                 <!-- If the user is not the ADMIN, list the user out on the ADMIN's profile -->
                                 <% if(user.status != "Admin") { %>
-                                    <div class="event">
-                                        <!-- Create divs that will make the events be collapsable -->
-                                        <button class="dropdown" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%=user._id%>"
-                                        aria-expanded="false" aria-controls="collapse<%=user._id%>"><%= user.firstName + " " + user.lastName %></button>
+                                    <div class="user">
+                                        <h2><%= user.firstName %> <%= user.lastName %></h2>
 
-                                        <div class="collapse" id="collapse<%=user._id%>">
-                                            <!-- List out information about the user. -->
-                                            <ul class="mt-1">
+                                        <!-- List out information about the user. -->
+                                        <ul>
+                                            <!-- Display the event location, description, volunteer, and donation information -->
+                                            <li>Username: <%= user.username %> </li>
+                                            <li>Status: <%= user.status %> </li>
+                                            <li>Total Donations: $<%= user.givenDonations %> </li>
+                                            <li>Total Volunteer Hours: TOTAL HOURS HERE </li>
+                                            <!-- !!! ASK THE OTHER GUYS IF YOU SHOULD LIST OUT THE EVENTS/TIMESLOTS THAT THE USERS ARE CURRENTLY SIGNED UP FOR!!! -->
 
-                                                <!-- Display the event location, description, volunteer, and donation information -->
-                                                <li>Username: <%= user.username %> </li>
-                                                <li>Status: <%= user.status %> </li>
-                                                <li>Total Donations: $<%= user.givenDonations %> </li>
-                                                <li>Total Volunteer Hours: TOTAL HOURS HERE </li>
-                                                <!-- !!! ASK THE OTHER GUYS IF YOU SHOULD LIST OUT THE EVENTS/TIMESLOTS THAT THE USERS ARE CURRENTLY SIGNED UP FOR!!! -->
-
-                                                
-                                                <!-- FUNCTION: Function to get the value of the user identifier -->
-                                                <% function getUser() { %>
-                                                    <% var value = $('timeattending').getValue(); %>
-                                                <% } %>
-                                                
-                                                <!-- Include a conditional to determine which button to display to the ADMIN -->
-                                                <% if(user.isActive == true) { %>
-                                                    <!-- Makes POST request to the user deactivation route -->
-                                                    <form class="form-horizontal" action="/deactivate_account" method="POST">
-                                                        <!-- Create hidden input types to obtain the different values that will be processed by the server -->
-                                                        <input type="hidden" id="customId" name="useridentifier" value="<%= user._id %>" onChange="getUser()">
-                                                        <button type="submit" class="mt-4 btn btn-lg btn-outline-light">Deactivate Account</button>
-                                                    </form>
-                                                <% } else { %>
-                                                    <!-- Makes POST request to the user activation route -->
-                                                    <form class="form-horizontal" action="/activate_account" method="POST">
-                                                        <!-- Create hidden input types to obtain the different values that will be processed by the server -->
-                                                        <input type="hidden" id="customId" name="useridentifier" value="<%= user._id %>" onChange="getUser()">
-                                                        <button type="submit" class="mt-4 btn btn-lg btn-outline-light">Activate Account</button>
-                                                    </form>
-                                                <% } %>
-                                            </ul>
-                                        </div>
+                                            
+                                            <!-- FUNCTION: Function to get the value of the user identifier -->
+                                            <% function getUser() { %>
+                                                <% var value = $('timeattending').getValue(); %>
+                                            <% } %>
+                                            
+                                            <!-- Include a conditional to determine which button to display to the ADMIN -->
+                                            <% if(user.isActive == true) { %>
+                                                <!-- Makes POST request to the user deactivation route -->
+                                                <form class="form-horizontal" action="/deactivate_account" method="POST">
+                                                    <!-- Create hidden input types to obtain the different values that will be processed by the server -->
+                                                    <input type="hidden" id="customId" name="useridentifier" value="<%= user._id %>" onChange="getUser()">
+                                                    <button type="submit" class="mt-4 btn btn-outline-light">Deactivate Account</button>
+                                                </form>
+                                            <% } else { %>
+                                                <!-- Makes POST request to the user activation route -->
+                                                <form class="form-horizontal" action="/activate_account" method="POST">
+                                                    <!-- Create hidden input types to obtain the different values that will be processed by the server -->
+                                                    <input type="hidden" id="customId" name="useridentifier" value="<%= user._id %>" onChange="getUser()">
+                                                    <button type="submit" class="mt-4 btn btn-outline-light">Activate Account</button>
+                                                </form>
+                                            <% } %>
+                                        </ul>
                                     </div>      
                                 <% } %>                          
                             <% } %>
                         <% }); %>
                     </div>
-                </div>
+
+                    <!-- Section for settings -->
+                    <div id="settings" data-visible="false">
+                        <form action="">
+                            <h3>Accent Color for Site</h3>
+                            <!-- <label for="accent-color">Accent Color for Site</label> -->
+                            <input type="color" name="" id="accent-color">
+                            <h3>Font Size</h3>
+                            <select name="magnification">
+                                <option value="normal">Normal</option>
+                                <option value="large">Large</option>
+                                <option value="x-large">X-Large</option>
+                            </select>
+
+                            <button type="submit" class="btn btn-outline-light">Apply</button>
+                        </form>
+                    </div>
+                </div>                   
             </div>
         </div>
     </div>

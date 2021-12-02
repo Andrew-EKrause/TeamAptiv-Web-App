@@ -60,18 +60,24 @@
                 <!-- Create a div to contain the buttons on the user profile -->
                 <nav class="profile-nav">
                     <!-- Add a button so that the user can see what events they have signed up for -->
-                    <button type="button">
+                    <button type="button" class="events-toggler">
                         <i class="fas fa-clipboard-list"></i>
-                        My Events
+                        <span>My Events</span>
                     </button>
 
                     <!-- Add a button for the user to view the cancelled events on their profile page -->
-                    <form action="" method="">
+                    <!-- <form action="" method="">
                         <button type="submit">
                             <i class="far fa-calendar-times"></i>
-                            Canceled Events
+                            <span>Cancelled Events</span>
                         </button>
-                    </form>
+                    </form> -->
+
+                    <!-- Create a button to access the settings -->
+                    <button type="button" class="settings-toggler">
+                        <i class="fas fa-sliders-h"></i>
+                        <span>Settings</span>
+                    </button>
 
                     <!-- Add a button for the user to see their HISTORY !!! THIS WILL LIKELY BE IMPLEMENTED LATER ON -->
                     <!-- <form action="" method="">
@@ -86,7 +92,7 @@
                     <form action="/logout" method="POST">
                         <button type="submit">
                             <i class="fas fa-sign-out-alt"></i>
-                            Logout
+                            <span>Logout</span>
                         </button>
                     </form>
                 </nav>
@@ -120,13 +126,13 @@
                         Include a section for the events that the user has signed up
                         for to be rendered on the user's profile page
                     -->
-                    <div class="events-list"> 
+                    <div id="events-list" data-visible="true"> 
                         <!-- Loop through the database and display the events -->
                         <% listOfUserEvents.forEach(function(event) { %>
                             <% if(event == null) { %>
                                 <% // For now, do nothing. In the future, trigger a request so that the %>
                                 <% // event object ID is removed from the user's info in the database. %>
-                            <% } else { %>
+                             <% } else { %>
 
                                 <div class="event">
                                     <!-- Create divs that will make the events be collapsable -->
@@ -264,6 +270,23 @@
                                  </div>                                
                             <% } %>
                         <% }); %>
+                    </div>
+
+                    <!-- Section for settings -->
+                    <div id="settings" data-visible="false">
+                        <form action="">
+                            <h3>Accent Color for Site</h3>
+                            <!-- <label for="accent-color">Accent Color for Site</label> -->
+                            <input type="color" name="" id="accent-color">
+                            <h3>Font Size</h3>
+                            <select name="magnification">
+                                <option value="normal">Normal</option>
+                                <option value="large">Large</option>
+                                <option value="x-large">X-Large</option>
+                            </select>
+
+                            <button type="submit" class="btn btn-outline-light">Apply</button>
+                        </form>
                     </div>
                 </div>
             </div>

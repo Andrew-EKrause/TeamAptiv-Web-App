@@ -23,7 +23,7 @@
  */
 
  /* Import fonts */
- @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono&family=Noto+Serif:ital@1&display=swap&family=Mochiy+Pop+P+One&display=swap&family=Gochi+Hand&display=swap'); 
+ @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono&family=Noto+Serif:ital@1&display=swap&family=Mochiy+Pop+P+One&display=swap&family=Gochi+Hand&display=swap&family=Yanone+Kaffeesatz&display=swap'); 
 
 /* ====================================================================
                             GENERAL STYLES
@@ -50,6 +50,7 @@
     body {
         margin: 0;
         font-family: 'Merriweather', serif; 
+        /* font-family: "Yanone Kaffeesatz", sans-serif; */
         background-color: var(--background-primary);
         min-height: 100vh;
         display: flex;
@@ -93,7 +94,7 @@
         background-color: rgb(255, 169, 169);
         color: rgb(255, 60, 60);
         border: 2px solid rgb(255, 60, 60);
-        animation: fade 2s forwards;
+        animation: fade 5s forwards;
     }
 
     /* Style confirmation message with greenish color. */
@@ -102,21 +103,15 @@
         background-color: rgb(207, 246, 207);
         color: rgb(145, 182, 145);
         border: 2px solid rgb(145, 182, 145);
-        animation: fade 2s forwards;
+        animation: fade 5s forwards;
     }
-
-    /* Fade the error message in and out. */
-    /* .elementToFadeInAndOut {
-        position: static;
-        opacity: 1;
-        animation: fade 3s forwards;
-    } */
 
     /* Key frames fade. */
     @keyframes fade {
     0% { opacity: 0; }
     50% { opacity: 1;}
-    100% { opacity: 0; position: fixed; pointer-events: none; } 
+    90% { height: auto; }
+    100% { opacity: 0; height: 0; pointer-events: none; } 
     }
 
     /* Format the messages sent to the user */ 
@@ -124,7 +119,6 @@
         text-align: center;
         font-size: 1.5em;
         width: 100%;
-        border-radius: 1em;
         padding: .5em;
     }
 
@@ -440,7 +434,7 @@
     .profile-ejs .profile {
         width: clamp(30em, 60vw, 60em); 
         position: relative;
-        margin: auto;   
+        margin: 3em auto;   
         box-shadow: 5px 5px 1em var(--theme1); 
         background-color: var(--background-secondary);
         border-radius: .5em;
@@ -489,10 +483,12 @@
     /* Styles for the profile content */
     .profile-ejs .profile-content {
         display: flex;
+        position: relative;
         padding: 1em;
     }
 
     .profile-ejs .profile-content .profile-nav button {
+        display: block;
         position: relative;
         margin-bottom: .5em;
         border: none;
@@ -500,12 +496,65 @@
         font-size: 1.25rem;
     }
 
-    .profile-ejs .profile-content .right-content {
-        width: 70%;
-        margin: auto;
+    /* Give the buttons a nice hover animation */
+    .profile-ejs .profile-nav button::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        height: .15em;
+        background-color: var(--theme1);
+        transform: scaleX(0%);
+        transform-origin: left;
+        transition: transform .25s;
     }
 
-    .profile-ejs .profile-content .event {
+    .profile-ejs .profile-nav button:hover {
+        cursor: pointer;
+    }
+
+    .profile-ejs .profile-nav button:hover::before {
+        transform: scaleX(100%);
+    }
+
+    .profile-ejs .profile-content .right-content {
+        width: 70%;
+        position: relative;
+        margin: 0 auto;
+    }
+
+    .profile-ejs .profile-content .total-donations {
+        width: fit-content;
+        margin: 0 0 .5em;
+        border-bottom: 5px solid var(--theme1);
+        font-family: "Gochi Hand";
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        line-height: 75%;
+    }
+
+    /* Styles to either hide or show the right content */
+    .profile-ejs #events-list[data-visible="true"],
+    .profile-ejs #users-list[data-visible="true"],
+    .profile-ejs #settings[data-visible="true"] {
+        opacity: 100%;
+        position: relative;
+        transform: translateY(0%);
+        transition: opacity 1s, transform .5s;
+    }
+
+    /* Styles to either hide or show the right content */
+    .profile-ejs #events-list[data-visible="false"],
+    .profile-ejs #users-list[data-visible="false"],
+    .profile-ejs #settings[data-visible="false"] {
+        opacity: 0%; 
+        position: absolute;
+        pointer-events: none;
+        transform: translateY(-10%);       
+    }
+
+    .profile-ejs .profile-content .event,
+    .profile-ejs .profile-content .user {
         position: relative;
         padding: 1em 1em 3em 1em;
         margin-bottom: .5em;
@@ -514,22 +563,44 @@
         transition: all .25s;
     }
 
-    .profile-ejs .profile-content .event:hover {
+    .profile-ejs .profile-content .event:hover,
+    .profile-ejs .profile-content .user:hover {
         box-shadow: 2px 2px .5em var(--theme1);
         border-color: var(--background-secondary);
     }
  
 
-    .profile-ejs .profile-content .event > h2 {
+    .profile-ejs .profile-content .event > h2,
+    .profile-ejs .profile-content .user > h2 {
         width: fit-content;
         border-bottom: 1px solid var(--foreground-color);
     }
 
-    .profile-ejs .profile-content .event > ul {
+    .profile-ejs .profile-content .event > ul,
+    .profile-ejs .profile-content .user > ul {
         margin: 0 1em;
     }
 
-    .profile-ejs .profile-content .event button {
+    .profile-ejs .profile-content .event button,
+    .profile-ejs .profile-content .user button {
+        position: absolute;
+        bottom: .5em;
+        right: .5em;
+    }
+    
+    .profile-ejs #settings {
+        position: relative;
+        padding: 1em;
+        border-radius: .5em;
+        border: 1px solid var(--theme1);    
+    }
+
+    .profile-ejs #settings h3 {
+        border-bottom: 1px solid var(--foreground-color);
+        width: fit-content;
+    }
+
+    .profile-ejs #settings button[type="submit"] {
         position: absolute;
         bottom: .5em;
         right: .5em;
@@ -628,6 +699,7 @@
         -ms-border-radius: 50%;
         -o-border-radius: 50%;
         border-radius: 50%;
+        background-color: var(--background-secondary);
     }
 
     /* Custom logo that is in the navbar */
