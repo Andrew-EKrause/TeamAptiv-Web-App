@@ -693,23 +693,6 @@ app.get("/admin_profile", function(req, res){
                                         }
                                     });
                                 }
-
-                                // --> KEEP THIS FOR NOW; MAYBE DELETE LATER!!!
-                                // // The counter 'j' determines when the results should be returned
-                                // // from the callback function and rendered on the user profile page.
-                                // if (j == 0) {
-
-                                //     // Render the ADMIN profile page and determine if ADMIN is undefined.
-                                //     res.render("admin_profile", {  
-                                //         user: req.user,
-                                //         listOfUserEvents: listOfUserEvents,
-                                //         listOfUsers: listOfUsers,
-                                //         successCreated: req.flash("successCreated"),
-                                //         failureNotCreated: req.flash("failureNotCreated"),
-                                //         sucessCancelled: req.flash("sucessCancelled"),
-                                //         permissionDenied: req.flash("permissionDenied")
-                                //     });
-                                // }
                             });
                         }
 
@@ -751,60 +734,6 @@ app.get("/admin_profile", function(req, res){
                     }
                 }
             });
-
-            // --> KEEP FOR NOW; DELETE LATER!!!
-            // // If the ADMIN has events they have signed up for, display the events
-            // // on the ADMIN's profile page. However, if the ADMIN has not signed up
-            // // for any events and has none, simply display the ADMIN's profile.
-            // if(userEventIds.length > 0) {
-
-            //     // Create variables to track the objects in the database and
-            //     // to determine when to display the objects in the ADMIN profile.
-            //     var i = 0;
-            //     var j = userEventIds.length;
-
-            //     // Go through the objects stored in the given ADMIN collection and
-            //     // look them up in the database by their ID. Then add the objects
-            //     // found as a result of the lookup to a list and pass it to the page.
-            //     for(i = 0; i < userEventIds.length; i++) {
-
-            //         // Use the find by ID function to return the event object for the ADMIN.
-            //         EventModel.findById(userEventIds[i], function(err, results){
-            //             if(err) {
-            //                 console.log(err);
-            //             } else {
-            //                 listOfUserEvents.push(results);
-            //                 j -= 1;
-            //             }
-
-            //             // The counter 'j' determines when the results should be returned
-            //             // from the callback function and rendered on the user profile page.
-            //             if (j == 0) {
-
-            //                 // Render the ADMIN profile page and determine if ADMIN is undefined.
-            //                 res.render("admin_profile", {  
-            //                     user: req.user,
-            //                     listOfUserEvents: listOfUserEvents,
-            //                     successCreated: req.flash("successCreated"),
-            //                     failureNotCreated: req.flash("failureNotCreated"),
-            //                     sucessCancelled: req.flash("sucessCancelled")
-            //                 });
-            //             }
-            //         });
-            //     }
-
-            // // If there are no events for the admin, then
-            // // render the admin profile on the screen.
-            // } else {
-            //     console.log(listOfUsers);
-            //     res.render("admin_profile", {  
-            //         user: req.user,
-            //         listOfUserEvents: listOfUserEvents,
-            //         successCreated: req.flash("successCreated"),
-            //         failureNotCreated: req.flash("failureNotCreated"),
-            //         sucessCancelled: req.flash("sucessCancelled")
-            //     });
-            // }
 
         } else {
             req.flash("alreadyCreated", "Your account has been deactivated. Contact admin at email@address for assistance");

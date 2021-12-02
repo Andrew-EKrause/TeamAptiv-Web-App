@@ -42,7 +42,9 @@
                             <h1><%= user.firstName %> <%= user.lastName %></h1>
                             <p>Status: <%= user.status %></p>
                             <p>My Donations: $<%= user.givenDonations %></p>
-                            <p>User Donations to Org: $<%= orgInfo[0].receivedDonations %></p>
+                            <% if(orgInfo != undefined) { %>
+                                <p>User Donations to Org: $<%= orgInfo[0].receivedDonations %></p>
+                            <% } %>
                         </div>
                     </header>
 
