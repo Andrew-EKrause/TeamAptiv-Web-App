@@ -190,88 +190,120 @@
                     LOGIN.EJS / REGISTER.EJS STYLES
  ==================================================================== */
 
-    /* Get rid of the default bootstrap padding */
-    .login-register-ejs .row > * {
-        padding: 0;
-    }
-
-    .login-register-ejs {
-        color: var(--foreground-color);
-    }
-    
-    .login-register-ejs .sheet {
+    .login-register-ejs .login-register-card {
+        width: clamp(25em, 60vw, 40em);
+        margin: 3em auto;
         border-radius: .5em;
         background-color: var(--background-secondary);
         box-shadow: 5px 5px 1em var(--theme1);
-        transition: all .5s; 
+        transition: box-shadow .25s;
     }
 
-    .login-register-ejs .sheet > header {
-        text-align: center;
-        padding: 1em;
+    .login-register-ejs .login-register-card:hover {
+        box-shadow: 5px 5px 2em var(--theme1);
+    }
+
+    .login-register-card header {
+        padding: 1em 1em 1.5em 1em;
+        border-bottom: 5px solid var(--theme1);
         border-radius: .5em .5em 0 0;
         background-color: var(--foreground-color);
-        color: var(--background-primary);
+        color: var(--background-secondary);
+        line-height: 30%;
+        text-align: center;
     }
 
-    .login-register-ejs .sheet > header > a {
-        display: block;
-        font-size: 3em;
-        padding: 0;
-        margin-bottom: .25em;
-        color: var(--background-primary);
-        border-bottom: 1px solid var(--foreground-color);
-        transition: all .5s;
-    }
-
-    /* Make the login/register font larger. */
-    .login-register-font {
-        font-size: x-large;
-        /* POTENTIALLY GET RID OF AND SELECT WITH A COMBINATOR AND CARD */
-    }
-
-    /* Adds some padding between the form elements */
-    .form-group {
-        padding: .5em;
-    }
-
-    /* Changes the styles of the inputs in the form */
-    .form-control {
-        background-color: transparent;
-        border: none;
-        border-bottom: 1px solid lightgray;
-    }
-
-    /* Changes style of inputs when they are focused on */
-    .form-control:focus {
-        background-color: transparent;
-        color: #747474;
-    }
-
-    /* Make the anchor tag for the google link have no text decoration */
-    .google-link {
+    .login-register-card header a {
+        color: var(--background-secondary);
         text-decoration: none;
+        font-size: 4rem; 
+        transform: translateY(0%);
+        transition: color .25s;
     }
 
-    /* Style the google link logo */
-    .google-link > i {
-        color: var(--theme2);
-        border: 1px solid var(--theme2); /* FIXME */
-        border-radius: 50%;
+    .login-register-card header a:hover {
+        color: var(--theme1);
+    }
+
+    .login-register-card header small {
+        font-size: 1rem;
+    }
+
+    .login-register-card .credentials {
+        width: 60%;
+        margin: auto;
+        padding: 2em 0;
+    }
+
+    .login-register-card .credentials input {
+        font-size: 1.25rem;
+        margin: .5em 0;
+    }
+
+    .login-register-card .credentials button {
+        width: 100%;
+        background-color: var(--theme1);
+        color: var(--background-secondary);
+        border: none;
+        border-radius: .20em;
+        padding: .375rem .75rem;
+        font-size: 1.25rem;
+    }
+
+    .login-register-card .bottom > * {
+        display: block;
+        padding: .375rem .75rem;
+        margin: .5em 0;
+        text-align: center;
+        font-size: 1.25rem;
+    }
+
+    .login-register-card .bottom > small {
+        overflow: hidden;
+    }
+
+    /* This adds a horizontal line around the 'or' in the login/register page */
+    .login-register-card .bottom > small::before,
+    .login-register-card .bottom > small::after {
+        content: "";
+        display: inline-block;
+        position: relative;
+        vertical-align: middle;
+        width: 50%;
+        height: 1px;
+        background-color: var(--foreground-color);
+    }
+
+    .login-register-card .bottom > small::before {
+        right: .5em;
+        margin-left: -50%;
+    }
+
+    .login-register-card .bottom > small::after {
+        left: 0.5em;
+        margin-right: -50%;
+    }
+
+    .login-register-card .bottom .google-link {
+        text-decoration: none;
+        color: var(--foreground-color);
+        border: 1px solid var(--foreground-color);
+        border-radius: .20em;
+    }
+
+    .login-register-card .bottom .google-link > i {
+        color: var(--theme1);
         padding: .25em;
     }
 
-    .login-register-ejs .sheet:hover {
-        box-shadow: 7px 7px 2em var(--theme1);
+    .login-register-card .bottom b {
+        margin-top: 2em;
+        font-weight: 400;
     }
 
-    /* Set the hover state of the google link */
-    .google-link:hover {
-        text-decoration: underline;
-    }
-
-    .login-register-ejs .sheet > header a:hover {
-        border-bottom: 1px solid var(--background-primary);
+    .login-register-card .bottom b > a {
+        text-decoration: none;
+        color: var(--theme1);
     }
 
 /* ====================================================================
@@ -320,6 +352,7 @@
     .events-ejs .event > h2 {
         font-size: 2.5em;
         border-bottom: 1px solid var(--foreground-color);
+        width: fit-content;
         transition: border .5s;
     }
 
@@ -387,6 +420,7 @@
  .specific-event-ejs .event > h1 {
      font-size: 3em;
      border-bottom: 1px solid var(--theme1);
+     width: fit-content;
  }
 
  .specific-event-ejs .event li {
@@ -410,6 +444,7 @@
  .specific-event-ejs .volunteer-donate .form-title {
      font-size: 1.75em;
      border-bottom: 1px solid var(--theme1);
+     margin-bottom: .5em;
  }
 
  .specific-event-ejs .volunteer .form-title {
@@ -610,27 +645,49 @@
                         EVENT_CREATION STYLES
  ==================================================================== */
 
-    /* Get rid of the default padding for the row */
-    .event-creation-ejs .row > * {
-        padding: 0;
-    }
-
-    .event-creation-ejs .sheet {
-        background-color: white;
+    .event-creation-ejs .create-card {
+        width: clamp(30em, 60vw, 60em); 
+        position: relative;
+        margin: 3em auto;   
         box-shadow: 5px 5px 1em var(--theme1); 
+        background-color: var(--background-secondary);
         border-radius: .5em;
-        transition: all .6s;    
+        transition: box-shadow .25s;
     }
 
-    .event-creation-ejs .sheet > header {
-        background-color: var(--foreground-color);
-        color: var(--background-primary);
+    .event-creation-ejs .create-card:hover {
+        box-shadow: 5px 5px 2em var(--theme1);
+    }
+
+    .create-card header {
         padding: 1em;
+        border-bottom: 5px solid var(--theme1);
         border-radius: .5em .5em 0 0;
+        background-color: var(--foreground-color);
+        color: var(--background-secondary);
+        text-align: center;
     }
 
-    .event-creation-ejs .sheet:hover {
-        box-shadow: 7px 7px 2em var(--theme1); 
+    .create-card header > h1 {
+        font-size: 3rem;
+        text-decoration: underline;
+    }
+
+    .create-card .info {
+        width: 60%;
+        margin: auto;
+        padding: 2em 0 5em;
+    }
+
+    .create-card .info input {
+        font-size: 1.25rem;
+        margin: .5em 0;
+    }
+
+    .create-card .info button {
+        display: inline;
+        float: left;
+        margin-right: .5em;
     }
 
  /* ====================================================================
@@ -652,7 +709,6 @@
     }
 
     .about-ejs .mission, .about-ejs .donate {
-        /* flex: 1; */
         margin: 1.5em;
         padding: 1em;
         background-color: var(--background-secondary);
@@ -671,6 +727,7 @@
 
     .about-ejs .mission > h2, .about-ejs .donate > h2 {
         border-bottom: 1px solid var(--foreground-color);
+        width: fit-content;
     }
 
     .about-ejs .mission:hover, .about-ejs .donate:hover {

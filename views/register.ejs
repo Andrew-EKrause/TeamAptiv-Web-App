@@ -25,59 +25,43 @@
 <%- include('./partials/login-register_header.ejs') %>
 
     <div class="login-register-ejs">
-        <div class="container mt-5 mb-5">
-            <div class="row">
-                <div class="sheet col-lg-6 col-md-8 col-sm-10 col-xs-12 mx-auto">
-                    <!-- Header for the login form -->
-                    <header>
-                        <a class="navbar-brand" href="/home">Team Aptiv</a>
-                        <p>Connect | Volunteer | Donate.</p>
-                    </header>
+        <div class="login-register-card">            
+            <!-- Header for the login form -->
+            <header>
+                <h1><a href="/home">Team Aptiv</a></h1>
+                <small>Connect | Volunteer | Donate.</small>
+            </header>
 
-                    <!-- 
-                        Include EJS to display any error messages to the user if
-                        they attempt to register with a username that already exists.
-                    -->
-                    <% if(alreadyCreated.length > 0) { %>
-                        <div class="card-body elementToFadeInAndOut message-format">
-                            <h1 class="incorrect-input"><%= alreadyCreated %></h1>
-                        </div>
-                    <% } %>
+            <!-- 
+                Include EJS to display any error messages to the user if
+                they attempt to register with a username that already exists.
+            -->
+            <% if(alreadyCreated.length > 0) { %>
+                <div class="card-body elementToFadeInAndOut message-format">
+                    <h1 class="incorrect-input"><%= alreadyCreated %></h1>
+                </div>
+            <% } %>
 
-                    <main class="p-3">
-                        <!-- Makes a POST request to the /register route -->
-                        <form class="form-horizontal" action="/register" method="POST">
-                            <div class="form-group">
-                                <label class="login-register-font control-label" for="fname">First Name</label>
-                                <input type="fname" class="login-register-font form-control" name="fname" maxlength="100" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="login-register-font control-label" for="lname">Last Name</label>
-                                <input type="lname" class="login-register-font form-control" name="lname" maxlength="100" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="login-register-font control-label" for="email">Email</label>
-                                <input type="email" class="login-register-font form-control" name="username" maxlength="100" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="login-register-font control-label" for="password">Password</label>
-                                <input type="password" class="login-register-font form-control" name="password" maxlength="100" required>
-                            </div>
-                            <button type="submit" class="mt-3 btn btn-lg btn-outline-light d-flex mx-auto">Register</button>
-                        </form>
+            <div class="credentials">
+                <!-- Makes a POST request to the /register route -->
+                <form action="/register" method="POST">
+                    <input placeholder="First name" type="fname" class="login-register-font form-control" name="fname" maxlength="100" required>
+                    <input placeholder="Last name" type="lname" class="login-register-font form-control" name="lname" maxlength="100" required>
+                    <input placeholder="Email address" type="email" class="login-register-font form-control" name="username" maxlength="100" required>
+                    <input placeholder="password" type="password" class="login-register-font form-control" name="password" maxlength="100" required>
+                    <button type="submit">Register</button>
+                </form>
 
-                        <!-- Authentication sign up with Google -->
-                        <div class="text-center">
-                            <h5 class="m-3">or<h5>
+                <!-- Authentication sign up with Google -->
+                <div class="bottom">
+                    <small>or</small>
 
-                            <a class="google-link" href="/auth/google" role="button">
-                                <i class="fab fa-google"></i>
-                                Sign up with Google
-                            </a>
-                            <!-- Add a link to login if the user already has an account -->
-                            <h5>Already have an account? <a class="reference-link" href="/login">Login Here</a></h5>
-                        </div>
-                    </main>
+                    <a class="google-link" href="/auth/google" role="button">
+                        <i class="fab fa-google"></i>
+                        Continue with Google
+                    </a>
+                    <!-- Add a link to login if the user already has an account -->
+                    <b>Already have an account?<br><a class="reference-link" href="/login">Login</a></b>
                 </div>
             </div>
         </div>
