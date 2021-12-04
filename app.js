@@ -1354,8 +1354,8 @@ app.post("/admin_cancel_event", function(req, res){
     // event that the ADMIN wants to cancel.
     var cancelEvent  = req.body.canceleventidentifier;
 
-    // ADD THE EVENT THAT THE ADMIN IS CANCELLING TO THEIR PROFILE SO THEY CAN KEEP AN EYE ON IT
-    // IF YOU END UP IMPLEMENTING THE "UNCANCEL" FEATURE!!!
+    // ADD THE EVENT THAT THE ADMIN IS CANCELLING TO THEIR PROFILE UNDER A "CANCELLED EVENTS" BUTTON
+    // SO THEY CAN KEEP AN EYE ON IT IF YOU END UP IMPLEMENTING THE "UNCANCEL" FEATURE!!!
 
     // Change the value representing whether or not
     // the event has been cancelled by the ADMIN to
@@ -1374,7 +1374,7 @@ app.post("/admin_cancel_event", function(req, res){
     
     // Redirect back to the events page after the ADMIN
     // cancels the event and flash a success message.
-    req.flash("successCancelled", "You have cancelled the event. Event stored in profile.");
+    req.flash("successCancelled", "You have cancelled the event."); // "Event stored in profile."
     res.redirect("/events");
 });
 
