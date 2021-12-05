@@ -18,4 +18,15 @@ TODOs:
 6. Anything else??? 
 -----------------------------------------
 
+//--> KEEP THIS CODE FOR NOW; DELETE LATER
+// res.render("admin_profile", {  
+//     user: req.user,
+//     listOfUserEvents: listOfUserEvents,
+//     listOfUsers: listOfUsers,
+//     successCreated: req.flash("successCreated"),
+//     failureNotCreated: req.flash("failureNotCreated"),
+//     successCancelled: req.flash("successCancelled"),
+//     permissionDenied: req.flash("permissionDenied")
+// });
+
 {% endcomment %}

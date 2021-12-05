@@ -83,6 +83,15 @@
 
     /* ~~~~~~~~~~~~~ General Class Selectors ~~~~~~~~~~~~~ */
 
+    /* Add an outline to the text in the footer of each page */
+    .text-outline {
+        text-shadow:
+        -0.063rem -0.063rem 0 #000,
+        0.063rem -0.063rem 0 #000,
+        -0.063rem 0.063rem 0 #000,
+        0.063rem 0.063rem 0 #000;
+    }
+
     /* Set styles for the background images of each page */
     .background {
         position: fixed;

@@ -146,8 +146,6 @@ const userSchema = new mongoose.Schema({
         sparse: true
     },
 
-    // MAY HAVE TO CREATE ANOTHER ID FIELD...
-
     // First name, last name, and picture of user.
     firstName: String,
     lastName: String,
@@ -175,6 +173,12 @@ const userSchema = new mongoose.Schema({
 
     // Total number of donations to all events.
     givenDonations: Number,
+
+    // Total time spent volunteering. // --> !!! KEEP AN EYE ON THIS!
+    volunteeredTime: {
+        type: String,
+        default: "0:00"
+    },
 
     // Array of times that the user is attending.
     // Also contains the date of the event.
@@ -629,113 +633,121 @@ app.get("/admin_profile", function(req, res){
            
             // Create a variable for storing the user data to be
             // passed to the front end for the ADMIN profile.
-            // Also create a counter variable for the callback.
             var listOfUsers;
 
-            // Find all of the users in the database and add them
-            // to a variable that will be passed to the ADMIN
-            // profile page.
-            UserModel.find({}, function(err, users){
-               
-                // Obtain the user data from the database.
+            // Create a variable for storing the event data to be
+            // passed to the front end for the ADMIN profile.
+            var listOfCancelledEvents;
+
+            // Finnd all of the events in the database and add them
+            // to a variable that will be passed to the ADMIN profile
+            // page to be manipulated. 
+            EventModel.find({}, function(err, events){
                 if(err) {
                     console.log(err);
                 } else {
+                    
+                    // Create a variable for storing the cancelled 
+                    // events in the ADMIN'S profile.
+                    listOfCancelledEvents = events
+                
+                    // Find all of the users in the database and add them
+                    // to a variable that will be passed to the ADMIN
+                    // profile page.
+                    UserModel.find({}, function(err, users){
+                    
+                        // Obtain the user data from the database.
+                        if(err) {
+                            console.log(err);
+                        } else {
 
-                    // Create a variable for storing the users in the database.
-                    listOfUsers = users;
+                            // Create a variable for storing the users in the database.
+                            listOfUsers = users;
 
-                    // If the ADMIN has events they have signed up for, display the events
-                    // on the ADMIN's profile page. However, if the ADMIN has not signed up
-                    // for any events and has none, simply display the ADMIN's profile.
-                    if(userEventIds.length > 0) {
+                            // If the ADMIN has events they have signed up for, display the events
+                            // on the ADMIN's profile page. However, if the ADMIN has not signed up
+                            // for any events and has none, simply display the ADMIN's profile.
+                            if(userEventIds.length > 0) {
 
-                        // Create variables to track the objects in the database and
-                        // to determine when to display the objects in the ADMIN profile.
-                        var i = 0;
-                        var j = userEventIds.length;
+                                // Create variables to track the objects in the database and
+                                // to determine when to display the objects in the ADMIN profile.
+                                var i = 0;
+                                var j = userEventIds.length;
 
-                        // Go through the objects stored in the given ADMIN collection and
-                        // look them up in the database by their ID. Then add the objects
-                        // found as a result of the lookup to a list and pass it to the page.
-                        for(i = 0; i < userEventIds.length; i++) {
+                                // Go through the objects stored in the given ADMIN collection and
+                                // look them up in the database by their ID. Then add the objects
+                                // found as a result of the lookup to a list and pass it to the page.
+                                for(i = 0; i < userEventIds.length; i++) {
 
-                            // Use the find by ID function to return the event object for the ADMIN.
-                            EventModel.findById(userEventIds[i], function(err, results){
-                                if(err) {
-                                    console.log(err);
-                                } else {
-                                    listOfUserEvents.push(results);
-                                    j -= 1;
-                                }
-
-                                // The counter 'j' determines when the results should be returned
-                                // from the callback function and rendered on the user profile page.
-                                if (j == 0) {
-                                   
-                                    // Obtain the information from the organization data model so
-                                    // that the admin can view the donations made to the Team Aptiv
-                                    // organization.
-                                    OrgModel.find({}, function(err, orgInfo){
+                                    // Use the find by ID function to return the event object for the ADMIN.
+                                    EventModel.findById(userEventIds[i], function(err, results){
                                         if(err) {
                                             console.log(err);
                                         } else {
-                                            // Render the ADMIN profile page and determine if ADMIN is undefined.
-                                            res.render("admin_profile", {  
-                                                user: req.user,
-                                                listOfUserEvents: listOfUserEvents,
-                                                listOfUsers: listOfUsers,
-                                                orgInfo: orgInfo,
-                                                successCreated: req.flash("successCreated"),
-                                                failureNotCreated: req.flash("failureNotCreated"),
-                                                successCancelled: req.flash("successCancelled"),
-                                                permissionDenied: req.flash("permissionDenied")
+                                            listOfUserEvents.push(results);
+                                            j -= 1;
+                                        }
+
+                                        // The counter 'j' determines when the results should be returned
+                                        // from the callback function and rendered on the user profile page.
+                                        if (j == 0) {
+                                        
+                                            // Obtain the information from the organization data model so
+                                            // that the admin can view the donations made to the Team Aptiv
+                                            // organization.
+                                            OrgModel.find({}, function(err, orgInfo){
+                                                if(err) {
+                                                    console.log(err);
+                                                } else {
+                                                    // Render the ADMIN profile page and determine if ADMIN is undefined.
+                                                    res.render("admin_profile", {  
+                                                        user: req.user,
+                                                        listOfUserEvents: listOfUserEvents,
+                                                        listOfCancelledEvents: listOfCancelledEvents,
+                                                        listOfUsers: listOfUsers,
+                                                        orgInfo: orgInfo,
+                                                        successCreated: req.flash("successCreated"),
+                                                        failureNotCreated: req.flash("failureNotCreated"),
+                                                        successCancelled: req.flash("successCancelled"),
+                                                        permissionDenied: req.flash("permissionDenied")
+                                                    });
+                                                }
                                             });
                                         }
                                     });
                                 }
-                            });
-                        }
 
-                    // If there are no events for the admin, then
-                    // render the admin profile on the screen.
-                    } else {
-
-                        // Obtain the information from the organization data model so
-                        // that the admin can view the donations made to the Team Aptiv
-                        // organization.
-                        OrgModel.find({}, function(err, orgInfo){
-                            if(err) {
-                                console.log(err);
+                            // If there are no events for the admin, then
+                            // render the admin profile on the screen.
                             } else {
-                                // Render the ADMIN profile page and determine if ADMIN is undefined.
-                                res.render("admin_profile", {  
-                                    user: req.user,
-                                    listOfUserEvents: listOfUserEvents,
-                                    listOfUsers: listOfUsers,
-                                    orgInfo: orgInfo,
-                                    successCreated: req.flash("successCreated"),
-                                    failureNotCreated: req.flash("failureNotCreated"),
-                                    successCancelled: req.flash("successCancelled"),
-                                    permissionDenied: req.flash("permissionDenied")
+
+                                // Obtain the information from the organization data model so
+                                // that the admin can view the donations made to the Team Aptiv
+                                // organization.
+                                OrgModel.find({}, function(err, orgInfo){
+                                    if(err) {
+                                        console.log(err);
+                                    } else {
+                                        // Render the ADMIN profile page and determine if ADMIN is undefined.
+                                        res.render("admin_profile", {  
+                                            user: req.user,
+                                            listOfUserEvents: listOfUserEvents,
+                                            listOfCancelledEvents: listOfCancelledEvents, 
+                                            listOfUsers: listOfUsers,
+                                            orgInfo: orgInfo,
+                                            successCreated: req.flash("successCreated"),
+                                            failureNotCreated: req.flash("failureNotCreated"),
+                                            successCancelled: req.flash("successCancelled"),
+                                            permissionDenied: req.flash("permissionDenied")
+                                        });
+                                    }
                                 });
                             }
-                        });
-
-                        // --> KEEP FOR NOW; MAYBE DELETE LATER!!!
-                        // res.render("admin_profile", {  
-                        //     user: req.user,
-                        //     listOfUserEvents: listOfUserEvents,
-                        //     listOfUsers: listOfUsers,
-                        //     successCreated: req.flash("successCreated"),
-                        //     failureNotCreated: req.flash("failureNotCreated"),
-                        //     successCancelled: req.flash("successCancelled"),
-                        //     permissionDenied: req.flash("permissionDenied")
-                        // });
-                    }
+                        }
+                    });               
                 }
             });
-
+            
         } else {
             req.flash("alreadyCreated", "Your account has been deactivated. Contact admin for assistance");
             res.redirect("/register");
@@ -1054,12 +1066,13 @@ app.post("/register", function(req, res){
                 // specifically for the ADMIN.
                 const adminUser = new UserModel({
                     userID: user_ID,
-                    firstName: req.body.fname.trim(), // --> KEEP AN EYE ON THIS TRIM FUNCTION!!!
+                    firstName: req.body.fname.trim(),
                     lastName: req.body.lname.trim(),
                     isActive: true,
                     username: req.body.username.trim(),
                     status: "Admin",
                     givenDonations: 0,
+                    volunteeredTime: "0:00",
                     timesAttending: [user_IDString]
                 });
 
@@ -1081,11 +1094,12 @@ app.post("/register", function(req, res){
                 // to pass into the register method.
                 const newUser = new UserModel({
                     userID: user_ID,
-                    firstName: req.body.fname.trim(), // --> KEEP AN EYE ON THIS TRIM FUNCTION!!!
+                    firstName: req.body.fname.trim(),
                     lastName: req.body.lname.trim(),
                     isActive: true,
                     username: req.body.username.trim(),
                     givenDonations: 0,
+                    volunteeredTime: "0:00",
                     timesAttending: [user_IDString]
                 });
 
@@ -1151,9 +1165,6 @@ app.post("/create_event", function(req, res){
 // Create a post request for the ADMIN so when they want to
 // add an event, that event is added to the database.
 app.post("/added_event", function(req, res){
-
-
-    console.log(req.body.eventdate);
 
     // Create a new event ID for the developers to use and track.
     // Also create a string version of the event ID to put in the
@@ -1357,9 +1368,6 @@ app.post("/admin_cancel_event", function(req, res){
     // event that the ADMIN wants to cancel.
     var cancelEvent  = req.body.canceleventidentifier;
 
-    // ADD THE EVENT THAT THE ADMIN IS CANCELLING TO THEIR PROFILE UNDER A "CANCELLED EVENTS" BUTTON
-    // SO THEY CAN KEEP AN EYE ON IT IF YOU END UP IMPLEMENTING THE "UNCANCEL" FEATURE!!!
-
     // Change the value representing whether or not
     // the event has been cancelled by the ADMIN to
     // be "cancelled" by the admin.
@@ -1377,58 +1385,26 @@ app.post("/admin_cancel_event", function(req, res){
     
     // Redirect back to the events page after the ADMIN
     // cancels the event and flash a success message.
-    req.flash("successCancelled", "You have cancelled the event."); // "Event stored in profile."
+    req.flash("successCancelled", "You have cancelled the event."); 
     res.redirect("/events");
 });
 
-// // Create a post request for when the
-// // ADMIN wants to reschedule an event.
+
+
+
+// --> !!! FRONT END WILL IMPLEMENT THIS AT A LATER TIME !!!
+// --> !!! UNCOMMENT THIS WHEN YOU PLAN ON FINISHING THE IMPLEMENTATION OF IT IN THE FRONTEND !!!
+// Create a post request for when the
+// ADMIN wants to reschedule an event.
 // app.post("/admin_reschedule_event", function(req, res){
         
 //     // Create a variable to store the id of the
 //     // event that the ADMIN wants to cancel.
 //     var rescheduleEvent  = req.body.rescheduleeventidentifier;
 
-//     // Get the ADMIN user info to update the ADMIN's profile page.
-//     var user = req.user;
-
-
-
-//     // IF YOU ADD THE "UNCANCEL" FEATURE, CHANGE THIS CODE!!!
-//     // YOU WILL ALSO HAVE TO UPDATE THE USER MODEL IN THE ROUTE
-//     // WHERE THE ADMIN CANCELS AN EVENT AS WELL!!!
-//     // Go through the list of events in the user events attribute
-//     // and check if the event is already in the user db.
-//     listOfUserEvents.forEach(function(eventInUserProfile) {
-
-//         // Check if the event already exists in the user's events section.
-//         if(String(eventInUserProfile) == String(requestedEventId)) {
-//             alreadyAdded = true;
-//         }
-//     });
-
-//     // If the event object itself has NOT already been added, add it.
-//     if(alreadyAdded == false) {
-//         // Add the event to the user's profile so that you can list
-//         // the event that the user volunteered for in their profile.
-//         UserModel.findOneAndUpdate(
-//             { _id: user.id },
-//             { $push: { userEvents: requestedEventId } },
-//             function (error, success) {
-//                 if (error) {
-//                     console.log("Error: " + error);
-//                 } else {
-//                     //console.log("Success: " + success);
-//                 }
-//             }
-//         );
-//     }
-
-
-
 //     // Change the value representing whether or not
-//     // the event has been cancelled by the ADMIN to 
-//     // be "uncancelled".
+//     // the event has been cancelled by the ADMIN to
+//     // be "cancelled" by the admin.
 //     EventModel.findOneAndUpdate(
 //         { _id: rescheduleEvent },
 //         { $set: { eventActive: true} },                  
@@ -1442,10 +1418,13 @@ app.post("/admin_cancel_event", function(req, res){
 //     );
     
 //     // Redirect back to the events page after the ADMIN
-//     // cancels the event and flash a success message.
+//     // reschedules the event and flash a success message.
 //     req.flash("successCancelled", "You have rescheduled the event.");
 //     res.redirect("/admin_profile");
 // });
+
+
+
 
 // Create a post request for when the ADMIN wants to cancel
 // creating a new event.
@@ -1563,6 +1542,78 @@ app.post("/cancel_event", function(req, res){
                     console.log(err);
                 } else {
 
+
+
+
+
+
+
+
+
+
+
+                    // --> MAY BE ERROR!!!
+                    // FUNCTION USED FOR CALCULATING VOLUNTEER HOURS
+                    // Calculate length of the timeslot
+                    function diffInTime(start, end, total) {
+
+                        // Get Hours and Minutes for Start and End times
+                        start = start.split(":");
+                        startHours = start[0];
+                        startMin = start[1];
+                        end = end.split(":");
+                        endHours = end[0];
+                        endMin = end[1];
+
+                        // Subtract Ints
+                        var sumHours = parseInt(endHours) - parseInt(startHours);
+                        var sumMin = parseInt(endMin) - parseInt(startMin);
+
+                        // Calculate valid time
+                        while (sumMin < 0) {
+                            sumHours = sumHours - 1;
+                            sumMin = sumMin + 60;
+                        }
+
+                        // Get Hours and Minutes for total volunteer time
+                        total = total.split(":");
+                        var totalHours = total[0];
+                        var totalMin = total[1];
+
+                        // Subtract Ints
+                        var hours = parseInt(totalHours) - parseInt(sumHours);
+                        var min = parseInt(totalMin) - parseInt(sumMin);
+
+                        // Calculate valid time
+                        while (min < 0) {
+                            hours = hours - 1;
+                            min = min + 60;
+                        }
+
+                        // Return valid string
+                        return hours + ":" + (min <= 9 ? "0" : "") + min;
+                    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    
                     // ------------------- CANCEL Times User Wants to Get Rid Of -------------------
                     // Check whether the user selected one or multiple timeslots to remove.
                     if(Array.isArray(atLeastOneTime) == true) {
@@ -1573,7 +1624,6 @@ app.post("/cancel_event", function(req, res){
                         // while also updating the other event information.
                         atLeastOneTime.forEach(function(timeSlot) {
 
-                            //console.log(timeSlot);
                             // Create variables for simplifying the event time slot
                             // when it is added back to the different data components.
                             var timeSlotSplit = timeSlot.split(" ");
@@ -1641,6 +1691,68 @@ app.post("/cancel_event", function(req, res){
                                     }
                                 );
                             }
+                            
+
+
+
+
+
+
+
+                            // --> MAY BE ERROR!!!
+                            // MILITARY TIME
+                            if (splitTimeslot[8] == "P.M.") {
+
+                                var splitEnd = endTime.split(":");
+                                if (splitEnd[0] == 12) { splitEnd[0] = 0; }
+                                endTime = (parseInt(splitEnd[0]) + 12) + ":" + splitEnd[1];
+
+                            } else if (endTime.split(":")[0] == 12) {
+
+                                endTime = "0:" + endTime.split(":")[1];
+                            }
+
+                            var totalVolunteerTime = diffInTime(startTime, endTime, user.volunteeredTime);
+
+                            UserModel.findOneAndUpdate(
+                                { _id: user.id },
+                                { $set: { volunteeredTime: totalVolunteerTime } },                 
+                                function (error, success) {
+                                    if (error) {
+                                        console.log("Error: " + error);
+                                    } else {
+                                        // console.log("User Success: " + success);
+                                    }
+                                }
+                            );
+
+                            // Calculate the total volunteer time after removal
+                            // Add the new total time to the user database.
+                            var splitTimeslot = timeSlot.split(" ");
+                            var startTime = splitTimeslot[4];
+                            var endTime = splitTimeslot[7];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         });
 
                     } else {
@@ -1691,6 +1803,77 @@ app.post("/cancel_event", function(req, res){
                                 }
                             }
                         );
+
+
+
+
+
+
+
+
+
+
+
+
+                        // --> MAY BE ERROR!!!
+                        // Calculate the total volunteer time after removal
+                        // Add the new total time to the user database.
+                        var splitTimeslot = atLeastOneTime.split(" ");
+                        var startTime = splitTimeslot[4];
+                        var endTime = splitTimeslot[7];
+
+                        // MILITARY TIME
+                        if (splitTimeslot[5] == "P.M.") {
+                            var splitStart = startTime.split(":");
+                            if (splitStart[0] == 12) { splitStart[0] = 0; }
+                            startTime = (parseInt(splitStart[0]) + 12) + ":" + splitStart[1];
+
+                        } else if (startTime.split(":")[0] == 12) {
+                            startTime = "0:" + startTime.split(":")[1];
+                        }
+
+                        // MILITARY TIME
+                        if (splitTimeslot[8] == "P.M.") {
+                            var splitEnd = endTime.split(":");
+                            if (splitEnd[0] == 12) { splitEnd[0] = 0; }
+                            endTime = (parseInt(splitEnd[0]) + 12) + ":" + splitEnd[1];
+
+                        } else if (endTime.split(":")[0] == 12) {
+                            endTime = "0:" + endTime.split(":")[1];
+                        }
+
+                        var totalVolunteerTime = diffInTime(startTime, endTime, user.volunteeredTime);
+
+                        UserModel.findOneAndUpdate(
+                            { _id: user.id },
+                            { $set: { volunteeredTime: totalVolunteerTime } },                  
+                            function (error, success) {
+                                if (error) {
+                                    console.log("Error: " + error);
+                                } else {
+                                    // console.log("User Success: " + success);
+                                }
+                            }
+                        );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                         // Decrement the number of timeslots variable to determine
                         // if there are still some left in the user's profile.
@@ -1782,9 +1965,6 @@ app.post("/volunteer", function(req, res){
                     console.log(err);
                 } else {
 
-                    // --> NOTE THAT THE FIRST PART OF THE "return" WAS: "(startTime1) <= (endTime2)" <-- IN CASE YOU ENCOUNTER ERRORS IN THE FUTURE!!!
-                    // --> I THINK YOU DO WANT THE "return" LIKE YOU HAVE IT RIGHT NOW BECAUSE THERE IS AN ISSUE WITH SIGINING UP FOR TIMESLOTS THAT LIE
-                    // --> WITHIN THE SAME EVENT IF THE "<" IN THE FIRST PART OF THE "return" IS "<=" !!!
                     // Create a function that is used later on to check if any of the times overlap.
                     function checkTimeOverlap(startTime1, endTime1, startTime2, endTime2) {
                         return ((startTime1) < (endTime2) && (startTime2) < (endTime1) ? true : false);
@@ -1921,6 +2101,101 @@ app.post("/volunteer", function(req, res){
                             );
                         }
        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        // --> MAY BE ERROR!!!
+                        // FUNCTION USED FOR CALCULATING VOLUNTEER HOURS
+                        // Calculate length of the timeslot
+                        function diffInTime(start, end, total) {
+                            // Get Hours and Minutes for Start and End times
+                            start = start.split(":");
+                            startHours = start[0];
+                            startMin = start[1];
+                            end = end.split(":");
+                            endHours = end[0];
+                            endMin = end[1];
+
+                            // Subtract Ints
+                            var sumHours = parseInt(endHours) - parseInt(startHours);
+                            var sumMin = parseInt(endMin) - parseInt(startMin);
+
+                            // Calculate valid time
+                            while (sumMin < 0) {
+                                sumHours = sumHours - 1;
+                                sumMin = sumMin + 60;
+                            }
+
+                            // Get Hours and Minutes for total volunteer time
+                            total = total.split(":");
+                            var totalHours = total[0];
+                            var totalMin = total[1];
+
+                            // Add Ints
+                            var hours = parseInt(sumHours) + parseInt(totalHours);
+                            var min = parseInt(sumMin) + parseInt(totalMin);
+
+                            // Calculate valid time
+                            while (min > 60) {
+                                hours = hours + 1;
+                                min = min - 60;
+                            }
+
+                            // Return valid string
+                            return hours + ":" + (min <= 9 ? "0" : "") + min;
+                        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         // TIMESLOT SECTION: Check if the user selected more than one timeslot.
                         // Otherwise, only add the single timeslot that the user selected.
                         if(Array.isArray(atLeastOneBox) == true) {
@@ -1984,6 +2259,123 @@ app.post("/volunteer", function(req, res){
                                         }
                                     }
                                 );
+
+
+
+
+
+
+
+                                // --> YOU ADDED THIS TO TEST THE CODE AND WHY IT WAS NOT WORKING WHEN MULTIPLE TIMESLOTS ARE SELECTED.
+                                // // --> MAY BE ERROR!!!
+                                // // FUNCTION USED FOR CALCULATING VOLUNTEER HOURS
+                                // // Calculate length of the timeslot
+                                // function diffInTime(start, end, total) {
+                                //     // Get Hours and Minutes for Start and End times
+                                //     start = start.split(":");
+                                //     startHours = start[0];
+                                //     startMin = start[1];
+                                //     end = end.split(":");
+                                //     endHours = end[0];
+                                //     endMin = end[1];
+
+                                //     // Subtract Ints
+                                //     var sumHours = parseInt(endHours) - parseInt(startHours);
+                                //     var sumMin = parseInt(endMin) - parseInt(startMin);
+
+                                //     // Calculate valid time
+                                //     while (sumMin < 0) {
+                                //         sumHours = sumHours - 1;
+                                //         sumMin = sumMin + 60;
+                                //     }
+
+                                //     // Get Hours and Minutes for total volunteer time
+                                //     total = total.split(":");
+                                //     var totalHours = total[0];
+                                //     var totalMin = total[1];
+
+                                //     // Add Ints
+                                //     var hours = parseInt(sumHours) + parseInt(totalHours);
+                                //     var min = parseInt(sumMin) + parseInt(totalMin);
+
+                                //     // Calculate valid time
+                                //     while (min > 60) {
+                                //         hours = hours + 1;
+                                //         min = min - 60;
+                                //     }
+
+                                //     // Return valid string
+                                //     return hours + ":" + (min <= 9 ? "0" : "") + min;
+                                // }
+
+
+
+
+
+
+
+
+                                // --> MAY BE ERROR!!!
+                                // Calculate the total volunteer time
+                                // Add the new total time to the user database.
+                                var splitTimeslot = timeSlot.split(" ");
+                                var startTime = splitTimeslot[1];
+                                var endTime = splitTimeslot[4];
+
+                                // MILITARY TIME
+                                if (splitTimeslot[2] == "P.M.") {
+                                    var splitStart = startTime.split(":");
+                                    if (splitStart[0] == 12) { splitStart[0] = 0; }
+                                    startTime = (parseInt(splitStart[0]) + 12) + ":" + splitStart[1];
+
+                                } else if (startTime.split(":")[0] == 12) {
+                                    startTime = "0:" + startTime.split(":")[1];
+                                }
+
+                                // MILITARY TIME
+                                if (splitTimeslot[5] == "P.M.") {
+                                    var splitEnd = endTime.split(":");
+                                    if (splitEnd[0] == 12) { splitEnd[0] = 0; }
+                                    endTime = (parseInt(splitEnd[0]) + 12) + ":" + splitEnd[1];
+
+                                } else if (endTime.split(":")[0] == 12) {
+                                    endTime = "0:" + endTime.split(":")[1];
+                                }
+
+                                // console.log("User: " + user.volunteeredTime); // --> DEBUGGING STATEMENT
+                                var totalVolunteerTime = diffInTime(startTime, endTime, user.volunteeredTime);
+                                // console.log("Total Time: " + totalVolunteerTime); // --> DEBUGGING STATEMENT
+
+                                UserModel.findOneAndUpdate(
+                                    { _id: user.id },
+                                    { $set: { volunteeredTime: totalVolunteerTime } },                 
+                                    function (error, success) {
+                                        if (error) {
+                                            console.log("Error: " + error);
+                                        } else {
+                                            // console.log("User Success: " + success);
+                                        }
+                                    }
+                                );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                             });
                         } else {
        
@@ -2043,6 +2435,97 @@ app.post("/volunteer", function(req, res){
                                     }
                                 }
                             );
+                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            // --> MAY BE ERROR!!!
+                            // Calculate the total volunteer time
+                            // Add the new total time to the user database.
+                            var splitTimeslot = atLeastOneBox.split(" ");
+                            var startTime = splitTimeslot[1];
+                            var endTime = splitTimeslot[4];
+
+                            // MILITARY TIME
+                            if (splitTimeslot[2] == "P.M.") {
+                                var splitStart = startTime.split(":");
+                                if (splitStart[0] == 12) { splitStart[0] = 0; }
+                                startTime = (parseInt(splitStart[0]) + 12) + ":" + splitStart[1];
+
+                            } else if (startTime.split(":")[0] == 12) {
+                                startTime = "0:" + startTime.split(":")[1];
+                            }
+
+                            // MILITARY TIME
+                            if (splitTimeslot[5] == "P.M.") {
+                                var splitEnd = endTime.split(":");
+                                if (splitEnd[0] == 12) { splitEnd[0] = 0; }
+                                endTime = (parseInt(splitEnd[0]) + 12) + ":" + splitEnd[1];
+
+                            } else if (endTime.split(":")[0] == 12) {
+                                endTime = "0:" + endTime.split(":")[1];
+                            }
+
+                            var totalVolunteerTime = diffInTime(startTime, endTime, user.volunteeredTime);
+
+                            UserModel.findOneAndUpdate(
+                                { _id: user.id },
+                                { $set: { volunteeredTime: totalVolunteerTime } },                 
+                                function (error, success) {
+                                    if (error) {
+                                        console.log("Error: " + error);
+                                    } else {
+
+                                        // console.log("User Success: " + success);
+                                    }
+                                }
+                            );
+                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         }
        
                         // Create a flash message informing the user
