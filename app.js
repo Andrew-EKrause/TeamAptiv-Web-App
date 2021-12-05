@@ -473,6 +473,7 @@ app.get("/events", function(req, res){
         // Render the events on the events
         // page of the web application.
         res.render("events", {
+            successCancelled: req.flash("successCancelled"),
             user: req.user,
             events: events,
         });
@@ -568,7 +569,7 @@ app.get("/user_profile", function(req, res){
                                 user: req.user,
                                 listOfUserEvents: listOfUserEvents,
                                 permissionDenied: req.flash("permissionDenied"),
-                                sucessCancelled: req.flash("sucessCancelled")
+                                successCancelled: req.flash("successCancelled")
 
                             });
                         }
@@ -580,7 +581,7 @@ app.get("/user_profile", function(req, res){
                     user: req.user,
                     listOfUserEvents: listOfUserEvents,
                     permissionDenied: req.flash("permissionDenied"),
-                    sucessCancelled: req.flash("sucessCancelled")
+                    successCancelled: req.flash("successCancelled")
 
                 });
             }
@@ -687,7 +688,7 @@ app.get("/admin_profile", function(req, res){
                                                 orgInfo: orgInfo,
                                                 successCreated: req.flash("successCreated"),
                                                 failureNotCreated: req.flash("failureNotCreated"),
-                                                sucessCancelled: req.flash("sucessCancelled"),
+                                                successCancelled: req.flash("successCancelled"),
                                                 permissionDenied: req.flash("permissionDenied")
                                             });
                                         }
@@ -715,7 +716,7 @@ app.get("/admin_profile", function(req, res){
                                     orgInfo: orgInfo,
                                     successCreated: req.flash("successCreated"),
                                     failureNotCreated: req.flash("failureNotCreated"),
-                                    sucessCancelled: req.flash("sucessCancelled"),
+                                    successCancelled: req.flash("successCancelled"),
                                     permissionDenied: req.flash("permissionDenied")
                                 });
                             }
@@ -728,7 +729,7 @@ app.get("/admin_profile", function(req, res){
                         //     listOfUsers: listOfUsers,
                         //     successCreated: req.flash("successCreated"),
                         //     failureNotCreated: req.flash("failureNotCreated"),
-                        //     sucessCancelled: req.flash("sucessCancelled"),
+                        //     successCancelled: req.flash("successCancelled"),
                         //     permissionDenied: req.flash("permissionDenied")
                         // });
                     }
@@ -1318,6 +1319,7 @@ app.post("/added_event", function(req, res){
         eventDate: req.body.eventdate,
         eventStartTime: req.body.eventstarttime,
         eventEndTime: req.body.eventendtime,
+        eventActive: true,
         eventTimeIncrements: convertVolunteerTimeIncrements,
         eventLocation: req.body.eventlocation,
         eventDescription: description,
@@ -1344,13 +1346,109 @@ app.post("/added_event", function(req, res){
     });
 });
 
+// Create a post request for when the
+// ADMIN wants to cancel an event.
+app.post("/admin_cancel_event", function(req, res){
+        
+    // Create a variable to store the id of the
+    // event that the ADMIN wants to cancel.
+    var cancelEvent  = req.body.canceleventidentifier;
+
+    // ADD THE EVENT THAT THE ADMIN IS CANCELLING TO THEIR PROFILE UNDER A "CANCELLED EVENTS" BUTTON
+    // SO THEY CAN KEEP AN EYE ON IT IF YOU END UP IMPLEMENTING THE "UNCANCEL" FEATURE!!!
+
+    // Change the value representing whether or not
+    // the event has been cancelled by the ADMIN to
+    // be "cancelled" by the admin.
+    EventModel.findOneAndUpdate(
+        { _id: cancelEvent },
+        { $set: { eventActive: false} },                  
+        function (error, success) {
+            if (error) {
+                console.log("Error: " + error);
+            } else {
+                // console.log("User Success: " + success);
+            }
+        }
+    );
+    
+    // Redirect back to the events page after the ADMIN
+    // cancels the event and flash a success message.
+    req.flash("successCancelled", "You have cancelled the event."); // "Event stored in profile."
+    res.redirect("/events");
+});
+
+// // Create a post request for when the
+// // ADMIN wants to reschedule an event.
+// app.post("/admin_reschedule_event", function(req, res){
+        
+//     // Create a variable to store the id of the
+//     // event that the ADMIN wants to cancel.
+//     var rescheduleEvent  = req.body.rescheduleeventidentifier;
+
+//     // Get the ADMIN user info to update the ADMIN's profile page.
+//     var user = req.user;
+
+
+
+//     // IF YOU ADD THE "UNCANCEL" FEATURE, CHANGE THIS CODE!!!
+//     // YOU WILL ALSO HAVE TO UPDATE THE USER MODEL IN THE ROUTE
+//     // WHERE THE ADMIN CANCELS AN EVENT AS WELL!!!
+//     // Go through the list of events in the user events attribute
+//     // and check if the event is already in the user db.
+//     listOfUserEvents.forEach(function(eventInUserProfile) {
+
+//         // Check if the event already exists in the user's events section.
+//         if(String(eventInUserProfile) == String(requestedEventId)) {
+//             alreadyAdded = true;
+//         }
+//     });
+
+//     // If the event object itself has NOT already been added, add it.
+//     if(alreadyAdded == false) {
+//         // Add the event to the user's profile so that you can list
+//         // the event that the user volunteered for in their profile.
+//         UserModel.findOneAndUpdate(
+//             { _id: user.id },
+//             { $push: { userEvents: requestedEventId } },
+//             function (error, success) {
+//                 if (error) {
+//                     console.log("Error: " + error);
+//                 } else {
+//                     //console.log("Success: " + success);
+//                 }
+//             }
+//         );
+//     }
+
+
+
+//     // Change the value representing whether or not
+//     // the event has been cancelled by the ADMIN to 
+//     // be "uncancelled".
+//     EventModel.findOneAndUpdate(
+//         { _id: rescheduleEvent },
+//         { $set: { eventActive: true} },                  
+//         function (error, success) {
+//             if (error) {
+//                 console.log("Error: " + error);
+//             } else {
+//                 // console.log("User Success: " + success);
+//             }
+//         }
+//     );
+    
+//     // Redirect back to the events page after the ADMIN
+//     // cancels the event and flash a success message.
+//     req.flash("successCancelled", "You have rescheduled the event.");
+//     res.redirect("/admin_profile");
+// });
+
 // Create a post request for when the ADMIN wants to cancel
 // creating a new event.
 app.post("/cancel", function(req, res){
     res.redirect("/admin_profile");
 });
-
-
 
 // Create a post request for when the ADMIN wants to DEACTIVATE
 // a user account. This operation will send a confirmation message.
@@ -1375,13 +1473,11 @@ app.post("/deactivate_account", function(req, res){
 
     // Create a flash message informing the ADMIN
     // that they have deactivated the user.
-    req.flash("sucessCancelled", "You have deactivated the user account.");
+    req.flash("successCancelled", "You have deactivated the user account.");
 
     // Redirect to the user's profile page of the website.
     res.redirect("admin_profile");
 });
-
-
 
 // Create a post request for when the ADMIN wants to ACTIVATE
 // a user account. This operation will send a confirmation message.
@@ -1406,7 +1502,7 @@ app.post("/activate_account", function(req, res){
 
     // Create a flash message informing the ADMIN
     // that they have deactivated the user.
-    req.flash("sucessCancelled", "You have activated the user account.");
+    req.flash("successCancelled", "You have activated the user account.");
 
     // Redirect to the user's profile page of the website.
     res.redirect("admin_profile");
@@ -1620,7 +1716,7 @@ app.post("/cancel_event", function(req, res){
 
             // Create a flash message informing the user
             // that they have cancelled an event timeslot.
-            req.flash("sucessCancelled", "You have cancelled your time(s).");
+            req.flash("successCancelled", "You have cancelled your time(s).");
 
             // Redirect to the user's profile page of the website.
             res.redirect("user_profile");

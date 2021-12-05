@@ -122,6 +122,10 @@
         z-index: 100;
     }
 
+    .cancelled {
+        text-decoration: line-through;
+    }
+
     /* Key frames fade. */
     @keyframes fade {
     0% { opacity: 1; }

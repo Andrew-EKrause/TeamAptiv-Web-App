@@ -136,11 +136,36 @@
                 </div>
             <% } %>
 
-            <!-- Button to go back to the other events -->
-            <div class="">
-                <form action="/back_events" method="POST">
-                    <div>
-                        <button type="submit" class="btn btn-outline-dark"><i class="fas fa-arrow-left"></i> Back to Events</button>
+                    <!-- 
+                        Include EJS display a message informing the user that
+                        they have already signed up for a particular event.
+                    -->
+                    <% if(alreadyVolunteered.length > 0) { %>
+                        <div class="incorrect-input message-format">
+                            <b><%= alreadyVolunteered %></b>
+                         </div>
+                    <% } %>
+                
+                    <!-- If the user is the ADMIN, display a "Cancel Event" button -->
+                    <!-- so that the ADMIN has the option to cancel the event. -->
+                    <% if(user != undefined && user.status == "Admin") { %>
+                        <div class="d-flex">
+                            <form action="/admin_cancel_event" method="POST">
+                                <div>
+                                    <input type="hidden" id="custId" name="canceleventidentifier" value="<%= eventID %>"> 
+                                    <button type="submit" class="btn btn-outline-dark"><i class="fas fa-calendar-times"></i> Cancel Event</button>
+                                </div>
+                            </form>
+                        </div>
+                    <% } %>
+
+                    <!-- Button to go back to the other events -->
+                    <div class="d-flex">
+                        <form action="/back_events" method="POST">
+                            <div>
+                                <button type="submit" class="btn btn-outline-dark"><i class="fas fa-arrow-left"></i> Back to Events</button>
+                            </div>
+                        </form>
                     </div>
                 </form>
             </div>

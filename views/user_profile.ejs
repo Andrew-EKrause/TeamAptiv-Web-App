@@ -20,8 +20,6 @@
     ...
 -->
 
-<!-- IN EVENT HISTORY, SHOW THE EVENTS THAT THE USER HAS CANCELLED!!! -->
-
 <%- include('./partials/home_header.ejs') %>
 
     <div class="profile-ejs">
@@ -45,15 +43,18 @@
                 </div>
             </header>
 
-            <!-- Obtain an array of identification numbers in order to list all of the -->
-            <!-- events that the user has has signed up for under the "Events" button -->
+            <!-- Obtain an array of identification numbers in order to help list all of the -->
+            <!-- events that the user has has signed up for under the "Events" button. -->
+            <!-- Also, include a counter variable to check how many events the user is registered for. -->
             <% var eventsArrayIds = []; %>
+            <% var numberOfEvents = 0; %>
             <% listOfUserEvents.forEach(function(event) { %>
                 <% if(event == null) { %>
                     <% // For now, do nothing. In the future, trigger a request so that the %>
                     <% // event object ID is removed from the user's info in the database. %>
                 <% } else { %>
                     <% eventsArrayIds.push(event.eventID); %>
+                    <% numberOfEvents += 1; %>
                 <% } %>
             <% }); %>
 
@@ -86,10 +87,10 @@
                         Include EJS to display any success messages to the user if they
                         have successfully cancelled one event or multiple event timeslots.
                     -->
-                    <% if(sucessCancelled.length > 0) { %>
+                    <% if(successCancelled.length > 0) { %>
                         <div class="confirmation">
                             <div class="elementToFadeInAndOut message-format">
-                                <h1><%= sucessCancelled %></h1>
+                                <h1><%= successCancelled %></h1>
                             </div>
                         </div>
                     <% } %>
@@ -111,149 +112,239 @@
                         for to be rendered on the user's profile page
                     -->
                     <div id="events-list" data-visible="true"> 
-                        <!-- Loop through the database and display the events -->
-                        <% listOfUserEvents.forEach(function(event) { %>
-                            <% if(event == null) { %>
-                                <% // For now, do nothing. In the future, trigger a request so that the %>
-                                <% // event object ID is removed from the user's info in the database. %>
-                             <% } else { %>
 
-                                <div class="event">
-                                    <!-- Create divs that will make the events be collapsable -->
-                                    <!-- Include a function to simplify the date display -->
-                                    <% function simplifyEventDate(eventDate){ %>
-                                        <% // First split the event into the components that directly %>
-                                        <% // involve the numberical representations of a date. %>
-                                        <% var date = eventDate.toISOString().split("T")[0]; %>
-                                    
-                                        <% // Create variables for workring with %>
-                                        <% // the nubmers in the date variable. %>
-                                        <% var arrayDate = date.split('-'); %>
-                                        <% var day = arrayDate[2]; %>
-                                        <% var getMonth = arrayDate[1]; %>
-                                        <% var month = ""; %>
-                                        <% var year = arrayDate[0]; %>
-                                        <% var simplifiedDate = ""; %>
-                                    
-                                        <% // Use a series of conditionals to determine %>
-                                        <% // what the name of the month is based on the %>
-                                        <% // numerical representation of it. %>
-                                        <% if(getMonth.localeCompare('1') == 0) { %>
-                                            <% month = 'Jan'; %>
-                                        <% } else if(getMonth.localeCompare('2') == 0) { %>
-                                            <% month = 'Feb'; %>
-                                        <% } else if(getMonth.localeCompare('3') == 0) { %>
-                                            <% month = 'Mar'; %>
-                                        <% } else if(getMonth.localeCompare('4') == 0) { %>
-                                            <% month = 'Apr'; %>
-                                        <% } else if(getMonth.localeCompare('5') == 0) { %>
-                                            <% month = 'May'; %>
-                                        <% } else if(getMonth.localeCompare('6') == 0) { %>
-                                            <% month = 'Jun'; %>
-                                        <% } else if(getMonth.localeCompare('7') == 0) { %>
-                                            <% month = 'Jul'; %>
-                                        <% } else if(getMonth.localeCompare('8') == 0) { %>
-                                            <% month = 'Aug'; %>
-                                        <% } else if(getMonth.localeCompare('9') == 0) { %>
-                                            <% month = 'Sep'; %>
-                                        <% } else if(getMonth.localeCompare('10') == 0) { %>
-                                            <% month = 'Oct'; %>
-                                        <% } else if(getMonth.localeCompare('11') == 0) { %>
-                                            <% month = 'Nov'; %>
-                                        <% } else if(getMonth.localeCompare('12') == 0) { %>
-                                            <% month = 'Dec'; %>
-                                        <% } else { %>
-                                            <% month = 'ERROR'; %>
-                                        <% } %>
-                                    
-                                        <% // Create the simplified date and return it. %>
-                                        <% simplifiedDate = month + " " + day + ", " + year; %>
-                                        <% return simplifiedDate; %>
-                                    <% } %>
+                        <!-- Check if there are no events currently in the user's profile. -->
+                        <% if(numberOfEvents > 0) { %>
 
-                                    <h2><%= event.eventName %></h2>
+                            <!-- Loop through the database and display the events -->
+                            <% listOfUserEvents.forEach(function(event) { %>
+                                <% if(event == null) { %>
+                                    <% // For now, do nothing. In the future, trigger a request so that the %>
+                                    <% // event object ID is removed from the user's info in the database. %>
 
-                                    <ul>
-                                        <!-- The date displayed utilized the function above for simplification -->
-                                        <li> <%= simplifyEventDate(event.eventDate) %> </li>
+                                <% // Check if the given event was cancelled by the admin. <-- !!! RILEY, THIS IS WHERE YOU CAN ADD DIFFERENT STYLES MAYBE !!! %>
+                                <% } else if(event.eventActive == false) { %>
 
-                                        <!-- Display the event location, description, volunteer, and donation information -->
-                                        <li>Location: <%= event.eventLocation %> </li>
-
-                                        <!-- If description is empty, do not display the description -->
-                                        <!-- Use the split function to determine if the description was left blank -->
-                                        <% var descriptionArray = event.eventDescription.split(" "); %>
-                                        <% if(descriptionArray[1] != "") { %>
-
-                                            <!-- If the description is not blank, obtain the info for it and display -->
-                                            <% var descriptionString = ""; %>
-                                            <% for(let i = 1; i < descriptionArray.length; i++) { %>
-                                                <% descriptionString = descriptionString + " " + descriptionArray[i]; %>
-                                            <% } %>
-                                            
-                                            <!-- Display the description assuming it is not blank -->
-                                            <li>Description: <%= descriptionString %></li>
-                                        <% } %>
-
+                                    <!-- Style the events that have been cancelled by the ADMIN differently -->
+                                    <div class="event cancelled" data-visible="false">
+                                        <!-- Include a function to simplify the date display -->
+                                        <% function simplifyEventDate(eventDate){ %>
+                                            <% // First split the event into the components that directly %>
+                                            <% // involve the numberical representations of a date. %>
+                                            <% var date = eventDate.toISOString().split("T")[0]; %>
                                         
-                                        <!-- THIS IS WHERE YOU WERE PLANNING ON LISTING HOW MUCH A USER HAD DONATED TO AN EVENT!!! -->
+                                            <% // Create variables for workring with %>
+                                            <% // the nubmers in the date variable. %>
+                                            <% var arrayDate = date.split('-'); %>
+                                            <% var day = arrayDate[2]; %>
+                                            <% var getMonth = arrayDate[1]; %>
+                                            <% var month = ""; %>
+                                            <% var year = arrayDate[0]; %>
+                                            <% var simplifiedDate = ""; %>
+                                        
+                                            <% // Use a series of conditionals to determine %>
+                                            <% // what the name of the month is based on the %>
+                                            <% // numerical representation of it. %>
+                                            <% if(getMonth.localeCompare('1') == 0) { %>
+                                                <% month = 'Jan'; %>
+                                            <% } else if(getMonth.localeCompare('2') == 0) { %>
+                                                <% month = 'Feb'; %>
+                                            <% } else if(getMonth.localeCompare('3') == 0) { %>
+                                                <% month = 'Mar'; %>
+                                            <% } else if(getMonth.localeCompare('4') == 0) { %>
+                                                <% month = 'Apr'; %>
+                                            <% } else if(getMonth.localeCompare('5') == 0) { %>
+                                                <% month = 'May'; %>
+                                            <% } else if(getMonth.localeCompare('6') == 0) { %>
+                                                <% month = 'Jun'; %>
+                                            <% } else if(getMonth.localeCompare('7') == 0) { %>
+                                                <% month = 'Jul'; %>
+                                            <% } else if(getMonth.localeCompare('8') == 0) { %>
+                                                <% month = 'Aug'; %>
+                                            <% } else if(getMonth.localeCompare('9') == 0) { %>
+                                                <% month = 'Sep'; %>
+                                            <% } else if(getMonth.localeCompare('10') == 0) { %>
+                                                <% month = 'Oct'; %>
+                                            <% } else if(getMonth.localeCompare('11') == 0) { %>
+                                                <% month = 'Nov'; %>
+                                            <% } else if(getMonth.localeCompare('12') == 0) { %>
+                                                <% month = 'Dec'; %>
+                                            <% } else { %>
+                                                <% month = 'ERROR'; %>
+                                            <% } %>
+                                        
+                                            <% // Create the simplified date and return it. %>
+                                            <% simplifiedDate = month + " " + day + ", " + year; %>
+                                            <% return simplifiedDate; %>
+                                        <% } %>
 
+                                        <h2><%= event.eventName %> (Cancelled by Admin)</h2>
 
-                                        <!-- Check if the user has times that they signed up for in the event. List the times out -->
-                                        <% if(user.timesAttending.length > 1) { %>
-                                            <li>Volunteering Times: </li>
+                                        <ul class="mt-1">
+                                            <!-- The date displayed utilized the function above for simplification -->
+                                            <li> <%= simplifyEventDate(event.eventDate) %> </li>
 
-                                            <!-- FUNCTION: Function to get the value of the time attending -->
-                                            <% function getResult() { %>
-                                                <% var value = $('timeattending').getValue(); %>
+                                            <!-- Display the event location, description, volunteer, and donation information -->
+                                            <li>Location: <%= event.eventLocation %> </li>
+
+                                            <!-- If description is empty, do not display the description -->
+                                            <!-- Use the split function to determine if the description was left blank -->
+                                            <% var descriptionArray = event.eventDescription.split(" "); %>
+                                            <% if(descriptionArray[1] != "") { %>
+
+                                                <!-- If the description is not blank, obtain the info for it and display -->
+                                                <% var descriptionString = ""; %>
+                                                <% for(let i = 1; i < descriptionArray.length; i++) { %>
+                                                    <% descriptionString = descriptionString + " " + descriptionArray[i]; %>
+                                                <% } %>
+                                                
+                                                <!-- Display the description assuming it is not blank -->
+                                                <li>Description: <%= descriptionString %></li>
+                                            <% } %>
+                                        </ul>
+                                    </div>
+
+                                <% // Otherwise, render the event(s) on screen. %>
+                                <% } else { %>
+
+                                    <div class="event">
+                                        <!-- Create divs that will make the events be collapsable -->
+                                        <!-- Include a function to simplify the date display -->
+                                        <% function simplifyEventDate(eventDate){ %>
+                                            <% // First split the event into the components that directly %>
+                                            <% // involve the numberical representations of a date. %>
+                                            <% var date = eventDate.toISOString().split("T")[0]; %>
+                                        
+                                            <% // Create variables for workring with %>
+                                            <% // the nubmers in the date variable. %>
+                                            <% var arrayDate = date.split('-'); %>
+                                            <% var day = arrayDate[2]; %>
+                                            <% var getMonth = arrayDate[1]; %>
+                                            <% var month = ""; %>
+                                            <% var year = arrayDate[0]; %>
+                                            <% var simplifiedDate = ""; %>
+                                        
+                                            <% // Use a series of conditionals to determine %>
+                                            <% // what the name of the month is based on the %>
+                                            <% // numerical representation of it. %>
+                                            <% if(getMonth.localeCompare('1') == 0) { %>
+                                                <% month = 'Jan'; %>
+                                            <% } else if(getMonth.localeCompare('2') == 0) { %>
+                                                <% month = 'Feb'; %>
+                                            <% } else if(getMonth.localeCompare('3') == 0) { %>
+                                                <% month = 'Mar'; %>
+                                            <% } else if(getMonth.localeCompare('4') == 0) { %>
+                                                <% month = 'Apr'; %>
+                                            <% } else if(getMonth.localeCompare('5') == 0) { %>
+                                                <% month = 'May'; %>
+                                            <% } else if(getMonth.localeCompare('6') == 0) { %>
+                                                <% month = 'Jun'; %>
+                                            <% } else if(getMonth.localeCompare('7') == 0) { %>
+                                                <% month = 'Jul'; %>
+                                            <% } else if(getMonth.localeCompare('8') == 0) { %>
+                                                <% month = 'Aug'; %>
+                                            <% } else if(getMonth.localeCompare('9') == 0) { %>
+                                                <% month = 'Sep'; %>
+                                            <% } else if(getMonth.localeCompare('10') == 0) { %>
+                                                <% month = 'Oct'; %>
+                                            <% } else if(getMonth.localeCompare('11') == 0) { %>
+                                                <% month = 'Nov'; %>
+                                            <% } else if(getMonth.localeCompare('12') == 0) { %>
+                                                <% month = 'Dec'; %>
+                                            <% } else { %>
+                                                <% month = 'ERROR'; %>
+                                            <% } %>
+                                        
+                                            <% // Create the simplified date and return it. %>
+                                            <% simplifiedDate = month + " " + day + ", " + year; %>
+                                            <% return simplifiedDate; %>
+                                        <% } %>
+
+                                        <h2><%= event.eventName %></h2>
+
+                                        <ul>
+                                            <!-- The date displayed utilized the function above for simplification -->
+                                            <li> <%= simplifyEventDate(event.eventDate) %> </li>
+
+                                            <!-- Display the event location, description, volunteer, and donation information -->
+                                            <li>Location: <%= event.eventLocation %> </li>
+
+                                            <!-- If description is empty, do not display the description -->
+                                            <!-- Use the split function to determine if the description was left blank -->
+                                            <% var descriptionArray = event.eventDescription.split(" "); %>
+                                            <% if(descriptionArray[1] != "") { %>
+
+                                                <!-- If the description is not blank, obtain the info for it and display -->
+                                                <% var descriptionString = ""; %>
+                                                <% for(let i = 1; i < descriptionArray.length; i++) { %>
+                                                    <% descriptionString = descriptionString + " " + descriptionArray[i]; %>
+                                                <% } %>
+                                                
+                                                <!-- Display the description assuming it is not blank -->
+                                                <li>Description: <%= descriptionString %></li>
                                             <% } %>
 
-                                            <!-- Makes POST request to the event cancellation route -->
-                                            <form class="form-horizontal" action="/cancel_event" method="POST">
-                                                <!-- Create a counter variable that tracks the number of timeslots in each event a user has signed up for -->
-                                                <% var numTimeSlots = 0; %>
+                                            <!-- Check if the user has times that they signed up for in the event. List the times out -->
+                                            <% if(user.timesAttending.length > 1) { %>
+                                                <li>Times Attending: </li>
 
-                                                <ol>
-                                                    <!-- Create different time slots that the user can cancel -->
-                                                    <% user.timesAttending.forEach(function(timesAttendingEvent) { %>
+                                                <!-- FUNCTION: Function to get the value of the time attending -->
+                                                <% function getResult() { %>
+                                                    <% var value = $('timeattending').getValue(); %>
+                                                <% } %>
 
-                                                        <% // Take the time attending and remove the unique id from the total string for display purposes. %>
-                                                        <% var timeAttendanceSplitTemp = timesAttendingEvent.split(" "); %>
+                                                <!-- Makes POST request to the event cancellation route -->
+                                                <form class="form-horizontal" action="/cancel_event" method="POST">
+                                                    <!-- Create a counter variable that tracks the number of timeslots in each event a user has signed up for -->
+                                                    <% var numTimeSlots = 0; %>
 
-                                                        <% // If the length of the split is greater than 1, the time attending is not an id alone. %>
-                                                        <% if(timeAttendanceSplitTemp.length > 1) { %>
-                                                            
-                                                            <% // Create variables to store the time attendance information: %>
-                                                            <% // The id attached to the time attendance and the time range itself. %>
-                                                            <% var timeAttendanceIentifier = timeAttendanceSplitTemp[3]; %> <% // --> MAY NOT NEED THIS!!! %>
-                                                            <% var timeAttendance = timeAttendanceSplitTemp[4] + " " + timeAttendanceSplitTemp[5] + " " + timeAttendanceSplitTemp[6] + " " + timeAttendanceSplitTemp[7] + " " + timeAttendanceSplitTemp[8]; %>
+                                                    <ol>
+                                                        <!-- Create different time slots that the user can cancel -->
+                                                        <% user.timesAttending.forEach(function(timesAttendingEvent) { %>
 
-                                                            <% // If the time being attended matches the event it was from, render it %>
-                                                            <% // within the correct event section in the user profile. %>
-                                                            <% if(event.eventID == timeAttendanceIentifier) { %>
-                                                                <% // Display the time attending as a checkbox that the user can select. %>
-                                                                <li>
-                                                                    <input type="checkbox" id="<%= timeAttendance %>" name="timeattending" value="<%= timesAttendingEvent %>">
-                                                                    <label for="<%= timeAttendance %>"> <%= timeAttendance %> </label>
-                                                                </li>
-                                                                <% numTimeSlots += 1; %>
+                                                            <% // Take the time attending and remove the unique id from the total string for display purposes. %>
+                                                            <% var timeAttendanceSplitTemp = timesAttendingEvent.split(" "); %>
+
+                                                            <% // If the length of the split is greater than 1, the time attending is not an id alone. %>
+                                                            <% if(timeAttendanceSplitTemp.length > 1) { %>
+                                                                
+                                                                <% // Create variables to store the time attendance information: %>
+                                                                <% // The id attached to the time attendance and the time range itself. %>
+                                                                <% var timeAttendanceIentifier = timeAttendanceSplitTemp[3]; %> <% // --> MAY NOT NEED THIS!!! %>
+                                                                <% var timeAttendance = timeAttendanceSplitTemp[4] + " " + timeAttendanceSplitTemp[5] + " " + timeAttendanceSplitTemp[6] + " " + timeAttendanceSplitTemp[7] + " " + timeAttendanceSplitTemp[8]; %>
+
+                                                                <% // If the time being attended matches the event it was from, render it %>
+                                                                <% // within the correct event section in the user profile. %>
+                                                                <% if(event.eventID == timeAttendanceIentifier) { %>
+                                                                    <% // Display the time attending as a checkbox that the user can select. %>
+                                                                    <li>
+                                                                        <input type="checkbox" id="<%= timeAttendance %>" name="timeattending" value="<%= timesAttendingEvent %>">
+                                                                        <label for="<%= timeAttendance %>"> <%= timeAttendance %> </label>
+                                                                    </li>
+                                                                    <% numTimeSlots += 1; %>
+                                                                <% } %>
+
                                                             <% } %>
 
-                                                        <% } %>
+                                                        <% }); %>
+                                                    </ol>
 
-                                                    <% }); %>
-                                                </ol>
+                                                    <!-- Create hidden input types to obtain the different values that will be processed by the server -->
+                                                    <input type="hidden" id="customId" name="eventidentifier" value="<%= event._id %>" onChange="getResult()">
+                                                    <input type="hidden" id="customId" name="timeattendlength" value="<%= numTimeSlots %>" onChange="getResult()">
+                                                    <button type="submit" class="btn btn-outline-light"><i class="fas fa-times"></i> Cancel Time(s)</button>
+                                                </form>
+                                            <% } %>
+                                        </ul>
+                                    </div>                                
+                                <% } %>
+                            <% }); %>
 
-                                                <!-- Create hidden input types to obtain the different values that will be processed by the server -->
-                                                <input type="hidden" id="customId" name="eventidentifier" value="<%= event._id %>" onChange="getResult()">
-                                                <input type="hidden" id="customId" name="timeattendlength" value="<%= numTimeSlots %>" onChange="getResult()">
-                                                <button type="submit" class="btn btn-outline-light">Cancel Time(s)</button>
-                                            </form>
-                                        <% } %>
-                                    </ul>
-                                 </div>                                
-                            <% } %>
-                        <% }); %>
+                        <% } else { %>
+
+                            <!-- If the user does not have any events, display the heading below -->
+                            <h2>You have no events.</h2>
+                        <% } %>
                     </div>
 
                     <!-- Section for settings -->
