@@ -23,38 +23,40 @@
  */
 
  /* Import fonts */
- @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono&family=Noto+Serif:ital@1&display=swap&family=Mochiy+Pop+P+One&display=swap&family=Gochi+Hand&display=swap&family=Yanone+Kaffeesatz&display=swap'); 
-
+ @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono&family=Mochiy+Pop+P+One&display=swap&family=Gochi+Hand&display=swap&'); 
+ @import url('https://fonts.googleapis.com/css2?family=Source+Serif+Pro&display=swap&family=Fjord+One&display=swap');
 /* ====================================================================
                             GENERAL STYLES
  ==================================================================== */
 
-    /* Defines global colors */
+    /* Define custom global properties */
     :root {
         --foreground-color: rgb(31, 31, 31);
         --background-primary: #f0f0f0; /* Background of the body */
         --background-secondary: white; /* Background of the cards */
-        --theme1: rgb(180, 180, 180); /* This is used for a lot of the box shadows */
-        --theme2: rgb(110, 110, 110);
-        --theme3: white;
-        --theme4: white;
-        --theme5: white;
+        --theme1: rgb(235, 139, 50); /* This is used for a lot of the box shadows */
 
+        --box-shadow1: 5px 5px 1em rgba(0, 0, 0, 30%);
+        --box-shadow2: 5px 5px 2em rgba(0, 0, 0, 30%);
+        --box-shadow2Small: 5px 5px 1.5em rgba(0, 0, 0, 30%);
 
-        /* Ex. to use these in another rule: */
-        /* color: var(--light-color); */
-        /* see https://www.w3.org/TR/css-variables/ for full documentation */
+        /* CAN CHANGE THE FONT SIZE HERE TO CHANGE THE FONT FOR THE WHOLE SITE */
+        font-size: 1rem;
     }
 
     /* Format content within the body tag of the HTML structure */
     body {
         margin: 0;
-        font-family: 'Merriweather', serif; 
-        /* font-family: "Yanone Kaffeesatz", sans-serif; */
-        background-color: var(--background-primary);
+        font-family: "Source Serif Pro", serif; 
+        background-color: var(--background-primary); /* FIXME!!! IMAGES DON'T HAVE TRANSPARENT BACKGROUNDS */
         min-height: 100vh;
         display: flex;
         flex-direction: column;
+    }
+
+    /* Change the specific font for top and second leve headings */
+    h1, h2 {
+        font-family: "Fjord One", serif;
     }
 
     /* Get rid of the default styling for lists */
@@ -69,14 +71,28 @@
         text-align: center;
     }
 
+    /* Footer styles */
     footer i {
-        color: var(--foreground-color);
+        color: var(--background-primary);
+        transition: color .25s;
+    }
+
+    footer i:hover {
+        color: var(--theme1)
     }
 
     /* ~~~~~~~~~~~~~ General Class Selectors ~~~~~~~~~~~~~ */
 
-    /* Set the background-color of the different cards throughout the site */
+    /* Set styles for the background images of each page */
+    .background {
+        position: fixed;
+        inset: 0 0 0 0;
+        background-size: cover;
+        /* background-position: center; */
+        z-index: -1;
+    }
 
+    /* Change the basic styles of bootstrap buttons */
     .btn-outline-light {
         color: var(--foreground-color);
         border: 1px solid var(--foreground-color);
@@ -85,30 +101,30 @@
     .btn-outline-light:hover {
         color: var(--background-primary);
         background-color: var(--foreground-color);
-        border: 1px solid var(--foreground-color);
+        border: 1px solid var(--theme1);
     }
 
     /* Style incorrect login with redish color. */
     .incorrect-input {
-        position: static;
         background-color: rgb(255, 169, 169);
         color: rgb(255, 60, 60);
         border: 2px solid rgb(255, 60, 60);
         animation: fade 5s forwards;
+        z-index: 100;
     }
 
     /* Style confirmation message with greenish color. */
     .confirmation {
-        position: static;
         background-color: rgb(207, 246, 207);
         color: rgb(145, 182, 145);
         border: 2px solid rgb(145, 182, 145);
         animation: fade 5s forwards;
+        z-index: 100;
     }
 
     /* Key frames fade. */
     @keyframes fade {
-    0% { opacity: 0; }
+    0% { opacity: 1; }
     50% { opacity: 1;}
     90% { height: auto; }
     100% { opacity: 0; height: 0; pointer-events: none; } 
@@ -117,14 +133,18 @@
     /* Format the messages sent to the user */ 
     .message-format {
         text-align: center;
-        font-size: 1.5em;
-        width: 100%;
-        padding: .5em;
+        font-size: 1.5rem;
+        width: fit-content;
+        padding: .25em;
     }
 
  /* ====================================================================
                             HOME.EJS STYLES
  ==================================================================== */
+
+    .home-ejs .background {
+        background-image: url('../images/Home-Illustration.png');
+    }
 
     .home-ejs .home-picture {
         text-align: left;
@@ -134,13 +154,13 @@
 
     /* Styles the main text on the home page */
     .home-ejs .home-picture h1 {
-        font-size: 5em;
-        font-family: 'Noto Serif';
+        font-size: clamp(5rem, 12vw, 7rem);
+        line-height: 95%;
     }
 
-    /* Styles the button below the main text on the home page */
-    .home-ejs .home-picture button, .home-picture p {
-        font-size: 1.5em;
+    .home-ejs .home-picture p {
+        text-decoration: underline var(--theme1);
+        font-size: clamp(1.5rem, 3vw, 2rem);
     }
 
     .home-ejs .home-picture .buttons {
@@ -180,9 +200,10 @@
         font-size: 1.5em;
     }
 
+    /* Set hover states for section */
     .navbar .navbar-nav .nav-link:hover,
     .navbar .navbar-toggler:hover {
-        color: var(--theme2);
+        color: var(--theme1);
     }
 
 
@@ -190,17 +211,21 @@
                     LOGIN.EJS / REGISTER.EJS STYLES
  ==================================================================== */
 
+    .login-register-ejs .background {
+        background-image: url("../images/LR-Illustration.png");
+    }
+
     .login-register-ejs .login-register-card {
         width: clamp(25em, 60vw, 40em);
         margin: 3em auto;
         border-radius: .5em;
         background-color: var(--background-secondary);
-        box-shadow: 5px 5px 1em var(--theme1);
+        box-shadow: var(--box-shadow1);
         transition: box-shadow .25s;
     }
 
     .login-register-ejs .login-register-card:hover {
-        box-shadow: 5px 5px 2em var(--theme1);
+        box-shadow: var(--box-shadow2);
     }
 
     .login-register-card header {
@@ -274,11 +299,13 @@
         background-color: var(--foreground-color);
     }
 
+    /* Used to place a horizonal line before 'or' */
     .login-register-card .bottom > small::before {
         right: .5em;
         margin-left: -50%;
     }
 
+    /* Used to place a horizonal line after 'or' */
     .login-register-card .bottom > small::after {
         left: 0.5em;
         margin-right: -50%;
@@ -310,6 +337,10 @@
                            EVENTS.EJS STYLES
  ==================================================================== */
 
+    .events-ejs .background {
+        background-image: url('../images/Events-Illustration.png');
+    }
+
     .events-ejs {
         width: 80%;
         margin: auto;
@@ -326,7 +357,7 @@
 
     /* Style the top level heading */
     .events-ejs header > h1 {
-        font-size: clamp(2em, 7vw, 5em);
+        font-size: clamp(2rem, 7vw, 8rem);
         line-height: 75%;
     } 
 
@@ -337,28 +368,29 @@
 
     /* Style the Volunteer | Donate comment in the header */
     .events-ejs header > small {
-        font-size: clamp(1.5em, 3vw, 2em);
+        font-size: clamp(1.5rem, 2vw, 2rem);
+        padding-left: 2em;
     }
 
     .events-ejs .event {
+        position: relative;
         margin-top: 1.5em;
         padding: 1em;
         border-radius: .5em;
         background-color: var(--background-secondary);
-        box-shadow: 5px 5px 1em var(--theme1);
+        box-shadow: var(--box-shadow1);
         transition: all .5s;
     }
 
     .events-ejs .event > h2 {
-        font-size: 2.5em;
+        font-size: 2.5rem;
         border-bottom: 1px solid var(--foreground-color);
         width: fit-content;
-        transition: border .5s;
     }
 
-    .events-ejs .event > p {
-        margin: 0;
-        font-size: 1.5em;
+    .events-ejs .event .hidden {
+        margin: 0 1em;
+        font-size: 1.5rem;
         opacity: 0%;
         transition: opacity .5s;
     }
@@ -370,7 +402,7 @@
     }
 
     .events-ejs .event > b {
-        font-size: 1.5em;
+        font-size: 1.5rem;
     }
 
     .events-ejs .event > b > i {
@@ -379,18 +411,28 @@
     }
 
     /* Set the hover state for the cards */
+    .events-ejs .event::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 10px;
+        border-radius: 0 0 5px 5px;
+        background-color: var(--theme1);
+        transform: scaleX(0%);
+        transform-origin: left;
+        transition: transform .5s;
+    }
+    .events-ejs .event:hover::before {
+        transform: scaleX(100%);
+    }
+
     .events-ejs .event:hover {
-        background-color: var(--foreground-color);
-        transform: scale(1.05);
-        color: var(--background-primary);
+        box-shadow: var(--box-shadow2Small);
     }
 
-    /* Change the bottom border when event is hovered on */
-    .events-ejs .event:hover > h2 {
-        border-bottom: 1px solid var(--background-primary);
-    }
-
-    .events-ejs .event:hover > p {
+    .events-ejs .event:hover .hidden {
         opacity: 100%;
     }
 
@@ -406,25 +448,30 @@
      grid-template-columns: 1fr 1fr;
   }
 
+  /* Background is placed as next sibling in order to not affect grid layout */
+  .specific-event-ejs + .background {
+      background-image: url('../images/Event-Illustration.png');
+  }
+
  .specific-event-ejs .event {
     padding: 1em;
     width: 90%;
     margin: auto;
     height: 100%;
     border-radius: .5em;
-    box-shadow: 5px 5px 1em var(--theme1); 
+    box-shadow: var(--box-shadow1);
     background-color: var(--background-secondary);
     transition: all .5s;
  }
 
  .specific-event-ejs .event > h1 {
-     font-size: 3em;
-     border-bottom: 1px solid var(--theme1);
+     font-size: clamp(2.5rem, 3vw, 3.5rem);
+     border-bottom: 3px solid var(--theme1);
      width: fit-content;
  }
 
  .specific-event-ejs .event li {
-     font-size: 1.5em;
+     font-size: 1.5rem;
      list-style: circle;
      margin-left: 1em;
      padding-bottom: .5em;
@@ -435,15 +482,15 @@
     width: 70%;
     margin-bottom: 1.5em;
     border-radius: .5em;
-    box-shadow: 5px 5px 1em var(--theme1); 
+    box-shadow: var(--box-shadow1);
     background-color: var(--background-secondary);
     transition: all .5s;
  }
 
  /* Make the labels for donating and volunteering the same font size */
  .specific-event-ejs .volunteer-donate .form-title {
-     font-size: 1.75em;
-     border-bottom: 1px solid var(--theme1);
+     font-size: 1.75rem;
+     border-bottom: 3px solid var(--theme1);
      margin-bottom: .5em;
  }
 
@@ -458,7 +505,7 @@
  /* Set the hover state of the cards to have a slight animation */
  .specific-event-ejs .event:hover, .specific-event-ejs .volunteer:hover, 
     .specific-event-ejs .donate:hover {
-        box-shadow: 7px 7px 2em var(--theme1);
+        box-shadow: var(--box-shadow2);
  }
     
 
@@ -466,18 +513,22 @@
                         USER/ADMIN_PROFILE.EJS STYLES
  ==================================================================== */
 
+    .profile-ejs .background {
+        background-image: url("../images/Profile-Illustration.png");
+    }
+
     .profile-ejs .profile {
         width: clamp(30em, 60vw, 60em); 
         position: relative;
         margin: 3em auto;   
-        box-shadow: 5px 5px 1em var(--theme1); 
+        box-shadow: var(--box-shadow1);
         background-color: var(--background-secondary);
         border-radius: .5em;
         transition: box-shadow .25s;
     }
 
     .profile-ejs .profile:hover {
-        box-shadow: 5px 5px 2em var(--theme1);
+        box-shadow: var(--box-shadow2);
     }
 
     /* Sytles for the profile header */
@@ -497,7 +548,7 @@
 
     .profile-ejs .profile > header .user-info > h1 {
         font-size: clamp(3rem, 7vw, 4rem);
-        border-bottom: 1px solid var(--background-primary);
+        border-bottom: 3px solid var(--background-primary);
     }
 
     .profile-ejs .profile > header .icons {
@@ -575,7 +626,7 @@
         opacity: 100%;
         position: relative;
         transform: translateY(0%);
-        transition: opacity 1s, transform .5s;
+        transition: opacity 1s, transform .5s, border-color .25s;
     }
 
     /* Styles to either hide or show the right content */
@@ -594,21 +645,25 @@
         padding: 1em 1em 3em 1em;
         margin-bottom: .5em;
         border-radius: .5em;
-        border: 1px solid var(--theme1);
+        border: 2px solid var(--foreground-color);
         transition: all .25s;
     }
 
     .profile-ejs .profile-content .event:hover,
     .profile-ejs .profile-content .user:hover {
-        box-shadow: 2px 2px .5em var(--theme1);
-        border-color: var(--background-secondary);
+        border-color: var(--theme1);
     }
  
-
     .profile-ejs .profile-content .event > h2,
     .profile-ejs .profile-content .user > h2 {
         width: fit-content;
-        border-bottom: 1px solid var(--foreground-color);
+        border-bottom: 2px solid var(--foreground-color);
+        transition: border-color .25s;
+    }
+    
+    .profile-ejs .profile-content .event:hover > h2,
+    .profile-ejs .profile-content .user:hover > h2 { 
+        border-color: var(--theme1);
     }
 
     .profile-ejs .profile-content .event > ul,
@@ -627,12 +682,18 @@
         position: relative;
         padding: 1em;
         border-radius: .5em;
-        border: 1px solid var(--theme1);    
+        border: 2px solid var(--foreground-color);    
+    }
+
+    .profile-ejs #settings:hover, 
+    .profile-ejs #settings:hover h3 {
+        border-color: var(--theme1);
     }
 
     .profile-ejs #settings h3 {
-        border-bottom: 1px solid var(--foreground-color);
+        border-bottom: 2px solid var(--foreground-color);
         width: fit-content;
+        transition: border-color .25s;
     }
 
     .profile-ejs #settings button[type="submit"] {
@@ -649,14 +710,14 @@
         width: clamp(30em, 60vw, 60em); 
         position: relative;
         margin: 3em auto;   
-        box-shadow: 5px 5px 1em var(--theme1); 
+        box-shadow: var(--box-shadow1);
         background-color: var(--background-secondary);
         border-radius: .5em;
         transition: box-shadow .25s;
     }
 
     .event-creation-ejs .create-card:hover {
-        box-shadow: 5px 5px 2em var(--theme1);
+        box-shadow: var(--box-shadow2);
     }
 
     .create-card header {
@@ -694,6 +755,10 @@
                            ABOUT.EJS STYLES
  ==================================================================== */
 
+    .about-ejs .background {
+        background-image: url("../images/Mission-Illustation.png");
+    }
+
     .about-ejs {
         color: var(--foreground-color);
     }
@@ -712,26 +777,66 @@
         margin: 1.5em;
         padding: 1em;
         background-color: var(--background-secondary);
-        box-shadow: 5px 5px 1em var(--theme1); 
+        box-shadow: var(--box-shadow1);
         border-radius: .5em;
         transition: all .6s;   
     }
 
-    .donate {
+    .about-ejs .mission h2 {
+        font-size: clamp(2.5rem, 5vw, 3rem);
+    }
+
+    .about-ejs .mission li {
+        margin-left: 2em;
+    }
+
+    .about-ejs .mission b { 
+        font-size: 1.25rem;
+        font-style: oblique;
+    }
+
+    .about-ejs .donate {
         height: fit-content;
     }
 
-    .help {
-        margin: .5em 1.5em;
+    .about-ejs .help {
+        margin: 1.5em;
+        padding: 1em;
+        background-color: var(--background-secondary);
+        box-shadow: var(--box-shadow1);
+        border-radius: .5em;
+        transition: all .6s;   
+    }
+
+    .about-ejs .help a {
+        position: relative;
+        padding: .25em;
+        border-radius: .25em 0 0 .25em;
+        background-color: var(--foreground-color);
+        color: var(--background-secondary);
+        text-decoration: none;
+    }
+
+    .about-ejs .help i {
+        padding: .37em;
+        color: var(--background-secondary);
+        background-color: var(--foreground-color);
+        border-radius: 0 .25em .25em 0;
+        transform: translateY(1px);
+        transition: transform .25s ease;
+    }
+
+    .about-ejs .help a:hover + i {
+        transform: translateX(50%) rotate(90deg);
     }
 
     .about-ejs .mission > h2, .about-ejs .donate > h2 {
-        border-bottom: 1px solid var(--foreground-color);
+        border-bottom: 3px solid var(--theme1);
         width: fit-content;
     }
 
-    .about-ejs .mission:hover, .about-ejs .donate:hover {
-        box-shadow: 7px 7px 2em var(--theme1); 
+    .about-ejs .mission:hover, .about-ejs .donate:hover, .about-ejs .help:hover {
+        box-shadow: var(--box-shadow2);
     }
 
 /* ====================================================================
@@ -740,11 +845,11 @@
 
     /* Add color to footer section of page. */
     #footer-section {
-        color: var(--foreground-color);
+        color: var(--background-primary);
     }
 
     #footer-section p {
-        font-size: .75em;
+        font-size: .75rem;
     }
 
     /* Format profile picture for user profile. */
@@ -761,7 +866,7 @@
 
     /* Custom logo that is in the navbar */
     #custom-logo {
-        font-size: 1.5em;
+        font-size: 1.5rem;
         font-family: "Mochiy Pop P One";
         color: var(--foreground-color);
         outline: 2px solid var(--foreground-color);
@@ -773,9 +878,3 @@
         background-color: var(--foreground-color);
         color: var(--background-primary);
     }
-
-    /* TODO */
-    /* 
-        Once the CSS is looking nice again -> 
-            refactor all common parts for pages into one style rule
-     */

@@ -24,6 +24,7 @@
 <%- include('./partials/home_header.ejs') %>
 
     <div class="profile-ejs">
+        <div class="background"></div>
         <!-- Create a card for showing the ADMIN data -->
         <div class="profile">
             <header>
@@ -70,15 +71,6 @@
                         </button>
                     </form>
 
-                    <!-- Add a button for the ADMIN to see their HISTORY !!! THIS WILL LIKELY BE IMPLEMENTED LATER ON -->
-                    <!-- <form action="" method="">
-                        <button type="submit" class="btn">
-                            <i class="fas fa-history"></i>
-                            See Event History
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </form> -->
-
                     <!-- Add a button so that the ADMIN can create a new event -->
                     <form action="/create_event" method="POST">
                         <button type="submit">
@@ -123,7 +115,7 @@
                     <% if(sucessCancelled.length > 0) { %>
                         <div class="confirmation">
                             <div class="elementToFadeInAndOut message-format">
-                                <h1><%= sucessCancelled %></h1>
+                                <b><%= sucessCancelled %></>
                             </div>
                         </div>
                     <% } %>
@@ -136,7 +128,7 @@
                     <% if(permissionDenied.length > 0) { %>
                         <div class="incorrect-input">
                             <div class="elementToFadeInAndOut message-format">
-                                <h1><%= permissionDenied %></h1>
+                                <b><%= permissionDenied %></b>
                             </div>
                         </div>
                     <% } %>
@@ -146,8 +138,8 @@
                         they successfully created a new event.
                     -->
                     <% if(successCreated.length > 0) { %>
-                        <div class="card-body elementToFadeInAndOut message-format">
-                            <h1 class="confirmation"><%= successCreated %></h1>
+                        <div class="elementToFadeInAndOut message-format">
+                            <b class="confirmation"><%= successCreated %></b>
                         </div>
                     <% } %>
 
@@ -156,8 +148,8 @@
                         they failed to create a new event.
                     -->
                     <% if(failureNotCreated.length > 0) { %>
-                            <div class="card-body elementToFadeInAndOut message-format">
-                                <h1 class="incorrect-input"><%= failureNotCreated %></h1>
+                            <div class="elementToFadeInAndOut message-format">
+                                <b class="incorrect-input"><%= failureNotCreated %></b>
                             </div>
                     <% } %>
 
@@ -174,6 +166,9 @@
                             <% } else { %>
 
                                 <div class="event" data-visible="false">
+
+                                    <h2> <%= event.eventName %></h2>
+                                   
                                     <!-- Include a function to simplify the date display -->
                                     <% function simplifyEventDate(eventDate){ %>
                                         <% // First split the event into the components that directly %>
@@ -295,7 +290,7 @@
                                                 <!-- Create hidden input types to obtain the different values that will be processed by the server -->
                                                 <input type="hidden" id="customId" name="eventidentifier" value="<%= event._id %>" onChange="getResult()">
                                                 <input type="hidden" id="customId" name="timeattendlength" value="<%= numTimeSlots %>" onChange="getResult()">
-                                                <button type="submit" class="mt-4 btn btn-lg btn-outline-light">Cancel Time(s)</button>
+                                                <button type="submit" class="mt-4 btn btn-outline-light">Cancel Time(s)</button>
                                             </form>
                                         <% } %>
                                     </ul>
@@ -368,17 +363,16 @@
 
                     <!-- Section for settings -->
                     <div id="settings" data-visible="false">
-                        <form action="">
+                        <form onsubmit="changeSettings()">
                             <h3>Accent Color for Site</h3>
                             <!-- <label for="accent-color">Accent Color for Site</label> -->
                             <input type="color" name="" id="accent-color">
                             <h3>Font Size</h3>
-                            <select name="magnification">
+                            <select id="font-size">
                                 <option value="normal">Normal</option>
                                 <option value="large">Large</option>
                                 <option value="x-large">X-Large</option>
                             </select>
-
                             <button type="submit" class="btn btn-outline-light">Apply</button>
                         </form>
                     </div>

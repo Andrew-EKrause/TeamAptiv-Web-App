@@ -517,7 +517,7 @@ app.get("/user_profile", function(req, res){
             // Redirect the ADMIN profile page and determine if ADMIN is undefined.
             res.redirect("/admin_profile");
         } else {
-            req.flash("alreadyCreated", "Your account has been deactivated. Contact admin at email@address for assistance");
+            req.flash("alreadyCreated", "Your account has been deactivated. Contact admin for assistance");
             res.redirect("/register");
         }
 
@@ -586,7 +586,7 @@ app.get("/user_profile", function(req, res){
             }
 
         } else {
-            req.flash("alreadyCreated", "Your account has been deactivated. Contact admin at email@address for assistance");
+            req.flash("alreadyCreated", "Your account has been deactivated. Contact admin for assistance");
             res.redirect("/register");
         }
 
@@ -736,7 +736,7 @@ app.get("/admin_profile", function(req, res){
             });
 
         } else {
-            req.flash("alreadyCreated", "Your account has been deactivated. Contact admin at email@address for assistance");
+            req.flash("alreadyCreated", "Your account has been deactivated. Contact admin for assistance");
             res.redirect("/register");
         }
 

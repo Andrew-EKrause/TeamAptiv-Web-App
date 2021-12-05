@@ -21,6 +21,7 @@
 <%- include('./partials/login-register_header.ejs') %>
 
     <div class="login-register-ejs">
+        <div class="background"></div>
         <div class="login-register-card">
             <!-- Header for the login form -->
             <header>
@@ -35,7 +36,7 @@
             <% if(errors.length > 0) { %>
                 <% for (let i = 0; i < errors.length; i++) { %>
                     <div class="message-format">
-                            <h1 class="incorrect-input"><%= errors[i] %></h1>
+                            <b class="incorrect-input"><%= errors[i] %></b>
                     </div>
                 <% } %>
             <% } %>
@@ -48,7 +49,7 @@
             -->
             <% if(permissionDenied.length > 0) { %>
                 <div class="message-format">
-                    <h1 class="incorrect-input"><%= permissionDenied %></h1>
+                    <b class="incorrect-input"><%= permissionDenied %></b>
                 </div>
             <% } %>
 

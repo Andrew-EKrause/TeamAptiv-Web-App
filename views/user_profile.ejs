@@ -25,6 +25,7 @@
 <%- include('./partials/home_header.ejs') %>
 
     <div class="profile-ejs">
+        <div class="background"></div>
         <!-- Create a card for showing the user data -->
         <div class="profile">
             <header>
@@ -65,28 +66,11 @@
                         <span>My Events</span>
                     </button>
 
-                    <!-- Add a button for the user to view the cancelled events on their profile page -->
-                    <!-- <form action="" method="">
-                        <button type="submit">
-                            <i class="far fa-calendar-times"></i>
-                            <span>Cancelled Events</span>
-                        </button>
-                    </form> -->
-
                     <!-- Create a button to access the settings -->
                     <button type="button" class="settings-toggler">
                         <i class="fas fa-sliders-h"></i>
                         <span>Settings</span>
                     </button>
-
-                    <!-- Add a button for the user to see their HISTORY !!! THIS WILL LIKELY BE IMPLEMENTED LATER ON -->
-                    <!-- <form action="" method="">
-                        <button type="submit" class="btn">
-                            <i class="fas fa-history"></i>
-                            See Event History
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </form> -->
 
                     <!-- Add a button so that the user can logout of their account -->
                     <form action="/logout" method="POST">
@@ -217,7 +201,7 @@
 
                                         <!-- Check if the user has times that they signed up for in the event. List the times out -->
                                         <% if(user.timesAttending.length > 1) { %>
-                                            <li>Times Attending: </li>
+                                            <li>Volunteering Times: </li>
 
                                             <!-- FUNCTION: Function to get the value of the time attending -->
                                             <% function getResult() { %>
@@ -274,15 +258,15 @@
 
                     <!-- Section for settings -->
                     <div id="settings" data-visible="false">
-                        <form action="">
+                        <form onsubmit="changeSettings()">
                             <h3>Accent Color for Site</h3>
                             <!-- <label for="accent-color">Accent Color for Site</label> -->
                             <input type="color" name="" id="accent-color">
                             <h3>Font Size</h3>
-                            <select name="magnification">
-                                <option value="normal">Normal</option>
-                                <option value="large">Large</option>
-                                <option value="x-large">X-Large</option>
+                            <select id="font-size">
+                                <option value="1rem">Normal</option>
+                                <option value="1.25rem">Large</option>
+                                <option value="1.5rem">X-Large</option>
                             </select>
 
                             <button type="submit" class="btn btn-outline-light">Apply</button>

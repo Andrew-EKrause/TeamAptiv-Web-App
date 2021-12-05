@@ -20,88 +20,86 @@
 <%- include('./partials/home_header.ejs') %>
 
     <div class="events-ejs my-auto">
+        <div class="background"></div>
         <!-- List of programs/events -->
-        <!-- <div class="container mt-3"> -->
-            <!-- <div class=""> -->
-                <header>
-                    <h1>Get Involved</h1>
-                    <small>Volunteer | Donate</small>
-                </header>
+        <header>
+            <h1>Get Involved</h1>
+            <small>Volunteer | Donate</small>
+        </header>
 
-                <section class="events-list mb-5">
-                    <!-- Loop through the database and display the events -->
-                    <% events.forEach(function(event) { %>
+        <section class="events-list mb-5">
+            <!-- Loop through the database and display the events -->
+            <% events.forEach(function(event) { %>
+                
+                <a href="/events/<%=event._id%>">
+                    <div class="event">
+                        <h2> <%= event.eventName %> </h2>
+
+                        <!-- Include a function to simplify the date display -->
+                        <% function simplifyEventDate(eventDate){ %>
+
+                            <% // First split the event into the components that directly %>
+                            <% // involve the numberical representations of a date. %>
+                            <% var date = eventDate.toISOString().split("T")[0]; %>
                         
-                        <a href="/events/<%=event._id%>">
-                            <div class="event">
-                                <h2> <%= event.eventName %> </h2>
+                            <% // Create variables for workring with %>
+                            <% // the nubmers in the date variable. %>
+                            <% var arrayDate = date.split('-'); %>
+                            <% var day = arrayDate[2]; %>
+                            <% var getMonth = arrayDate[1]; %>
+                            <% var month = ""; %>
+                            <% var year = arrayDate[0]; %>
+                            <% var simplifiedDate = ""; %>
+                        
+                            <% // Use a series of conditionals to determine %>
+                            <% // what the name of the month is based on the %>
+                            <% // numerical representation of it. %>
+                            <% if(getMonth.localeCompare('1') == 0) { %>
+                                <% month = 'Jan'; %>
+                            <% } else if(getMonth.localeCompare('2') == 0) { %>
+                                <% month = 'Feb'; %>
+                            <% } else if(getMonth.localeCompare('3') == 0) { %>
+                                <% month = 'Mar'; %>
+                            <% } else if(getMonth.localeCompare('4') == 0) { %>
+                                <% month = 'Apr'; %>
+                            <% } else if(getMonth.localeCompare('5') == 0) { %>
+                                <% month = 'May'; %>
+                            <% } else if(getMonth.localeCompare('6') == 0) { %>
+                                <% month = 'Jun'; %>
+                            <% } else if(getMonth.localeCompare('7') == 0) { %>
+                                <% month = 'Jul'; %>
+                            <% } else if(getMonth.localeCompare('8') == 0) { %>
+                                <% month = 'Aug'; %>
+                            <% } else if(getMonth.localeCompare('9') == 0) { %>
+                                <% month = 'Sep'; %>
+                            <% } else if(getMonth.localeCompare('10') == 0) { %>
+                                <% month = 'Oct'; %>
+                            <% } else if(getMonth.localeCompare('11') == 0) { %>
+                                <% month = 'Nov'; %>
+                            <% } else if(getMonth.localeCompare('12') == 0) { %>
+                                <% month = 'Dec'; %>
+                            <% } else { %>
+                                <% month = 'ERROR'; %>
+                            <% } %>
+                        
+                            <% // Create the simplified date and return it. %>
+                            <% simplifiedDate = month + " " + day + ", " + year; %>
+                            <% return simplifiedDate; %>
+                        <% } %>
+                        
+                        <!-- The date displayed utilized the function above for simplification -->
+                        <div class="hidden">
+                            <ul>
+                                <li><%= simplifyEventDate(event.eventDate) %></li>
+                                <li><%= event.eventLocation %></li>
+                            </ul>
+                        </div>
+                        <b>Learn more<i class="fas fa-chevron-right"></i></b>
+                    </div>
+                </a>
 
-                                <!-- Include a function to simplify the date display -->
-                                <% function simplifyEventDate(eventDate){ %>
-
-                                    <% // First split the event into the components that directly %>
-                                    <% // involve the numberical representations of a date. %>
-                                    <% var date = eventDate.toISOString().split("T")[0]; %>
-                                
-                                    <% // Create variables for workring with %>
-                                    <% // the nubmers in the date variable. %>
-                                    <% var arrayDate = date.split('-'); %>
-                                    <% var day = arrayDate[2]; %>
-                                    <% var getMonth = arrayDate[1]; %>
-                                    <% var month = ""; %>
-                                    <% var year = arrayDate[0]; %>
-                                    <% var simplifiedDate = ""; %>
-                                
-                                    <% // Use a series of conditionals to determine %>
-                                    <% // what the name of the month is based on the %>
-                                    <% // numerical representation of it. %>
-                                    <% if(getMonth.localeCompare('1') == 0) { %>
-                                        <% month = 'Jan'; %>
-                                    <% } else if(getMonth.localeCompare('2') == 0) { %>
-                                        <% month = 'Feb'; %>
-                                    <% } else if(getMonth.localeCompare('3') == 0) { %>
-                                        <% month = 'Mar'; %>
-                                    <% } else if(getMonth.localeCompare('4') == 0) { %>
-                                        <% month = 'Apr'; %>
-                                    <% } else if(getMonth.localeCompare('5') == 0) { %>
-                                        <% month = 'May'; %>
-                                    <% } else if(getMonth.localeCompare('6') == 0) { %>
-                                        <% month = 'Jun'; %>
-                                    <% } else if(getMonth.localeCompare('7') == 0) { %>
-                                        <% month = 'Jul'; %>
-                                    <% } else if(getMonth.localeCompare('8') == 0) { %>
-                                        <% month = 'Aug'; %>
-                                    <% } else if(getMonth.localeCompare('9') == 0) { %>
-                                        <% month = 'Sep'; %>
-                                    <% } else if(getMonth.localeCompare('10') == 0) { %>
-                                        <% month = 'Oct'; %>
-                                    <% } else if(getMonth.localeCompare('11') == 0) { %>
-                                        <% month = 'Nov'; %>
-                                    <% } else if(getMonth.localeCompare('12') == 0) { %>
-                                        <% month = 'Dec'; %>
-                                    <% } else { %>
-                                        <% month = 'ERROR'; %>
-                                    <% } %>
-                                
-                                    <% // Create the simplified date and return it. %>
-                                    <% simplifiedDate = month + " " + day + ", " + year; %>
-                                    <% return simplifiedDate; %>
-                                <% } %>
-                                
-                                <!-- The date displayed utilized the function above for simplification -->
-                                <p> <%= simplifyEventDate(event.eventDate) %> </p> 
-                                <p> <%= event.eventLocation %> </p>
-                                <b>Learn more<i class="fas fa-chevron-right"></i></b>
-                            </div>
-                        </a>
-
-                    <% }); %>
-                </section>
-            <!-- </div> -->
-
-            <!-- Include a section for the events to be posted -->
-        
-        <!-- </div> -->
+            <% }); %>
+        </section>
     </div>
     
  <%- include('./partials/footer.ejs') %>
