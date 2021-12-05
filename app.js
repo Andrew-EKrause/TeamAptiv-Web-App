@@ -797,23 +797,23 @@ function simplifyEventDate(eventDate){
     // Use a series of conditionals to determine
     // what the name of the month is based on the
     // numerical representation of it.
-    if(getMonth.localeCompare('1') == 0) {
+    if(getMonth.localeCompare('01') == 0) {
         month = 'Jan';
-    } else if(getMonth.localeCompare('2') == 0) {
+    } else if(getMonth.localeCompare('02') == 0) {
         month = 'Feb';
-    } else if(getMonth.localeCompare('3') == 0) {
+    } else if(getMonth.localeCompare('03') == 0) {
         month = 'Mar';
-    } else if(getMonth.localeCompare('4') == 0) {
+    } else if(getMonth.localeCompare('04') == 0) {
         month = 'Apr';
-    } else if(getMonth.localeCompare('5') == 0) {
+    } else if(getMonth.localeCompare('05') == 0) {
         month = 'May';
-    } else if(getMonth.localeCompare('6') == 0) {
+    } else if(getMonth.localeCompare('06') == 0) {
         month = 'Jun';
-    } else if(getMonth.localeCompare('7') == 0) {
+    } else if(getMonth.localeCompare('07') == 0) {
         month = 'Jul';
-    } else if(getMonth.localeCompare('8') == 0) {
+    } else if(getMonth.localeCompare('08') == 0) {
         month = 'Aug';
-    } else if(getMonth.localeCompare('9') == 0) {
+    } else if(getMonth.localeCompare('09') == 0) {
         month = 'Sep';
     } else if(getMonth.localeCompare('10') == 0) {
         month = 'Oct';
@@ -1151,6 +1151,9 @@ app.post("/create_event", function(req, res){
 // Create a post request for the ADMIN so when they want to
 // add an event, that event is added to the database.
 app.post("/added_event", function(req, res){
+
+
+    console.log(req.body.eventdate);
 
     // Create a new event ID for the developers to use and track.
     // Also create a string version of the event ID to put in the
