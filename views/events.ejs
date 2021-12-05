@@ -19,27 +19,25 @@
 
 <%- include('./partials/home_header.ejs') %>
 
+    <!-- 
+        Include EJS to display any success messages to the ADMIN
+        if they have successfully cancelled an entire event.
+    -->
+    <% if(successCancelled.length > 0) { %>
+        <div class="confirmation">
+            <div class="elementToFadeInAndOut message-format">
+                <h1><%= successCancelled %></h1>
+            </div>
+        </div>
+    <% } %>
+
     <div class="events-ejs my-auto">
+        <div class="background"></div>
         <!-- List of programs/events -->
-        <!-- <div class="container mt-3"> -->
-            <!-- <div class=""> -->
-                <header>
-                    <h1>Get Involved</h1>
-                    <small>Volunteer | Donate</small>
-                </header>
-
-                <!-- 
-                    Include EJS to display any success messages to the ADMIN
-                    if they have successfully cancelled an entire event.
-                -->
-                <% if(successCancelled.length > 0) { %>
-                    <div class="confirmation">
-                        <div class="elementToFadeInAndOut message-format">
-                            <h1><%= successCancelled %></h1>
-                        </div>
-                    </div>
-                <% } %>
-
+        <header>
+            <h1>Get Involved</h1>
+            <small>Volunteer | Donate</small>
+        </header>
                 <!-- Include a section to style each event in the list of events -->
                 <section class="events-list mb-5">
                     <!-- Loop through the database and display the events -->
@@ -103,10 +101,15 @@
                                         <% simplifiedDate = month + " " + day + ", " + year; %>
                                         <% return simplifiedDate; %>
                                     <% } %>
-                                    
+
                                     <!-- The date displayed utilized the function above for simplification -->
-                                    <p> <%= simplifyEventDate(event.eventDate) %> </p> 
-                                    <p> <%= event.eventLocation %> </p>
+                                    <div class="hidden">
+                                        <ul>
+                                            <li><%= simplifyEventDate(event.eventDate) %></li>
+                                            <li><%= event.eventLocation %></li>
+                                        </ul>
+                                    </div>
+
                                     <b>Learn more<i class="fas fa-chevron-right"></i></b>
                                 </div>
                             </a>

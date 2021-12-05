@@ -19,9 +19,55 @@
     ...
 -->
 
+        <!-- 
+            Include EJS to display any success messages to the ADMIN if they
+            have successfully cancelled one event or multiple event timeslots.
+        -->
+        <% if(successCancelled.length > 0) { %>
+            <div class="confirmation">
+                <div class="elementToFadeInAndOut message-format">
+                    <b><%= successCancelled %></>
+                </div>
+            </div>
+        <% } %>
+
+        <!-- 
+            Include EJS to display an error message if the ADMIN
+            attempts to complete an action that is impossible to 
+            complete.
+        -->
+        <% if(permissionDenied.length > 0) { %>
+            <div class="incorrect-input">
+                <div class="elementToFadeInAndOut message-format">
+                    <b><%= permissionDenied %></b>
+                </div>
+            </div>
+        <% } %>
+
+        <!-- 
+            Include EJS to display a success message to the ADMIN if
+            they successfully created a new event.
+        -->
+        <% if(successCreated.length > 0) { %>
+            <div class="elementToFadeInAndOut message-format">
+                <b class="confirmation"><%= successCreated %></b>
+            </div>
+        <% } %>
+
+        <!-- 
+            Include EJS to display a failure message to the ADMIN if
+            they failed to create a new event.
+        -->
+        <% if(failureNotCreated.length > 0) { %>
+                <div class="elementToFadeInAndOut message-format">
+                    <b class="incorrect-input"><%= failureNotCreated %></b>
+                </div>
+        <% } %>
+
 <%- include('./partials/home_header.ejs') %>
 
     <div class="profile-ejs">
+        <div class="background"></div>
         <!-- Create a card for showing the ADMIN data -->
         <div class="profile">
             <header>
@@ -134,51 +180,6 @@
                     <% }); %>
 
                     <!-- 
-                        Include EJS to display any success messages to the ADMIN if they
-                        have successfully cancelled one event or multiple event timeslots.
-                    -->
-                    <% if(successCancelled.length > 0) { %>
-                        <div class="confirmation">
-                            <div class="elementToFadeInAndOut message-format">
-                                <h1><%= successCancelled %></h1>
-                            </div>
-                        </div>
-                    <% } %>
-
-                    <!-- 
-                        Include EJS to display an error message if the ADMIN
-                        attempts to complete an action that is impossible to 
-                        complete.
-                    -->
-                    <% if(permissionDenied.length > 0) { %>
-                        <div class="incorrect-input">
-                            <div class="elementToFadeInAndOut message-format">
-                                <h1><%= permissionDenied %></h1>
-                            </div>
-                        </div>
-                    <% } %>
-
-                    <!-- 
-                        Include EJS to display a success message to the ADMIN if
-                        they successfully created a new event.
-                    -->
-                    <% if(successCreated.length > 0) { %>
-                        <div class="card-body elementToFadeInAndOut message-format">
-                            <h1 class="confirmation"><%= successCreated %></h1>
-                        </div>
-                    <% } %>
-
-                    <!-- 
-                        Include EJS to display a failure message to the ADMIN if
-                        they failed to create a new event.
-                    -->
-                    <% if(failureNotCreated.length > 0) { %>
-                            <div class="card-body elementToFadeInAndOut message-format">
-                                <h1 class="incorrect-input"><%= failureNotCreated %></h1>
-                            </div>
-                    <% } %>
-
-                    <!-- 
                         Include a section for the events that the ADMIN has signed up
                         for to be rendered on the user's profile page
                     -->
@@ -197,7 +198,7 @@
                                 <% } else if(event.eventActive == false) { %>
 
                                     <!-- Style the events that have been cancelled by the ADMIN differently -->
-                                    <div class="event" data-visible="false">
+                                    <div class="event cancelled" data-visible="false">
                                         <!-- Include a function to simplify the date display -->
                                         <% function simplifyEventDate(eventDate){ %>
                                             <% // First split the event into the components that directly %>
@@ -285,7 +286,7 @@
                                             <form action="/admin_reschedule_event" method="POST">
                                                 <div>
                                                     <input type="hidden" id="custId" name="rescheduleeventidentifier" value="<%= //event.eventID // --> MAYBE GIVES ERROR!!! %>"> 
-                                                    <button type="submit" class="btn btn-outline-dark"><i class="fas fa-plus"></i> Reschedule Event</button>
+                                                    <!-- <button type="submit" class="btn btn-outline-dark"><i class="fas fa-plus"></i> Reschedule Event</button>
                                                 </div>
                                             </form>
                                         </div> -->
@@ -418,7 +419,7 @@
                                                     <!-- Create hidden input types to obtain the different values that will be processed by the server -->
                                                     <input type="hidden" id="customId" name="eventidentifier" value="<%= event._id %>" onChange="getResult()">
                                                     <input type="hidden" id="customId" name="timeattendlength" value="<%= numTimeSlots %>" onChange="getResult()">
-                                                    <button type="submit" class="mt-4 btn btn-lg btn-outline-light"><i class="fas fa-times"></i> Cancel Time(s)</button>
+                                                    <button type="submit" class="mt-4 btn btn-outline-light"><i class="fas fa-times"></i> Cancel Time(s)</button>
                                                 </form>
                                             <% } %>
                                         </ul>
@@ -504,17 +505,16 @@
 
                     <!-- Section for settings -->
                     <div id="settings" data-visible="false">
-                        <form action="">
+                        <form onsubmit="changeSettings()">
                             <h3>Accent Color for Site</h3>
                             <!-- <label for="accent-color">Accent Color for Site</label> -->
                             <input type="color" name="" id="accent-color">
                             <h3>Font Size</h3>
-                            <select name="magnification">
+                            <select id="font-size">
                                 <option value="normal">Normal</option>
                                 <option value="large">Large</option>
                                 <option value="x-large">X-Large</option>
                             </select>
-
                             <button type="submit" class="btn btn-outline-light">Apply</button>
                         </form>
                     </div>

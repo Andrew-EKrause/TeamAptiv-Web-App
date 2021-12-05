@@ -28,7 +28,7 @@
 
         <!-- CSS Stylesheets -->
         <link rel="stylesheet" href="/css/bootstrap-social.css">
-        <link rel="stylesheet" href="/css/stylesRefactored.css">
+        <link rel="stylesheet" href="/css/styles.css">
         <link rel="stylesheet" href="/css/dynamic.css">
 
         <!-- Font Awesome -->
@@ -40,7 +40,7 @@
             integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous">
         </script>
 
-        <script src="/profile.js"></script>
+        <script src="/dynamic.js"></script>
     </head>
 
     <body>
@@ -53,40 +53,27 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
-              
+
                         <!-- First navigation bar link -->
                         <li class="nav-item">
                             <a class="nav-link" href="/events">Events</a>
                         </li>
-
-                        <!-- Take to unrestricted donation page -->
-                        <!-- <li class="nav-item">
-                            <a class="nav-link" href="/unrestricted_donation">Support us</a>
-                        </li> -->
-                        
                         <!-- First navigation bar link -->
                         <li id="about" class="nav-item">
                             <a class="nav-link" href="/about">Mission</a>
                         </li>
-                        <!-- Link to user profile -->
-                        <!-- <li class="nav-item">
-                            <a class="nav-link" href="/user_profile">Profile</a>
-                        </li> -->
                         <!-- Show the format for logged out or logged in -->
                         <% if(typeof user != 'undefined') { %>
                             <li class="nav-item">
                                 <a class="nav-link" href="/user_profile">Profile</a>
                             </li>
-                            <!-- Third navigation bar link -->
-                            <!-- <li class="nav-item">
-                                <a class="nav-link" href="/logout">Logout</a>
-                            </li> -->
                         <% } else { %>
                             <!-- Third navigation bar link -->
                             <li class="nav-item">
                                 <a class="nav-link" href="/login">Login</a>
                             </li>
                         <% } %>
+                        
                     </ul>
                 </div>
             </div>

@@ -12,61 +12,60 @@
 
 <%- include('./partials/home_header.ejs') %>
     <div class="about-ejs">
+        <!-- Send a message to the user alterting them that they made an unrestricted donation-->
+        <% if(thanksForDonation.length > 0) { %>
+            <div class="card-body elementToFadeInAndOut message-format">
+                <h1 class="confirmation"><%= thanksForDonation %></h1>
+            </div>
+        <% } %>
+        <div class="background"></div>
         <div class="wrapper">
             <div class="main">
                 <div class="mission">
                     <h2>Our Mission</h2>
 
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
-                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim 
-                        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex 
-                        ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate 
-                        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat 
-                        cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id 
-                        est laborum.
-                    </p>
+                    <b>Aptiv is committed to providing people with disabilities the opportunity to:</b>
+                    <ul>
+                        <li>Showcase their aptitude for learning new skills</li>
+                        <li>Better-engage and play a more-active role in their community</li>
+                        <li>Live a more-meaningful and fulfilling life</li>
+                        <li>Find adaptive options that help them succeed in their goals. </li>
+                    </ul>
+
+                    <b>Aptiv serves children and adults with many different types of disabilities.</b>
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
-                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim 
-                        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex 
-                        ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate 
-                        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat 
-                        cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id 
-                        est laborum.
+                        Aptiv, established in 1977 as Riverfront Inc., is a non-profit with over 40 years of experience working alongside 
+                        children and adults with disabilities to provide a spectrum of innovative support through programs and services
+                         so they may live more independent lives. Our services help more than 1,700 individuals and their families in each 
+                         community we serve. We provide support when and where you need it, whether it’s in your home, at school, in the 
+                         community or at one of our 8 service locations.
                     </p>
-                    </div>
-
-                <div class="donate">
-                    <h2>Donate to Team Aptiv</h2>
-                    <!-- Send a message to the user alterting them that they made an unrestricted donation-->
-                    <% if(thanksForDonation.length > 0) { %>
-                    <div class="card-body elementToFadeInAndOut message-format">
-                        <h1 class="confirmation"><%= thanksForDonation %></h1>
-                    </div>
-                    <% } %>
-                    
-                    <% events.forEach(function(event) { %>
-                        <!-- Makes POST request to the organization donation route -->
-                        <!-- Use the forEach loop above to access the components of the document -->
-                        <form class="form-horizontal" action="/donate_org" method="POST">
-                            <div class="form-group mt-2">
-                                <input type="hidden" class="login-register-font form-control" name="orgidentifier" value="<%= event.orgID %>">
-                                <input type="hidden" class="login-register-font form-control" name="orgcurrent" value="<%= event.receivedDonations %>">
-                                <input type="number" class="login-register-font form-control" name="orgdonation" min="1" required>
-                            </div>
-                            <button type="submit" class="mt-4 btn btn-lg btn-outline-light">Place Donation</button>
-                        </form>
-                    <% }); %>  
                 </div>
-              
-            </div>
 
-            <div class="help">
-                <!-- Create a form to process when user clicks "Donate" button -->
-                <h2>Having trouble with the site?</h2>
-                <!-- Create a link for downloading the user help manual -->
-                <span><a href="/download_help">Download Help Manual for Website</a></span>
-            </div>
+                <div class="right">
+                    <div class="donate">
+                        <h2>Donate to Team Aptiv</h2>
+                        <% events.forEach(function(event) { %>
+                            <!-- Makes POST request to the organization donation route -->
+                            <!-- Use the forEach loop above to access the components of the document -->
+                            <form class="form-horizontal" action="/donate_org" method="POST">
+                                <div class="form-group mt-2">
+                                    <input type="hidden" class="login-register-font form-control" name="orgidentifier" value="<%= event.orgID %>">
+                                    <input type="hidden" class="login-register-font form-control" name="orgcurrent" value="<%= event.receivedDonations %>">
+                                    <input type="number" class="login-register-font form-control" name="orgdonation" min="1" required>
+                                </div>
+                                <button type="submit" class="mt-4 btn btn-lg btn-outline-light">Place Donation</button>
+                            </form>
+                        <% }); %>  
+                    </div>
+                    <div class="help">
+                        <!-- Create a form to process when user clicks "Donate" button -->
+                        <h2>Having trouble with the site?</h2>
+                        <!-- Create a link for downloading the user help manual -->
+                        <span><a href="/download_help">Download Help Manual for Website</a><i class="fas fa-chevron-right"></i></span>
+                    </div>
+                </div>              
+            </div>  
         </div>
     </div>
  

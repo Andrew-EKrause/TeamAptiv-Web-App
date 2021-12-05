@@ -1,3 +1,13 @@
+/*
+ * Author: Riley Radle
+ * Description: 
+ *      This file adds dynamic styles through css.  It allows
+ *      the website to be mobile friendly on a basic level
+ *
+ * Last Edited: December 2021
+ */
+
+/* Media query to shift to mobile view */
 @media (max-width: 50em) {
 
 /* ====================================================================
@@ -17,6 +27,11 @@
                         EVENTS.EJS STYLES
 ==================================================================== */
 
+    .events-ejs .background {
+        background-image: url("../images/LR-Illustration.png");
+        background-position: right;
+    }
+
     .events-ejs header {
         position: static;
         transform: none;
@@ -32,6 +47,10 @@
     .events-ejs header > h1 {
         font-size: clamp(4em, 10vw, 6em);
     } 
+
+    .events-ejs header > small {
+        padding: 0;
+    }
 
 /* ====================================================================
                         SPECIFIC_EVENT.EJS STYLES

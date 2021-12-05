@@ -20,9 +20,34 @@
     ...
 -->
 
+    <!-- 
+        Include EJS to display any success messages to the user if they
+        have successfully cancelled one event or multiple event timeslots.
+    -->
+    <% if(successCancelled.length > 0) { %>
+        <div class="confirmation">
+            <div class="elementToFadeInAndOut message-format">
+                <h1><%= successCancelled %></h1>
+            </div>
+        </div>
+    <% } %>
+
+    <!-- 
+        Include EJS to display any error messages to the user if the
+        attempt to access a page that they are not authorized to access.
+    -->
+    <% if(permissionDenied.length > 0) { %>
+        <div class="incorrect-input">
+            <div class="elementToFadeInAndOut message-format">
+                <h1><%= permissionDenied %></h1>
+            </div>
+        </div>
+    <% } %>
+
 <%- include('./partials/home_header.ejs') %>
 
     <div class="profile-ejs">
+        <div class="background"></div>
         <!-- Create a card for showing the user data -->
         <div class="profile">
             <header>
@@ -72,15 +97,6 @@
                         <span>Settings</span>
                     </button>
 
-                    <!-- Add a button for the user to see their HISTORY !!! THIS WILL LIKELY BE IMPLEMENTED LATER ON -->
-                    <!-- <form action="" method="">
-                        <button type="submit" class="btn">
-                            <i class="fas fa-history"></i>
-                            See Event History
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </form> -->
-
                     <!-- Add a button so that the user can logout of their account -->
                     <form action="/logout" method="POST">
                         <button type="submit">
@@ -90,31 +106,7 @@
                     </form>
                 </nav>
                 <!-- Add a column class in order to help make the page responsive -->
-                <div class="right-content">
-                    <!-- 
-                        Include EJS to display any success messages to the user if they
-                        have successfully cancelled one event or multiple event timeslots.
-                    -->
-                    <% if(successCancelled.length > 0) { %>
-                        <div class="confirmation">
-                            <div class="elementToFadeInAndOut message-format">
-                                <h1><%= successCancelled %></h1>
-                            </div>
-                        </div>
-                    <% } %>
-
-                    <!-- 
-                        Include EJS to display any error messages to the user if the
-                        attempt to access a page that they are not authorized to access.
-                    -->
-                    <% if(permissionDenied.length > 0) { %>
-                        <div class="incorrect-input">
-                            <div class="elementToFadeInAndOut message-format">
-                                <h1><%= permissionDenied %></h1>
-                            </div>
-                        </div>
-                    <% } %>
-                        
+                <div class="right-content"> 
                     <!-- 
                         Include a section for the events that the user has signed up
                         for to be rendered on the user's profile page
@@ -134,7 +126,7 @@
                                 <% } else if(event.eventActive == false) { %>
 
                                     <!-- Style the events that have been cancelled by the ADMIN differently -->
-                                    <div class="event" data-visible="false">
+                                    <div class="event cancelled" data-visible="false">
                                         <!-- Include a function to simplify the date display -->
                                         <% function simplifyEventDate(eventDate){ %>
                                             <% // First split the event into the components that directly %>
@@ -357,15 +349,15 @@
 
                     <!-- Section for settings -->
                     <div id="settings" data-visible="false">
-                        <form action="">
+                        <form onsubmit="changeSettings()">
                             <h3>Accent Color for Site</h3>
                             <!-- <label for="accent-color">Accent Color for Site</label> -->
                             <input type="color" name="" id="accent-color">
                             <h3>Font Size</h3>
-                            <select name="magnification">
-                                <option value="normal">Normal</option>
-                                <option value="large">Large</option>
-                                <option value="x-large">X-Large</option>
+                            <select id="font-size">
+                                <option value="1rem">Normal</option>
+                                <option value="1.25rem">Large</option>
+                                <option value="1.5rem">X-Large</option>
                             </select>
 
                             <button type="submit" class="btn btn-outline-light">Apply</button>
