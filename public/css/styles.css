@@ -106,19 +106,27 @@
 
     /* Style incorrect login with redish color. */
     .incorrect-input {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: fit-content;
         background-color: rgb(255, 169, 169);
         color: rgb(255, 60, 60);
         border: 2px solid rgb(255, 60, 60);
-        animation: fade 5s forwards;
+        animation: drop 7s forwards;
         z-index: 100;
     }
 
     /* Style confirmation message with greenish color. */
     .confirmation {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: fit-content;
         background-color: rgb(207, 246, 207);
         color: rgb(145, 182, 145);
         border: 2px solid rgb(145, 182, 145);
-        animation: fade 5s forwards;
+        animation: drop 7s forwards;
         z-index: 100;
     }
 
@@ -127,19 +135,28 @@
     }
 
     /* Key frames fade. */
-    @keyframes fade {
-    0% { opacity: 1; }
-    50% { opacity: 1;}
-    90% { height: auto; }
-    100% { opacity: 0; height: 0; pointer-events: none; } 
+    @keyframes drop {
+        0% {
+            transform:  translateY(-100%) translateX(calc(-50vw + 50%));
+        }
+        15% {
+            transform: translateY(0%) translateX(calc(-50vw + 50%));
+        }
+        85% {
+            transform: translateY(0%) translateX(calc(-50vw + 50%));
+        }
+        100% {
+            transform: translateY(-100%) translateX(calc(-50vw + 50%));
+            display: none;
+         }
     }
 
     /* Format the messages sent to the user */ 
     .message-format {
+        display: inline-block;
         text-align: center;
-        font-size: 1.5rem;
+        font-size: 3rem;
         width: fit-content;
-        padding: .25em;
     }
 
  /* ====================================================================
@@ -388,7 +405,7 @@
 
     .events-ejs .event > h2 {
         font-size: 2.5rem;
-        border-bottom: 1px solid var(--foreground-color);
+        border-bottom: 3px solid var(--theme1);
         width: fit-content;
     }
 
@@ -458,7 +475,8 @@
   }
 
  .specific-event-ejs .event {
-    padding: 1em;
+    position: relative;
+    padding: 1em 1em 2em;
     width: 90%;
     margin: auto;
     height: 100%;
@@ -475,10 +493,19 @@
  }
 
  .specific-event-ejs .event li {
-     font-size: 1.5rem;
-     list-style: circle;
-     margin-left: 1em;
-     padding-bottom: .5em;
+    font-size: 1.5rem;
+    list-style: circle;
+    margin-left: 1em;
+    padding-bottom: .5em;
+ }
+
+ /* Style the buttons in the event card */
+ .specific-event-ejs .event .btn-container {
+    position: absolute;
+    right: 1em;
+    bottom: 1em;
+    display: flex;
+    gap: 1em;
  }
 
  .specific-event-ejs .volunteer, .specific-event-ejs .donate {
@@ -493,9 +520,14 @@
 
  /* Make the labels for donating and volunteering the same font size */
  .specific-event-ejs .volunteer-donate .form-title {
-     font-size: 1.75rem;
-     border-bottom: 3px solid var(--theme1);
-     margin-bottom: .5em;
+    font-size: 1.75rem;
+    border-bottom: 3px solid var(--theme1);
+    margin-bottom: .5em;
+ }
+ 
+ .specific-event-ejs .volunteer-donate .form-title-no-border {
+    display: block;
+    font-size: 1.75rem;
  }
 
  .specific-event-ejs .volunteer .form-title {
@@ -768,7 +800,7 @@
     }
 
     .about-ejs .wrapper {
-        width: 80%;
+        width: clamp(40em, 90%, 100em);
         margin: auto;
     }
 

@@ -19,6 +19,18 @@
 
 <%- include('./partials/home_header.ejs') %>
 
+    <!-- 
+        Include EJS to display any success messages to the ADMIN
+        if they have successfully cancelled an entire event.
+    -->
+    <% if(successCancelled.length > 0) { %>
+        <div class="confirmation">
+            <div class="elementToFadeInAndOut message-format">
+                <h1><%= successCancelled %></h1>
+            </div>
+        </div>
+    <% } %>
+
     <div class="events-ejs my-auto">
         <div class="background"></div>
         <!-- List of programs/events -->
@@ -26,19 +38,6 @@
             <h1>Get Involved</h1>
             <small>Volunteer | Donate</small>
         </header>
-
-                <!-- 
-                    Include EJS to display any success messages to the ADMIN
-                    if they have successfully cancelled an entire event.
-                -->
-                <% if(successCancelled.length > 0) { %>
-                    <div class="confirmation">
-                        <div class="elementToFadeInAndOut message-format">
-                            <h1><%= successCancelled %></h1>
-                        </div>
-                    </div>
-                <% } %>
-
                 <!-- Include a section to style each event in the list of events -->
                 <section class="events-list mb-5">
                     <!-- Loop through the database and display the events -->
@@ -70,23 +69,23 @@
                                         <% // Use a series of conditionals to determine %>
                                         <% // what the name of the month is based on the %>
                                         <% // numerical representation of it. %>
-                                        <% if(getMonth.localeCompare('1') == 0) { %>
+                                        <% if(getMonth.localeCompare('01') == 0) { %>
                                             <% month = 'Jan'; %>
-                                        <% } else if(getMonth.localeCompare('2') == 0) { %>
+                                        <% } else if(getMonth.localeCompare('02') == 0) { %>
                                             <% month = 'Feb'; %>
-                                        <% } else if(getMonth.localeCompare('3') == 0) { %>
+                                        <% } else if(getMonth.localeCompare('03') == 0) { %>
                                             <% month = 'Mar'; %>
-                                        <% } else if(getMonth.localeCompare('4') == 0) { %>
+                                        <% } else if(getMonth.localeCompare('04') == 0) { %>
                                             <% month = 'Apr'; %>
-                                        <% } else if(getMonth.localeCompare('5') == 0) { %>
+                                        <% } else if(getMonth.localeCompare('05') == 0) { %>
                                             <% month = 'May'; %>
-                                        <% } else if(getMonth.localeCompare('6') == 0) { %>
+                                        <% } else if(getMonth.localeCompare('06') == 0) { %>
                                             <% month = 'Jun'; %>
-                                        <% } else if(getMonth.localeCompare('7') == 0) { %>
+                                        <% } else if(getMonth.localeCompare('07') == 0) { %>
                                             <% month = 'Jul'; %>
-                                        <% } else if(getMonth.localeCompare('8') == 0) { %>
+                                        <% } else if(getMonth.localeCompare('08') == 0) { %>
                                             <% month = 'Aug'; %>
-                                        <% } else if(getMonth.localeCompare('9') == 0) { %>
+                                        <% } else if(getMonth.localeCompare('09') == 0) { %>
                                             <% month = 'Sep'; %>
                                         <% } else if(getMonth.localeCompare('10') == 0) { %>
                                             <% month = 'Oct'; %>
@@ -110,7 +109,7 @@
                                             <li><%= event.eventLocation %></li>
                                         </ul>
                                     </div>
-                                    
+
                                     <b>Learn more<i class="fas fa-chevron-right"></i></b>
                                 </div>
                             </a>

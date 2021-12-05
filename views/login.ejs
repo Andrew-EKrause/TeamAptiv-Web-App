@@ -18,6 +18,19 @@
     ...
 -->
 
+<!-- 
+    Include EJS to display any error messages to the user if the
+    attempt to access a page that they are not authorized to access.
+    This will also appear if the user tries to volunteer or donate
+    when they are not signed in.
+-->
+<% if(permissionDenied.length > 0) { %>
+    <div class="message-format">
+        <b class="incorrect-input"><%= permissionDenied %></b>
+    </div>
+<% } %>
+
+
 <%- include('./partials/login-register_header.ejs') %>
 
     <div class="login-register-ejs">
@@ -39,20 +52,7 @@
                             <b class="incorrect-input"><%= errors[i] %></b>
                     </div>
                 <% } %>
-            <% } %>
-
-            <!-- 
-                Include EJS to display any error messages to the user if the
-                attempt to access a page that they are not authorized to access.
-                This will also appear if the user tries to volunteer or donate
-                when they are not signed in.
-            -->
-            <% if(permissionDenied.length > 0) { %>
-                <div class="message-format">
-                    <b class="incorrect-input"><%= permissionDenied %></b>
-                </div>
-            <% } %>
-
+            <% } %> 
 
             <div class="credentials">
                 <!-- Makes POST request to the /login route -->

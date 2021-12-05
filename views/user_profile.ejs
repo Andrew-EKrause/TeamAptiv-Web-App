@@ -20,6 +20,30 @@
     ...
 -->
 
+    <!-- 
+        Include EJS to display any success messages to the user if they
+        have successfully cancelled one event or multiple event timeslots.
+    -->
+    <% if(successCancelled.length > 0) { %>
+        <div class="confirmation">
+            <div class="elementToFadeInAndOut message-format">
+                <h1><%= successCancelled %></h1>
+            </div>
+        </div>
+    <% } %>
+
+    <!-- 
+        Include EJS to display any error messages to the user if the
+        attempt to access a page that they are not authorized to access.
+    -->
+    <% if(permissionDenied.length > 0) { %>
+        <div class="incorrect-input">
+            <div class="elementToFadeInAndOut message-format">
+                <h1><%= permissionDenied %></h1>
+            </div>
+        </div>
+    <% } %>
+
 <%- include('./partials/home_header.ejs') %>
 
     <div class="profile-ejs">
@@ -82,31 +106,7 @@
                     </form>
                 </nav>
                 <!-- Add a column class in order to help make the page responsive -->
-                <div class="right-content">
-                    <!-- 
-                        Include EJS to display any success messages to the user if they
-                        have successfully cancelled one event or multiple event timeslots.
-                    -->
-                    <% if(successCancelled.length > 0) { %>
-                        <div class="confirmation">
-                            <div class="elementToFadeInAndOut message-format">
-                                <h1><%= successCancelled %></h1>
-                            </div>
-                        </div>
-                    <% } %>
-
-                    <!-- 
-                        Include EJS to display any error messages to the user if the
-                        attempt to access a page that they are not authorized to access.
-                    -->
-                    <% if(permissionDenied.length > 0) { %>
-                        <div class="incorrect-input">
-                            <div class="elementToFadeInAndOut message-format">
-                                <h1><%= permissionDenied %></h1>
-                            </div>
-                        </div>
-                    <% } %>
-                        
+                <div class="right-content"> 
                     <!-- 
                         Include a section for the events that the user has signed up
                         for to be rendered on the user's profile page
@@ -145,23 +145,23 @@
                                             <% // Use a series of conditionals to determine %>
                                             <% // what the name of the month is based on the %>
                                             <% // numerical representation of it. %>
-                                            <% if(getMonth.localeCompare('1') == 0) { %>
+                                            <% if(getMonth.localeCompare('01') == 0) { %>
                                                 <% month = 'Jan'; %>
-                                            <% } else if(getMonth.localeCompare('2') == 0) { %>
+                                            <% } else if(getMonth.localeCompare('02') == 0) { %>
                                                 <% month = 'Feb'; %>
-                                            <% } else if(getMonth.localeCompare('3') == 0) { %>
+                                            <% } else if(getMonth.localeCompare('03') == 0) { %>
                                                 <% month = 'Mar'; %>
-                                            <% } else if(getMonth.localeCompare('4') == 0) { %>
+                                            <% } else if(getMonth.localeCompare('04') == 0) { %>
                                                 <% month = 'Apr'; %>
-                                            <% } else if(getMonth.localeCompare('5') == 0) { %>
+                                            <% } else if(getMonth.localeCompare('05') == 0) { %>
                                                 <% month = 'May'; %>
-                                            <% } else if(getMonth.localeCompare('6') == 0) { %>
+                                            <% } else if(getMonth.localeCompare('06') == 0) { %>
                                                 <% month = 'Jun'; %>
-                                            <% } else if(getMonth.localeCompare('7') == 0) { %>
+                                            <% } else if(getMonth.localeCompare('07') == 0) { %>
                                                 <% month = 'Jul'; %>
-                                            <% } else if(getMonth.localeCompare('8') == 0) { %>
+                                            <% } else if(getMonth.localeCompare('08') == 0) { %>
                                                 <% month = 'Aug'; %>
-                                            <% } else if(getMonth.localeCompare('9') == 0) { %>
+                                            <% } else if(getMonth.localeCompare('09') == 0) { %>
                                                 <% month = 'Sep'; %>
                                             <% } else if(getMonth.localeCompare('10') == 0) { %>
                                                 <% month = 'Oct'; %>
@@ -227,23 +227,23 @@
                                             <% // Use a series of conditionals to determine %>
                                             <% // what the name of the month is based on the %>
                                             <% // numerical representation of it. %>
-                                            <% if(getMonth.localeCompare('1') == 0) { %>
+                                            <% if(getMonth.localeCompare('01') == 0) { %>
                                                 <% month = 'Jan'; %>
-                                            <% } else if(getMonth.localeCompare('2') == 0) { %>
+                                            <% } else if(getMonth.localeCompare('02') == 0) { %>
                                                 <% month = 'Feb'; %>
-                                            <% } else if(getMonth.localeCompare('3') == 0) { %>
+                                            <% } else if(getMonth.localeCompare('03') == 0) { %>
                                                 <% month = 'Mar'; %>
-                                            <% } else if(getMonth.localeCompare('4') == 0) { %>
+                                            <% } else if(getMonth.localeCompare('04') == 0) { %>
                                                 <% month = 'Apr'; %>
-                                            <% } else if(getMonth.localeCompare('5') == 0) { %>
+                                            <% } else if(getMonth.localeCompare('05') == 0) { %>
                                                 <% month = 'May'; %>
-                                            <% } else if(getMonth.localeCompare('6') == 0) { %>
+                                            <% } else if(getMonth.localeCompare('06') == 0) { %>
                                                 <% month = 'Jun'; %>
-                                            <% } else if(getMonth.localeCompare('7') == 0) { %>
+                                            <% } else if(getMonth.localeCompare('07') == 0) { %>
                                                 <% month = 'Jul'; %>
-                                            <% } else if(getMonth.localeCompare('8') == 0) { %>
+                                            <% } else if(getMonth.localeCompare('08') == 0) { %>
                                                 <% month = 'Aug'; %>
-                                            <% } else if(getMonth.localeCompare('9') == 0) { %>
+                                            <% } else if(getMonth.localeCompare('09') == 0) { %>
                                                 <% month = 'Sep'; %>
                                             <% } else if(getMonth.localeCompare('10') == 0) { %>
                                                 <% month = 'Oct'; %>

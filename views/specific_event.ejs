@@ -51,6 +51,30 @@
                         <li>Description: <%= descriptionString %> </li>
                     <% } %>
                 </ul>
+
+                <!-- Include buttons to go back or cancel event (if admin) -->
+                <div class="btn-container">
+                    <!-- Button to go back to the other events -->
+                    <div class="d-flex">
+                        <form action="/back_events" method="POST">
+                            <div>
+                                <button type="submit" class="btn btn-outline-light"><i class="fas fa-arrow-left"></i> Back to Events</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- If the user is the ADMIN, display a "Cancel Event" button -->
+                    <!-- so that the ADMIN has the option to cancel the event. -->
+                    <% if(user != undefined && user.status == "Admin") { %>
+                        <div class="d-flex">
+                            <form action="/admin_cancel_event" method="POST">
+                                <div>
+                                    <input type="hidden" id="custId" name="canceleventidentifier" value="<%= eventID %>"> 
+                                    <button type="submit" class="btn btn-outline-light"><i class="fas fa-calendar-times"></i> Cancel Event</button>
+                                </div>
+                            </form>
+                        </div>
+                    <% } %>
+                </div>
             </div>
         </div>
 
@@ -63,8 +87,8 @@
 
                     <!-- Display the donations on the page depending on how many donations were received -->
                     <% if (neededDonations > 0) { %>
-                        <label for="donations">Donation Goal: $<%= neededDonations %></label>
-                        <p>Received Donations: $<%= numDonations %></p>
+                        <label for="donations" class="form-title-no-border">Donation Goal: $<%= neededDonations %></label>
+                        <label for="donations" class="form-title">Received Donations: $<%= numDonations %></label>
                     <% } else { %>
                         <label for="donations" class="form-title">Received Donations: $<%= numDonations %></label>
                     <% } %>
@@ -145,28 +169,6 @@
                             <b><%= alreadyVolunteered %></b>
                          </div>
                     <% } %>
-                
-                    <!-- If the user is the ADMIN, display a "Cancel Event" button -->
-                    <!-- so that the ADMIN has the option to cancel the event. -->
-                    <% if(user != undefined && user.status == "Admin") { %>
-                        <div class="d-flex">
-                            <form action="/admin_cancel_event" method="POST">
-                                <div>
-                                    <input type="hidden" id="custId" name="canceleventidentifier" value="<%= eventID %>"> 
-                                    <button type="submit" class="btn btn-outline-dark"><i class="fas fa-calendar-times"></i> Cancel Event</button>
-                                </div>
-                            </form>
-                        </div>
-                    <% } %>
-
-                    <!-- Button to go back to the other events -->
-                    <div class="d-flex">
-                        <form action="/back_events" method="POST">
-                            <div>
-                                <button type="submit" class="btn btn-outline-dark"><i class="fas fa-arrow-left"></i> Back to Events</button>
-                            </div>
-                        </form>
-                    </div>
                 </form>
             </div>
         </div>

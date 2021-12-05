@@ -12,6 +12,12 @@
 
 <%- include('./partials/home_header.ejs') %>
     <div class="about-ejs">
+        <!-- Send a message to the user alterting them that they made an unrestricted donation-->
+        <% if(thanksForDonation.length > 0) { %>
+            <div class="card-body elementToFadeInAndOut message-format">
+                <h1 class="confirmation"><%= thanksForDonation %></h1>
+            </div>
+        <% } %>
         <div class="background"></div>
         <div class="wrapper">
             <div class="main">
@@ -29,8 +35,8 @@
                     <b>Aptiv serves children and adults with many different types of disabilities.</b>
                     <p>
                         Aptiv, established in 1977 as Riverfront Inc., is a non-profit with over 40 years of experience working alongside 
-                        children and adults with disabilities to provide a spectrum of innovative support through programs and service
-                         so they may live more independent lives.Our services help more than 1,700 individuals and their families in each 
+                        children and adults with disabilities to provide a spectrum of innovative support through programs and services
+                         so they may live more independent lives. Our services help more than 1,700 individuals and their families in each 
                          community we serve. We provide support when and where you need it, whether it’s in your home, at school, in the 
                          community or at one of our 8 service locations.
                     </p>
@@ -39,13 +45,6 @@
                 <div class="right">
                     <div class="donate">
                         <h2>Donate to Team Aptiv</h2>
-                        <!-- Send a message to the user alterting them that they made an unrestricted donation-->
-                        <% if(thanksForDonation.length > 0) { %>
-                        <div class="card-body elementToFadeInAndOut message-format">
-                            <h1 class="confirmation"><%= thanksForDonation %></h1>
-                        </div>
-                        <% } %>
-                        
                         <% events.forEach(function(event) { %>
                             <!-- Makes POST request to the organization donation route -->
                             <!-- Use the forEach loop above to access the components of the document -->
