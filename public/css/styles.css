@@ -667,7 +667,8 @@
     /* Styles to either hide or show the right content */
     .profile-ejs #events-list[data-visible="true"],
     .profile-ejs #users-list[data-visible="true"],
-    .profile-ejs #settings[data-visible="true"] {
+    .profile-ejs #settings[data-visible="true"], 
+    .profile-ejs #cancelledevent-list[data-visible="true"] {           
         opacity: 100%;
         position: relative;
         transform: translateY(0%);
@@ -677,7 +678,8 @@
     /* Styles to either hide or show the right content */
     .profile-ejs #events-list[data-visible="false"],
     .profile-ejs #users-list[data-visible="false"],
-    .profile-ejs #settings[data-visible="false"] {
+    .profile-ejs #settings[data-visible="false"],
+    .profile-ejs #cancelledevent-list[data-visible="false"] {
         opacity: 0%; 
         position: absolute;
         pointer-events: none;
@@ -685,7 +687,8 @@
     }
 
     .profile-ejs .profile-content .event,
-    .profile-ejs .profile-content .user {
+    .profile-ejs .profile-content .user,
+    .profile-ejs .profile-content .cancelledevent {     
         position: relative;
         padding: 1em 1em 3em 1em;
         margin-bottom: .5em;
@@ -695,29 +698,34 @@
     }
 
     .profile-ejs .profile-content .event:hover,
-    .profile-ejs .profile-content .user:hover {
+    .profile-ejs .profile-content .user:hover,
+    .profile-ejs .profile-content .cancelledevent:hover {
         border-color: var(--theme1);
     }
  
     .profile-ejs .profile-content .event > h2,
-    .profile-ejs .profile-content .user > h2 {
+    .profile-ejs .profile-content .user > h2,
+    .profile-ejs .profile-content .cancelledevent > h2 {
         width: fit-content;
         border-bottom: 2px solid var(--foreground-color);
         transition: border-color .25s;
     }
     
     .profile-ejs .profile-content .event:hover > h2,
-    .profile-ejs .profile-content .user:hover > h2 { 
+    .profile-ejs .profile-content .user:hover > h2,
+    .profile-ejs .profile-content .cancelledevent:hover > h2 { 
         border-color: var(--theme1);
     }
 
     .profile-ejs .profile-content .event > ul,
-    .profile-ejs .profile-content .user > ul {
+    .profile-ejs .profile-content .user > ul,
+    .profile-ejs .profile-content .cancelledevent > ul {
         margin: 0 1em;
     }
 
     .profile-ejs .profile-content .event button,
-    .profile-ejs .profile-content .user button {
+    .profile-ejs .profile-content .user button,
+    .profile-ejs .profile-content .cancelledevent button {
         position: absolute;
         bottom: .5em;
         right: .5em;

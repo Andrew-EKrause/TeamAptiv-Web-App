@@ -106,7 +106,7 @@
                         <span>My Events</span>
                     </button>
 
-                    <!-- Add a button for the ADMIN to see their HISTORY !!! THIS WILL LIKELY BE IMPLEMENTED LATER ON -->
+                    <!-- Add a button for the ADMIN to see their HISTORY !!! THIS WILL LIKELY BE IMPLEMENTED LATER ON !!! -->
                     <!-- <form action="" method="">
                         <button type="submit" class="btn">
                             <i class="fas fa-history"></i>
@@ -114,20 +114,12 @@
                         </button>
                     </form> -->
 
-
-
-
-                    <!-- !!! RILEY PLEASE CONNECT THIS BUTTON WITH THE CANCELLED EVENTS SECTION (CODE LISTED ON LINE 508) !!! -->
-                    <!-- !!! FINISH THE FRONTEND IMPLEMENTATION OF THIS AT A LATER TIME !!! -->
-                    <!-- Add a button for the ADMIN to see events they have cancelled -->
-                    <!-- <button type="button" class="cancelledevent-toggler">
+                    <!-- Add a button for the ADMIN to see events that they have cancelled -->
+                    <button type="button" class="cancelledevent-toggler">
                         <i class="fas fa-calendar-times"></i>
                         <span>Cancelled Events</span>
-                    </button> -->
+                    </button>
 
-
-
-                    
                     <!-- Add a button so that the ADMIN can create a new event -->
                     <form action="/create_event" method="POST">
                         <button type="submit">
@@ -512,127 +504,118 @@
                         <% } %>
                     </div>
 
-
-
-
-                    <!-- !!! RILEY PLEASE ADD THIS TO THE "Cancelled Events" BUTTON !!!-->
-                    <!-- !!! FINISH THE FRONTEND IMPLEMENTATION OF THIS AT A LATER TIME !!! -->
-                    <!-- !!! BE CAREFULE WHEN YOU UNCOMMENT THIS - IT IS GOING TO BE A TEDIOUS PROCESS OF UNCOMMENTING !!! -->
                     <!-- 
                         Include a section for the ADMIN to view the events
                         that they have cancelled for the Team Aptiv website.
                     -->
-                    <!-- <div id="cancelledevent-list" data-visible="false">  -->
+                    <div id="cancelledevent-list" data-visible="false"> 
 
                         <!-- Check if there are no cancelled events -->
-                        <% // if(numberOfCancelled > 0) { %>
+                        <% if(numberOfCancelled > 0) { %>
 
                             <!-- Loop through the database and display the cancelled events -->
-                            <% // listOfCancelledEvents.forEach(function(cancelled) { %>
+                            <% listOfCancelledEvents.forEach(function(cancelled) { %>
                                 
                                 <!-- If the event has been cancelled by the ADMIN, render it on the page -->
-                                <% // if(cancelled.eventActive == false) { %>
+                                <% if(cancelled.eventActive == false) { %>
                                     <!-- Style the events that have been cancelled by the ADMIN differently -->
-                                    <!-- <div class="cancelledevent" data-visible="false"> -->
+                                    <div class="cancelledevent" data-visible="false">
                                         <!-- Include a function to simplify the date display -->
-                                        <% // function simplifyEventDate(eventDate){ %>
+                                        <% function simplifyEventDate(eventDate){ %>
                                             <% // First split the event into the components that directly %>
                                             <% // involve the numberical representations of a date. %>
-                                            <% // var date = eventDate.toISOString().split("T")[0]; %>
+                                            <% var date = eventDate.toISOString().split("T")[0]; %>
                                         
                                             <% // Create variables for workring with %>
                                             <% // the nubmers in the date variable. %>
-                                            <% // var arrayDate = date.split('-'); %>
-                                            <% // var day = arrayDate[2]; %>
-                                            <% // var getMonth = arrayDate[1]; %>
-                                            <% // var month = ""; %>
-                                            <% // var year = arrayDate[0]; %>
-                                            <% // var simplifiedDate = ""; %>
+                                            <% var arrayDate = date.split('-'); %>
+                                            <% var day = arrayDate[2]; %>
+                                            <% var getMonth = arrayDate[1]; %>
+                                            <% var month = ""; %>
+                                            <% var year = arrayDate[0]; %>
+                                            <% var simplifiedDate = ""; %>
                                         
                                             <% // Use a series of conditionals to determine %>
                                             <% // what the name of the month is based on the %>
                                             <% // numerical representation of it. %>
-                                            <% // if(getMonth.localeCompare('01') == 0) { %>
-                                                <% // month = 'Jan'; %>
-                                            <% // } else if(getMonth.localeCompare('02') == 0) { %>
-                                                <% // month = 'Feb'; %>
-                                            <% // } else if(getMonth.localeCompare('03') == 0) { %>
-                                                <% // month = 'Mar'; %>
-                                            <% // } else if(getMonth.localeCompare('04') == 0) { %>
-                                                <% // month = 'Apr'; %>
-                                            <% // } else if(getMonth.localeCompare('05') == 0) { %>
-                                                <% // month = 'May'; %>
-                                            <% // } else if(getMonth.localeCompare('06') == 0) { %>
-                                                <% // month = 'Jun'; %>
-                                            <% // } else if(getMonth.localeCompare('07') == 0) { %>
-                                                <% // month = 'Jul'; %>
-                                            <% // } else if(getMonth.localeCompare('08') == 0) { %>
-                                                <% // month = 'Aug'; %>
-                                            <% // } else if(getMonth.localeCompare('09') == 0) { %>
-                                                <% // month = 'Sep'; %>
-                                            <% // } else if(getMonth.localeCompare('10') == 0) { %>
-                                                <% // month = 'Oct'; %>
-                                            <% // } else if(getMonth.localeCompare('11') == 0) { %>
-                                                <% // month = 'Nov'; %>
-                                            <% // } else if(getMonth.localeCompare('12') == 0) { %>
-                                                <% // month = 'Dec'; %>
-                                            <% // } else { %>
-                                                <% // month = 'ERROR'; %>
-                                            <% // } %>
+                                            <% if(getMonth.localeCompare('01') == 0) { %>
+                                                <% month = 'Jan'; %>
+                                            <% } else if(getMonth.localeCompare('02') == 0) { %>
+                                                <% month = 'Feb'; %>
+                                            <% } else if(getMonth.localeCompare('03') == 0) { %>
+                                                <% month = 'Mar'; %>
+                                            <% } else if(getMonth.localeCompare('04') == 0) { %>
+                                                <% month = 'Apr'; %>
+                                            <% } else if(getMonth.localeCompare('05') == 0) { %>
+                                                <% month = 'May'; %>
+                                            <% } else if(getMonth.localeCompare('06') == 0) { %>
+                                                <% month = 'Jun'; %>
+                                            <% } else if(getMonth.localeCompare('07') == 0) { %>
+                                                <% month = 'Jul'; %>
+                                            <% } else if(getMonth.localeCompare('08') == 0) { %>
+                                                <% month = 'Aug'; %>
+                                            <% } else if(getMonth.localeCompare('09') == 0) { %>
+                                                <% month = 'Sep'; %>
+                                            <% } else if(getMonth.localeCompare('10') == 0) { %>
+                                                <% month = 'Oct'; %>
+                                            <% } else if(getMonth.localeCompare('11') == 0) { %>
+                                                <% month = 'Nov'; %>
+                                            <% } else if(getMonth.localeCompare('12') == 0) { %>
+                                                <% month = 'Dec'; %>
+                                            <% } else { %>
+                                                <% month = 'ERROR'; %>
+                                            <% } %>
                                         
                                             <% // Create the simplified date and return it. %>
-                                            <% // simplifiedDate = month + " " + day + ", " + year; %>
-                                            <% // return simplifiedDate; %>
-                                        <% // } %>
+                                            <% simplifiedDate = month + " " + day + ", " + year; %>
+                                            <% return simplifiedDate; %>
+                                        <% } %>
 
-                                        <!-- <h2><%= // cancelled.eventName %> (Cancelled by Admin)</h2> <% // (Cancelled by Admin) %>
+                                        <h2><%= cancelled.eventName %> (Cancelled by Admin)</h2>
 
-                                        <ul class="mt-1"> -->
+                                        <ul class="mt-1">
                                             <!-- The date displayed utilized the function above for simplification -->
-                                            <!-- <li> <%= // simplifyEventDate(cancelled.eventDate) %> </li> -->
+                                            <li> <%= simplifyEventDate(cancelled.eventDate) %> </li>
 
                                             <!-- Display the event location, description, volunteer, and donation information -->
-                                            <!-- <li>Location: <%= // cancelled.eventLocation %> </li> -->
+                                            <li>Location: <%= cancelled.eventLocation %> </li>
 
                                             <!-- If description is empty, do not display the description -->
                                             <!-- Use the split function to determine if the description was left blank -->
-                                            <% // var descriptionArray = cancelled.eventDescription.split(" "); %>
-                                            <% // if(descriptionArray[1] != "") { %>
+                                            <% var descriptionArray = cancelled.eventDescription.split(" "); %>
+                                            <% if(descriptionArray[1] != "") { %>
 
                                                 <!-- If the description is not blank, obtain the info for it and display -->
-                                                <% // var descriptionString = ""; %>
-                                                <% // for(let i = 1; i < descriptionArray.length; i++) { %>
-                                                    <% // descriptionString = descriptionString + " " + descriptionArray[i]; %>
-                                                <% // } %>
+                                                <% var descriptionString = ""; %>
+                                                <% for(let i = 1; i < descriptionArray.length; i++) { %>
+                                                    <% descriptionString = descriptionString + " " + descriptionArray[i]; %>
+                                                <% } %>
                                                 
                                                 <!-- Display the description assuming it is not blank -->
-                                                <!-- <li>Description: <%= // descriptionString %></li>
-                                            <% // } %>
-                                        </ul> -->
+                                                <li>Description: <%= descriptionString %></li>
+                                            <% } %>
+                                        </ul>
 
                                         <!-- Display a "Reschedule Event" button so that the ADMIN -->
                                         <!-- has the option to reschedule a cancelled event. -->              
-                                        <!-- <div class="d-flex">
+                                        <div class="d-flex">
                                             <form action="/admin_reschedule_event" method="POST">
                                                 <div>
-                                                    <input type="hidden" id="custId" name="rescheduleeventidentifier" value="<%= // cancelled._id %>"> 
+                                                    <input type="hidden" id="custId" name="rescheduleeventidentifier" value="<%= cancelled._id %>"> 
                                                     <button type="submit" class="btn btn-outline-dark"><i class="fas fa-calendar-check"></i> Reschedule Event</button>
                                                 </div>
                                             </form>
                                         </div>
                                     </div>
-                                <% // } %>
-                            <% // }); %>
+                                <% } %>
+                            <% }); %>
 
-                        <% // } else { %> -->
+                        <% } else { %>
 
                             <!-- If there are currently no cancelled events in the system, display the heading below -->
-                            <!-- <h2>There are no cancelled events.</h2>
-                        <% // } %>
-                    </div> -->
-
-
-
+                            <h2>There are no cancelled events.</h2>
+                        <% } %>
+                    </div>
 
                     <!-- Section for settings -->
                     <div id="settings" data-visible="false">

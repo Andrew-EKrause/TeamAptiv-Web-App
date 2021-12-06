@@ -25,6 +25,7 @@ document.addEventListener('click', e => {
         let events = document.getElementById('events-list');
         let settings = document.getElementById('settings');
         let users = document.getElementById('users-list');
+        let cancelled = document.getElementById('cancelledevent-list');
 
         // Set the attirbutes of these elements
         if (srcClass == 'events-toggler') {
@@ -32,6 +33,7 @@ document.addEventListener('click', e => {
             events.setAttribute("data-visible", true);
             settings.setAttribute("data-visible", false);
             users.setAttribute("data-visible", false);
+            cancelled.setAttribute("data-visible", false);
         } 
         else if (srcClass == 'settings-toggler') {
 
@@ -41,9 +43,17 @@ document.addEventListener('click', e => {
             settings.setAttribute("data-visible", true);
             events.setAttribute("data-visible", false);
             users.setAttribute("data-visible", false);
+            cancelled.setAttribute("data-visible", false);
         }
         else if (srcClass == 'users-toggler') {
             users.setAttribute("data-visible", true);
+            events.setAttribute("data-visible", false);
+            settings.setAttribute("data-visible", false);
+            cancelled.setAttribute("data-visible", false);
+        }
+        else if (srcClass == 'cancelledevent-toggler') {
+            cancelled.setAttribute("data-visible", true);
+            users.setAttribute("data-visible", false);
             events.setAttribute("data-visible", false);
             settings.setAttribute("data-visible", false);
         }

@@ -1366,7 +1366,7 @@ app.post("/admin_cancel_event", function(req, res){
         
     // Create a variable to store the id of the
     // event that the ADMIN wants to cancel.
-    var cancelEvent  = req.body.canceleventidentifier;
+    var cancelEvent = req.body.canceleventidentifier;
 
     // Change the value representing whether or not
     // the event has been cancelled by the ADMIN to
@@ -1389,42 +1389,34 @@ app.post("/admin_cancel_event", function(req, res){
     res.redirect("/events");
 });
 
-
-
-
-// --> !!! FRONT END WILL IMPLEMENT THIS AT A LATER TIME !!!
-// --> !!! UNCOMMENT THIS WHEN YOU PLAN ON FINISHING THE IMPLEMENTATION OF IT IN THE FRONTEND !!!
 // Create a post request for when the
 // ADMIN wants to reschedule an event.
-// app.post("/admin_reschedule_event", function(req, res){
+app.post("/admin_reschedule_event", function(req, res){
         
-//     // Create a variable to store the id of the
-//     // event that the ADMIN wants to cancel.
-//     var rescheduleEvent  = req.body.rescheduleeventidentifier;
+    // Create a variable to store the id of the
+    // event that the ADMIN wants to cancel.
+    var rescheduleEvent = req.body.rescheduleeventidentifier;
 
-//     // Change the value representing whether or not
-//     // the event has been cancelled by the ADMIN to
-//     // be "cancelled" by the admin.
-//     EventModel.findOneAndUpdate(
-//         { _id: rescheduleEvent },
-//         { $set: { eventActive: true} },                  
-//         function (error, success) {
-//             if (error) {
-//                 console.log("Error: " + error);
-//             } else {
-//                 // console.log("User Success: " + success);
-//             }
-//         }
-//     );
+    // Change the value representing whether or not
+    // the event has been cancelled by the ADMIN to
+    // be "cancelled" by the admin.
+    EventModel.findOneAndUpdate(
+        { _id: rescheduleEvent },
+        { $set: { eventActive: true} },                  
+        function (error, success) {
+            if (error) {
+                console.log("Error: " + error);
+            } else {
+                // console.log("User Success: " + success);
+            }
+        }
+    );
     
-//     // Redirect back to the events page after the ADMIN
-//     // reschedules the event and flash a success message.
-//     req.flash("successCancelled", "You have rescheduled the event.");
-//     res.redirect("/admin_profile");
-// });
-
-
-
+    // Redirect back to the events page after the ADMIN
+    // reschedules the event and flash a success message.
+    req.flash("successCancelled", "You have rescheduled the event.");
+    res.redirect("/admin_profile");
+});
 
 // Create a post request for when the ADMIN wants to cancel
 // creating a new event.
@@ -1542,17 +1534,7 @@ app.post("/cancel_event", function(req, res){
                     console.log(err);
                 } else {
 
-
-
-
-
-
-
-
-
-
-
-                    // --> MAY BE ERROR!!!
+                    // --> KEEP AN EYE ON THIS!!!
                     // FUNCTION USED FOR CALCULATING VOLUNTEER HOURS
                     // Calculate length of the timeslot
                     function diffInTime(start, end, total) {
@@ -1593,27 +1575,8 @@ app.post("/cancel_event", function(req, res){
                         // Return valid string
                         return hours + ":" + (min <= 9 ? "0" : "") + min;
                     }
+                    ////////////////////////////////////////////////////////////////////////////////////
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    
                     // ------------------- CANCEL Times User Wants to Get Rid Of -------------------
                     // Check whether the user selected one or multiple timeslots to remove.
                     if(Array.isArray(atLeastOneTime) == true) {
@@ -1692,23 +1655,30 @@ app.post("/cancel_event", function(req, res){
                                 );
                             }
                             
+                            // --> KEEP AN EYE ON THIS!!!
+                            // Calculate the total volunteer time after removal
+                            // Add the new total time to the user database.
+                            var splitTimeslot = timeSlot.split(" ");
+                            var startTime = splitTimeslot[4];
+                            var endTime = splitTimeslot[7];
 
+                            // MILITARY TIME
+                            if (splitTimeslot[5] == "P.M.") {
+                                var splitStart = startTime.split(":");
+                                if (splitStart[0] == 12) { splitStart[0] = 0; }
+                                startTime = (parseInt(splitStart[0]) + 12) + ":" + splitStart[1];
 
+                            } else if (startTime.split(":")[0] == 12) {
+                                startTime = "0:" + startTime.split(":")[1];
+                            }
 
-
-
-
-
-                            // --> MAY BE ERROR!!!
                             // MILITARY TIME
                             if (splitTimeslot[8] == "P.M.") {
-
                                 var splitEnd = endTime.split(":");
                                 if (splitEnd[0] == 12) { splitEnd[0] = 0; }
                                 endTime = (parseInt(splitEnd[0]) + 12) + ":" + splitEnd[1];
 
                             } else if (endTime.split(":")[0] == 12) {
-
                                 endTime = "0:" + endTime.split(":")[1];
                             }
 
@@ -1725,33 +1695,7 @@ app.post("/cancel_event", function(req, res){
                                     }
                                 }
                             );
-
-                            // Calculate the total volunteer time after removal
-                            // Add the new total time to the user database.
-                            var splitTimeslot = timeSlot.split(" ");
-                            var startTime = splitTimeslot[4];
-                            var endTime = splitTimeslot[7];
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                            ////////////////////////////////////////////////////////////////////////////////////
 
                         });
 
@@ -1804,18 +1748,7 @@ app.post("/cancel_event", function(req, res){
                             }
                         );
 
-
-
-
-
-
-
-
-
-
-
-
-                        // --> MAY BE ERROR!!!
+                        // --> KEEP AN EYE ON THIS!!!
                         // Calculate the total volunteer time after removal
                         // Add the new total time to the user database.
                         var splitTimeslot = atLeastOneTime.split(" ");
@@ -1855,25 +1788,7 @@ app.post("/cancel_event", function(req, res){
                                 }
                             }
                         );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                        ////////////////////////////////////////////////////////////////////////////////////
 
                         // Decrement the number of timeslots variable to determine
                         // if there are still some left in the user's profile.
@@ -2101,30 +2016,7 @@ app.post("/volunteer", function(req, res){
                             );
                         }
        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                        // --> MAY BE ERROR!!!
+                        // --> KEEP AN EYE ON THIS!!!
                         // FUNCTION USED FOR CALCULATING VOLUNTEER HOURS
                         // Calculate length of the timeslot
                         function diffInTime(start, end, total) {
@@ -2164,37 +2056,7 @@ app.post("/volunteer", function(req, res){
                             // Return valid string
                             return hours + ":" + (min <= 9 ? "0" : "") + min;
                         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                        ////////////////////////////////////////////////////////////////////////////////////
 
                         // TIMESLOT SECTION: Check if the user selected more than one timeslot.
                         // Otherwise, only add the single timeslot that the user selected.
@@ -2260,62 +2122,7 @@ app.post("/volunteer", function(req, res){
                                     }
                                 );
 
-
-
-
-
-
-
-                                // --> YOU ADDED THIS TO TEST THE CODE AND WHY IT WAS NOT WORKING WHEN MULTIPLE TIMESLOTS ARE SELECTED.
-                                // // --> MAY BE ERROR!!!
-                                // // FUNCTION USED FOR CALCULATING VOLUNTEER HOURS
-                                // // Calculate length of the timeslot
-                                // function diffInTime(start, end, total) {
-                                //     // Get Hours and Minutes for Start and End times
-                                //     start = start.split(":");
-                                //     startHours = start[0];
-                                //     startMin = start[1];
-                                //     end = end.split(":");
-                                //     endHours = end[0];
-                                //     endMin = end[1];
-
-                                //     // Subtract Ints
-                                //     var sumHours = parseInt(endHours) - parseInt(startHours);
-                                //     var sumMin = parseInt(endMin) - parseInt(startMin);
-
-                                //     // Calculate valid time
-                                //     while (sumMin < 0) {
-                                //         sumHours = sumHours - 1;
-                                //         sumMin = sumMin + 60;
-                                //     }
-
-                                //     // Get Hours and Minutes for total volunteer time
-                                //     total = total.split(":");
-                                //     var totalHours = total[0];
-                                //     var totalMin = total[1];
-
-                                //     // Add Ints
-                                //     var hours = parseInt(sumHours) + parseInt(totalHours);
-                                //     var min = parseInt(sumMin) + parseInt(totalMin);
-
-                                //     // Calculate valid time
-                                //     while (min > 60) {
-                                //         hours = hours + 1;
-                                //         min = min - 60;
-                                //     }
-
-                                //     // Return valid string
-                                //     return hours + ":" + (min <= 9 ? "0" : "") + min;
-                                // }
-
-
-
-
-
-
-
-
-                                // --> MAY BE ERROR!!!
+                                // --> KEEP AN EYE ON THIS!!!
                                 // Calculate the total volunteer time
                                 // Add the new total time to the user database.
                                 var splitTimeslot = timeSlot.split(" ");
@@ -2357,24 +2164,7 @@ app.post("/volunteer", function(req, res){
                                         }
                                     }
                                 );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                                ////////////////////////////////////////////////////////////////////////////////////
 
                             });
                         } else {
@@ -2436,30 +2226,7 @@ app.post("/volunteer", function(req, res){
                                 }
                             );
                         
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                            // --> MAY BE ERROR!!!
+                            // --> KEEP AN EYE ON THIS!!!
                             // Calculate the total volunteer time
                             // Add the new total time to the user database.
                             var splitTimeslot = atLeastOneBox.split(" ");
@@ -2500,32 +2267,8 @@ app.post("/volunteer", function(req, res){
                                     }
                                 }
                             );
+                            ////////////////////////////////////////////////////////////////////////////////////
                     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                         }
        
                         // Create a flash message informing the user
