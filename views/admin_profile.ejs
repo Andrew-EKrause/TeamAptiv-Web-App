@@ -117,7 +117,7 @@
                     <!-- Add a button for the ADMIN to see events that they have cancelled -->
                     <button type="button" class="cancelledevent-toggler">
                         <i class="fas fa-calendar-times"></i>
-                        <span>Cancelled Events</span>
+                        <span>Cancelled</span>
                     </button>
 
                     <!-- Add a button so that the ADMIN can create a new event -->
@@ -571,7 +571,7 @@
                                             <% return simplifiedDate; %>
                                         <% } %>
 
-                                        <h2><%= cancelled.eventName %> (Cancelled by Admin)</h2>
+                                        <h2><%= cancelled.eventName %> (Cancelled)</h2>
 
                                         <ul class="mt-1">
                                             <!-- The date displayed utilized the function above for simplification -->

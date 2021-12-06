@@ -28,6 +28,26 @@
     <div class="specific-event-ejs mt-3">
         <!-- Create a container to format the specific event on the page. -->
         <div>
+
+            <!-- 
+                Include EJS display a message informing the user that 
+                they successfully volunteered or donated to an event.
+            -->
+            <% if(successVolunteeredOrDonated.length > 0) { %>
+                <div class="confirmation message-format">
+                    <b><%= successVolunteeredOrDonated %></b>
+                </div>
+            <% } %>
+
+            <!-- 
+                Include EJS display a message informing the user that
+                they have already signed up for a particular event.
+            -->
+            <% if(alreadyVolunteered.length > 0) { %>
+                <div class="incorrect-input message-format">
+                    <b><%= alreadyVolunteered %></b>
+                </div>
+            <% } %>
                     
             <!-- Create a title for the event creation page.-->
             <div class="event">
@@ -134,26 +154,8 @@
                         
                         <input type="hidden" id="custId" name="eventidentifier" value="<%= eventID %>" onChange="getResult()"> 
                         <input type="hidden" id="custId" name="eventdate" value="<%= eventDate %>" onChange="getResult()"> 
+                        
                         <div class="submit-container">
-                            <!-- 
-                                Include EJS display a message informing the user that 
-                                they successfully volunteered or donated to an event.
-                            -->
-                            <% if(successVolunteeredOrDonated.length > 0) { %>
-                                <div class="confirmation message-format">
-                                    <b><%= successVolunteeredOrDonated %></b>
-                                </div>
-                            <% } %>
-
-                            <!-- 
-                                Include EJS display a message informing the user that
-                                they have already signed up for a particular event.
-                            -->
-                            <% if(alreadyVolunteered.length > 0) { %>
-                                <div class="incorrect-input message-format">
-                                    <b><%= alreadyVolunteered %></b>
-                                </div>
-                            <% } %>
                             <button type="submit" class="mt-4 btn btn-outline-light">Sign Up</button>
                         </div>
                     </form>
