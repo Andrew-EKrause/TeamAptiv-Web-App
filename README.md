@@ -1,5 +1,5 @@
 # *Team Aptiv Web Application*
-## View the Project Here (Maybe delete and add back later)
+## View the Project Here (Maybe delete and add back later - Google Oauth does not work on Heroku yet. Will fix over winter break)
 https://murmuring-journey-10745.herokuapp.com/
 
 <p>&nbsp;</p>
