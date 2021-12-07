@@ -174,7 +174,7 @@ const userSchema = new mongoose.Schema({
     // Total number of donations to all events.
     givenDonations: Number,
 
-    // Total time spent volunteering. // --> !!! KEEP AN EYE ON THIS!
+    // Total time spent volunteering.
     volunteeredTime: {
         type: String,
         default: "0:00"
@@ -611,7 +611,6 @@ app.get("/logout", function(req, res){
 // Create a route for the admin profile. For this route, include some
 // layers of security so that the user cannot access the Admin profile
 // unless they are the admin.
-// --> MAKE SURE THAT YOU DEBUG THIS!!! THERE A BUNCH OF VALIDATION CHECKS THAT YOU WILL NEED TO MAKE!!!
 app.get("/admin_profile", function(req, res){
 
     // Create an object to store the user information in an object.
@@ -1040,7 +1039,7 @@ app.post("/donate_org", function(req, res){
 // already exist.
 app.post("/register", function(req, res){
    
-    // Create a new user ID for the developers to use and track. // <-- MAYBE!!!
+    // Create a new user ID for the developers to use and track.
     var user_ID = mongoose.Types.ObjectId();
     var user_IDString = user_ID.toString();
 
@@ -1171,8 +1170,6 @@ app.post("/added_event", function(req, res){
     // timeslots array. This eliminates the issue of duplicate keys.
     var event_ID = mongoose.Types.ObjectId();
     var event_IDString = event_ID.toString();
-
-    // !!!MAYBE ADD CHECKS AT SOME POINT TO DETERMINE IF AN EVENT WAS ALREADY CREATED
 
     // STEP 1: Calculate the total duration of a given event.
     // The function takes the time range and returns the total time
@@ -1361,7 +1358,7 @@ app.post("/added_event", function(req, res){
 });
 
 // Create a post request for when the
-// ADMIN wants to cancel an event.
+// ADMIN wants to CANCEL an event.
 app.post("/admin_cancel_event", function(req, res){
         
     // Create a variable to store the id of the
@@ -1390,7 +1387,7 @@ app.post("/admin_cancel_event", function(req, res){
 });
 
 // Create a post request for when the
-// ADMIN wants to reschedule an event.
+// ADMIN wants to RESCHEDULE an event.
 app.post("/admin_reschedule_event", function(req, res){
         
     // Create a variable to store the id of the
@@ -1534,12 +1531,11 @@ app.post("/cancel_event", function(req, res){
                     console.log(err);
                 } else {
 
-                    // --> KEEP AN EYE ON THIS!!!
-                    // FUNCTION USED FOR CALCULATING VOLUNTEER HOURS
-                    // Calculate length of the timeslot
+                    // The following function is used to calculate the
+                    // total length of time in a given timeslot.
                     function diffInTime(start, end, total) {
 
-                        // Get Hours and Minutes for Start and End times
+                        // Get Hours and Minutes for Start and End times.
                         start = start.split(":");
                         startHours = start[0];
                         startMin = start[1];
@@ -1547,42 +1543,45 @@ app.post("/cancel_event", function(req, res){
                         endHours = end[0];
                         endMin = end[1];
 
-                        // Subtract Ints
+                        // Subtract Ints.
                         var sumHours = parseInt(endHours) - parseInt(startHours);
                         var sumMin = parseInt(endMin) - parseInt(startMin);
 
-                        // Calculate valid time
+                        // Calculate valid time.
                         while (sumMin < 0) {
                             sumHours = sumHours - 1;
                             sumMin = sumMin + 60;
                         }
 
-                        // Get Hours and Minutes for total volunteer time
+                        // Get Hours and Minutes for total volunteer time.
                         total = total.split(":");
                         var totalHours = total[0];
                         var totalMin = total[1];
 
-                        // Subtract Ints
+                        // Subtract Ints.
                         var hours = parseInt(totalHours) - parseInt(sumHours);
                         var min = parseInt(totalMin) - parseInt(sumMin);
 
-                        // Calculate valid time
+                        // Calculate valid time.
                         while (min < 0) {
                             hours = hours - 1;
                             min = min + 60;
                         }
 
-                        // Return valid string
+                        // Return valid string.
                         return hours + ":" + (min <= 9 ? "0" : "") + min;
                     }
-                    ////////////////////////////////////////////////////////////////////////////////////
 
                     // ------------------- CANCEL Times User Wants to Get Rid Of -------------------
                     // Check whether the user selected one or multiple timeslots to remove.
                     if(Array.isArray(atLeastOneTime) == true) {
                        
                         // ------------------- MULTIPLE Timeslots Selected -------------------
-                        // Go thorugh each timeslot that was selected by the user
+                        
+                        // Create a variable to store the total volunteer time that the user is cancelling.
+                        let totalVolunteerTime = user.volunteeredTime;
+                        
+                        // Go through each timeslot that was selected by the user
                         // to be cancelled, and remove it from the user profile
                         // while also updating the other event information.
                         atLeastOneTime.forEach(function(timeSlot) {
@@ -1655,14 +1654,13 @@ app.post("/cancel_event", function(req, res){
                                 );
                             }
                             
-                            // --> KEEP AN EYE ON THIS!!!
                             // Calculate the total volunteer time after removal
                             // Add the new total time to the user database.
                             var splitTimeslot = timeSlot.split(" ");
                             var startTime = splitTimeslot[4];
                             var endTime = splitTimeslot[7];
 
-                            // MILITARY TIME
+                            // Convert to Military Time.
                             if (splitTimeslot[5] == "P.M.") {
                                 var splitStart = startTime.split(":");
                                 if (splitStart[0] == 12) { splitStart[0] = 0; }
@@ -1672,7 +1670,7 @@ app.post("/cancel_event", function(req, res){
                                 startTime = "0:" + startTime.split(":")[1];
                             }
 
-                            // MILITARY TIME
+                            // Convert to Military Time for other cases.
                             if (splitTimeslot[8] == "P.M.") {
                                 var splitEnd = endTime.split(":");
                                 if (splitEnd[0] == 12) { splitEnd[0] = 0; }
@@ -1682,22 +1680,23 @@ app.post("/cancel_event", function(req, res){
                                 endTime = "0:" + endTime.split(":")[1];
                             }
 
-                            var totalVolunteerTime = diffInTime(startTime, endTime, user.volunteeredTime);
-
-                            UserModel.findOneAndUpdate(
-                                { _id: user.id },
-                                { $set: { volunteeredTime: totalVolunteerTime } },                 
-                                function (error, success) {
-                                    if (error) {
-                                        console.log("Error: " + error);
-                                    } else {
-                                        // console.log("User Success: " + success);
-                                    }
-                                }
-                            );
-                            ////////////////////////////////////////////////////////////////////////////////////
-
+                            // Set the total volunteer time equal to the results of the function.
+                            totalVolunteerTime = diffInTime(startTime, endTime, totalVolunteerTime);
                         });
+
+                        // Update the user model with the calculated decrementation
+                        // of total time.
+                        UserModel.findOneAndUpdate(
+                            { _id: user.id },
+                            { $set: { volunteeredTime: totalVolunteerTime } },                 
+                            function (error, success) {
+                                if (error) {
+                                    console.log("Error: " + error);
+                                } else {
+                                    // console.log("User Success: " + success);
+                                }
+                            }
+                        );
 
                     } else {
 
@@ -1729,7 +1728,7 @@ app.post("/cancel_event", function(req, res){
                                 if (error) {
                                     console.log("Error: " + error);
                                 } else {
-                                    // console.log("User Success!!! " + atLeastOneTime);
+                                    // console.log("User Success: " + atLeastOneTime);
                                 }
                             }
                         );
@@ -1748,14 +1747,13 @@ app.post("/cancel_event", function(req, res){
                             }
                         );
 
-                        // --> KEEP AN EYE ON THIS!!!
                         // Calculate the total volunteer time after removal
                         // Add the new total time to the user database.
                         var splitTimeslot = atLeastOneTime.split(" ");
                         var startTime = splitTimeslot[4];
                         var endTime = splitTimeslot[7];
 
-                        // MILITARY TIME
+                        // Convert to Military Time.
                         if (splitTimeslot[5] == "P.M.") {
                             var splitStart = startTime.split(":");
                             if (splitStart[0] == 12) { splitStart[0] = 0; }
@@ -1765,7 +1763,7 @@ app.post("/cancel_event", function(req, res){
                             startTime = "0:" + startTime.split(":")[1];
                         }
 
-                        // MILITARY TIME
+                        // Convert to Military Time for other cases.
                         if (splitTimeslot[8] == "P.M.") {
                             var splitEnd = endTime.split(":");
                             if (splitEnd[0] == 12) { splitEnd[0] = 0; }
@@ -1775,8 +1773,10 @@ app.post("/cancel_event", function(req, res){
                             endTime = "0:" + endTime.split(":")[1];
                         }
 
+                        // Create a variable for storing the total time decremented.
                         var totalVolunteerTime = diffInTime(startTime, endTime, user.volunteeredTime);
 
+                        // Decrease the total volunteer time of the user in the database. 
                         UserModel.findOneAndUpdate(
                             { _id: user.id },
                             { $set: { volunteeredTime: totalVolunteerTime } },                  
@@ -1788,7 +1788,6 @@ app.post("/cancel_event", function(req, res){
                                 }
                             }
                         );
-                        ////////////////////////////////////////////////////////////////////////////////////
 
                         // Decrement the number of timeslots variable to determine
                         // if there are still some left in the user's profile.
@@ -2016,9 +2015,8 @@ app.post("/volunteer", function(req, res){
                             );
                         }
        
-                        // --> KEEP AN EYE ON THIS!!!
-                        // FUNCTION USED FOR CALCULATING VOLUNTEER HOURS
-                        // Calculate length of the timeslot
+                        // The following function is used to calculate the
+                        // total length of time in a given timeslot.
                         function diffInTime(start, end, total) {
                             // Get Hours and Minutes for Start and End times
                             start = start.split(":");
@@ -2028,41 +2026,44 @@ app.post("/volunteer", function(req, res){
                             endHours = end[0];
                             endMin = end[1];
 
-                            // Subtract Ints
+                            // Subtract Ints.
                             var sumHours = parseInt(endHours) - parseInt(startHours);
                             var sumMin = parseInt(endMin) - parseInt(startMin);
 
-                            // Calculate valid time
+                            // Calculate valid time.
                             while (sumMin < 0) {
                                 sumHours = sumHours - 1;
                                 sumMin = sumMin + 60;
                             }
 
-                            // Get Hours and Minutes for total volunteer time
+                            // Get Hours and Minutes for total volunteer time.
                             total = total.split(":");
                             var totalHours = total[0];
                             var totalMin = total[1];
 
-                            // Add Ints
+                            // Add Ints.
                             var hours = parseInt(sumHours) + parseInt(totalHours);
                             var min = parseInt(sumMin) + parseInt(totalMin);
 
-                            // Calculate valid time
+                            // Calculate valid time.
                             while (min > 60) {
                                 hours = hours + 1;
                                 min = min - 60;
                             }
 
-                            // Return valid string
+                            // Return valid string.
                             return hours + ":" + (min <= 9 ? "0" : "") + min;
                         }
-                        ////////////////////////////////////////////////////////////////////////////////////
 
                         // TIMESLOT SECTION: Check if the user selected more than one timeslot.
                         // Otherwise, only add the single timeslot that the user selected.
                         if(Array.isArray(atLeastOneBox) == true) {
        
                             // ------------------- MULTIPLE Timeslots Selected -------------------
+
+                            // Create a variable for storing the total volunteer time.
+                            let totalVolunteerTime = user.volunteeredTime;
+
                             // Use a for each loop to add multiple timeslots to the user DB.
                             atLeastOneBox.forEach(function(timeSlot) {
        
@@ -2122,14 +2123,13 @@ app.post("/volunteer", function(req, res){
                                     }
                                 );
 
-                                // --> KEEP AN EYE ON THIS!!!
                                 // Calculate the total volunteer time
                                 // Add the new total time to the user database.
                                 var splitTimeslot = timeSlot.split(" ");
                                 var startTime = splitTimeslot[1];
                                 var endTime = splitTimeslot[4];
 
-                                // MILITARY TIME
+                                // Convert to Military Time.
                                 if (splitTimeslot[2] == "P.M.") {
                                     var splitStart = startTime.split(":");
                                     if (splitStart[0] == 12) { splitStart[0] = 0; }
@@ -2139,7 +2139,7 @@ app.post("/volunteer", function(req, res){
                                     startTime = "0:" + startTime.split(":")[1];
                                 }
 
-                                // MILITARY TIME
+                                // Convert to Military Time for other cases.
                                 if (splitTimeslot[5] == "P.M.") {
                                     var splitEnd = endTime.split(":");
                                     if (splitEnd[0] == 12) { splitEnd[0] = 0; }
@@ -2149,24 +2149,23 @@ app.post("/volunteer", function(req, res){
                                     endTime = "0:" + endTime.split(":")[1];
                                 }
 
-                                // console.log("User: " + user.volunteeredTime); // --> DEBUGGING STATEMENT
-                                var totalVolunteerTime = diffInTime(startTime, endTime, user.volunteeredTime);
-                                // console.log("Total Time: " + totalVolunteerTime); // --> DEBUGGING STATEMENT
-
-                                UserModel.findOneAndUpdate(
-                                    { _id: user.id },
-                                    { $set: { volunteeredTime: totalVolunteerTime } },                 
-                                    function (error, success) {
-                                        if (error) {
-                                            console.log("Error: " + error);
-                                        } else {
-                                            // console.log("User Success: " + success);
-                                        }
-                                    }
-                                );
-                                ////////////////////////////////////////////////////////////////////////////////////
-
+                                // Calculate the total value of timeslots to add to the user's total time.
+                                totalVolunteerTime = diffInTime(startTime, endTime, totalVolunteerTime);
                             });
+
+                            // Update the total volunteer time in the database by adding to it.
+                            UserModel.findOneAndUpdate(
+                                { _id: user.id },
+                                { $set: { volunteeredTime: totalVolunteerTime } },                 
+                                function (error, success) {
+                                    if (error) {
+                                        console.log("Error: " + error);
+                                    } else {
+                                        // console.log("User Success: " + success);
+                                    }
+                                }
+                            );
+
                         } else {
        
                             // ------------------- SINGLE Timeslot Selected -------------------
@@ -2226,14 +2225,13 @@ app.post("/volunteer", function(req, res){
                                 }
                             );
                         
-                            // --> KEEP AN EYE ON THIS!!!
                             // Calculate the total volunteer time
                             // Add the new total time to the user database.
                             var splitTimeslot = atLeastOneBox.split(" ");
                             var startTime = splitTimeslot[1];
                             var endTime = splitTimeslot[4];
 
-                            // MILITARY TIME
+                            // Convert to Military Time.
                             if (splitTimeslot[2] == "P.M.") {
                                 var splitStart = startTime.split(":");
                                 if (splitStart[0] == 12) { splitStart[0] = 0; }
@@ -2243,7 +2241,7 @@ app.post("/volunteer", function(req, res){
                                 startTime = "0:" + startTime.split(":")[1];
                             }
 
-                            // MILITARY TIME
+                            // Convert to Military Time for other cases.
                             if (splitTimeslot[5] == "P.M.") {
                                 var splitEnd = endTime.split(":");
                                 if (splitEnd[0] == 12) { splitEnd[0] = 0; }
@@ -2253,8 +2251,10 @@ app.post("/volunteer", function(req, res){
                                 endTime = "0:" + endTime.split(":")[1];
                             }
 
+                            // Create a variable to obtain the total value of the timeslot.
                             var totalVolunteerTime = diffInTime(startTime, endTime, user.volunteeredTime);
 
+                            // Update the user information in the database with the timeslot value.
                             UserModel.findOneAndUpdate(
                                 { _id: user.id },
                                 { $set: { volunteeredTime: totalVolunteerTime } },                 
@@ -2266,9 +2266,7 @@ app.post("/volunteer", function(req, res){
                                         // console.log("User Success: " + success);
                                     }
                                 }
-                            );
-                            ////////////////////////////////////////////////////////////////////////////////////
-                    
+                            );                    
                         }
        
                         // Create a flash message informing the user
