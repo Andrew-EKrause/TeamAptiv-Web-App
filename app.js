@@ -446,7 +446,7 @@ app.get("/auth/google/team-aptiv",
 app.get("/download_help", function(req, res){
 
     // Download the help manual (PDF) file stored for website.
-    const file = `${__dirname}/public/files/TEMPORARY.pdf`;
+    const file = `${__dirname}/public/files/User-Manual.pdf`;
     res.download(file);
 });
 
