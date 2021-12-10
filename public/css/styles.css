@@ -488,7 +488,7 @@
     padding: 1em 1em 2em;
     width: 90%;
     margin: auto;
-    height: 100%;
+    height: fit-content;
     border-radius: .5em;
     box-shadow: var(--box-shadow1);
     background-color: var(--background-secondary);
@@ -625,6 +625,10 @@
         border: none;
         background-color: transparent;
         font-size: 1.25rem;
+    }
+
+    .profile-ejs .btn {
+        font-size: clamp(.75rem, 1.5vw, 1.25rem);
     }
 
     /* Give the buttons a nice hover animation */

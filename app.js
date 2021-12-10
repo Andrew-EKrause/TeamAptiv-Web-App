@@ -1319,20 +1319,20 @@ app.post("/added_event", function(req, res){
     // STEP 7: Add the ID of the event to the description
     // to avoid the duplicate key error. Also add the content
     // (or lack thereof) to the event description.
-    var description = event_IDString + " " + req.body.eventdescription;
+    var description = event_IDString + " " + req.body.eventdescription.trim();
 
     // STEP 8: Create a new event based on the event schema.
     // Pass in the different time slots as an array for the
     // 'eventTimeIncrements' attribute.
     const newEvent = new EventModel({
         eventID: event_ID,
-        eventName: req.body.eventname,
+        eventName: req.body.eventname.trim(),
         eventDate: req.body.eventdate,
         eventStartTime: req.body.eventstarttime,
         eventEndTime: req.body.eventendtime,
         eventActive: true,
         eventTimeIncrements: convertVolunteerTimeIncrements,
-        eventLocation: req.body.eventlocation,
+        eventLocation: req.body.eventlocation.trim(),
         eventDescription: description,
         numVolunteersNeeded: req.body.eventvolunteers,
         neededDonations: req.body.eventdonations,
