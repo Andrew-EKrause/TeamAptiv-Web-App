@@ -10,3 +10,9 @@
 
 # Ignore the README file when making commits
 # README.md --> DO NOT IGNORE THIS FILE FOR NOW
+
+# Ignore the Admin login information when you make commits.
+Admin-Login-Info.txt
+
+# Ignore the .env file, which provides the Google OAuth key for your website.
+.env
