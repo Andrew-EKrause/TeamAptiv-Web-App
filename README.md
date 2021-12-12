@@ -61,7 +61,7 @@ If you decide to login as a user to further explore or test out the website, ple
 - Feature that allows admin to dictate how many volunteers are needed for a particular time slot.
 - Handling for the case when user attempts to sign up for an event that conflicts with a cancelled event. 
 - A complete mobile-friendly view for the website so that it can be utilized on a mobile device.
-- Pop-ups that alert the user when various actions have been taken as well as pop-ups that ask the user to confirm certain actions that they take.
+- Pop-ups that ask the user to confirm certain actions being taken.
 
 <p>&nbsp;</p>
 
