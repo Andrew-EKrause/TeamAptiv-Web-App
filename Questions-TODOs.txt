@@ -10,23 +10,7 @@ Date: 12/15/2021
 Post Questions / TODOs in this file
 -----------------------------------------
 TODOs:
-1. Enable user to cancel their event
-2. Enable user to donate to an event
-3. Make the sign-up page more specific and handle the data passed through.
-4. Update the status of the user (when the user makes a donation) to "volunteer, donor".
-5. Encrypt the user passwords/confidential information --> DONE
-6. Anything else??? 
+--> NONE
 -----------------------------------------
-
-//--> KEEP THIS CODE FOR NOW; DELETE LATER
-// res.render("admin_profile", {  
-//     user: req.user,
-//     listOfUserEvents: listOfUserEvents,
-//     listOfUsers: listOfUsers,
-//     successCreated: req.flash("successCreated"),
-//     failureNotCreated: req.flash("failureNotCreated"),
-//     successCancelled: req.flash("successCancelled"),
-//     permissionDenied: req.flash("permissionDenied")
-// });
 
 {% endcomment %}

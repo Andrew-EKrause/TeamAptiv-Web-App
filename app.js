@@ -51,18 +51,20 @@
  * The sections present in the code are listed
  * below in order in all caps:
  *
- * -1 SECTION: INSTALLED PACKAGES AND INITIALIZATION
- * -2 SECTION: USER, PROGRAM, AND EVENTS FOR DATABASE VIA MONGOOSE AND MONGODB
- * -3 SECTION: AUTHENTICATE USERS AND USE GOOGLE OAUTH
- * -4 SECTION: GET INFORMATION FROM SERVER (GET) --> Has sections within it
- * -->5 ADMIN SECTION (GET)
- * -->6 SINGLE EVENT SECTION (GET)
- * -->7 SECTION WITHIN GET: FUNCTIONS FOR SIMPLIFYING THE DATE/TIME DISPLAY OF EVENTS
- * -->8 SECTION WITHIN GET: RENDERING A PAGE ON THE SCREEN SPECIFIC TO AN EVENT
- * -9 SECTION: PROCESS REQUESTS MADE TO SERVER (POST) --> Has sections within it
- * -->10 ADMIN SECTION (POST)
- * -->11 USER VOLUNTEER SIGN-UP (POST)
- * -12 SECTION: LISTEN FOR SERVER REQUESTS
+ * 1. SECTION: INSTALLED PACKAGES AND INITIALIZATION
+ * 2. SECTION: USER, PROGRAM, AND EVENTS FOR DATABASE VIA MONGOOSE AND MONGODB
+ * 3. SECTION: AUTHENTICATE USERS AND USE GOOGLE OAUTH
+ * 4. SECTION: GET INFORMATION FROM SERVER (GET) --> Has sections 5-8 within it
+ * -->5. ADMIN SECTION (GET)
+ * -->6. SINGLE EVENT SECTION (GET)
+ * -->7. SECTION WITHIN GET: FUNCTIONS FOR SIMPLIFYING THE DATE/TIME DISPLAY OF EVENTS
+ * -->8. SECTION WITHIN GET: RENDERING A PAGE ON THE SCREEN SPECIFIC TO AN EVENT
+ * 9. SECTION: PROCESS REQUESTS MADE TO SERVER (POST) --> Has sections 10-13 within it
+ * -->10. ADMIN SECTION (POST)
+ * -->11. USER EVENT CANCELLATION (POST)
+ * -->12. USER VOLUNTEER SIGN-UP (POST)
+ * -->13. USER DONATION (POST)
+ * 14. SECTION: LISTEN FOR SERVER REQUESTS
  * ----------------------------------------------------------------------------------
  *
  * Project: Aptiv Web Application
@@ -873,7 +875,7 @@ function convertToStandardTime(eventTime){
         timeValue = "12";
     }
    
-    // Get the minutes for the time and determine whether it is in AM or PM
+    // Get the minutes for the time and determine whether it is in AM or PM.
     timeValue += (minutes < 10) ? ":0" + minutes : ":" + minutes;  
     timeValue += (hours >= 12) ? " P.M." : " A.M.";
 
@@ -1654,7 +1656,7 @@ app.post("/cancel_event", function(req, res){
                                 );
                             }
                             
-                            // Calculate the total volunteer time after removal
+                            // Calculate the total volunteer time after removal.
                             // Add the new total time to the user database.
                             var splitTimeslot = timeSlot.split(" ");
                             var startTime = splitTimeslot[4];
@@ -1747,7 +1749,7 @@ app.post("/cancel_event", function(req, res){
                             }
                         );
 
-                        // Calculate the total volunteer time after removal
+                        // Calculate the total volunteer time after removal.
                         // Add the new total time to the user database.
                         var splitTimeslot = atLeastOneTime.split(" ");
                         var startTime = splitTimeslot[4];

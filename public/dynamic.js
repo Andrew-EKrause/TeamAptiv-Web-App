@@ -153,4 +153,3 @@ const loadSavedSettings =  function() {
 
 // Load the user's settings every time that the page is loaded
 window.addEventListener("load", loadSavedSettings, false);
-

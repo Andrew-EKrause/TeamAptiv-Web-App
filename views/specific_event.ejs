@@ -161,18 +161,6 @@
                     </form>
                 </div>
             <% } %>
-
-                    <!-- 
-                        Include EJS display a message informing the user that
-                        they have already signed up for a particular event.
-                    -->
-                    <% if(alreadyVolunteered.length > 0) { %>
-                        <div class="incorrect-input message-format">
-                            <b><%= alreadyVolunteered %></b>
-                         </div>
-                    <% } %>
-                </form>
-            </div>
         </div>
     </div>
     <!-- Need this here to not affect the grid layout -->

@@ -23,25 +23,25 @@
 
 <%- include('./partials/home_header.ejs') %>
 
-<div class="home-ejs my-auto">
-    <div class="background"></div>
-    <!-- Section for the picture on the webpage -->
-    <section class="home-picture">
-        <header>
-            <h1>Team Aptiv</h1>
-            <p>Connecting You With Your Community</p>
-        </header>
+    <div class="home-ejs my-auto">
+        <div class="background"></div>
+        <!-- Section for the picture on the webpage -->
+        <section class="home-picture">
+            <header>
+                <h1>Team Aptiv</h1>
+                <p>Connecting You With Your Community</p>
+            </header>
 
-        <!-- Create a form to process when user clicks "Find Events" button -->
-        <div class="buttons">
-            <form action="/find_events" method="POST">
-                <button type="submit" class="mb-4 me-1 btn btn-outline-light btn-lg">Find Events</button>
-            </form>
-            <form action="/about">
-                <button type="submit" class="mb-4 ms-1 btn btn-outline-light btn-lg">Support Us</button>
-            </form>
-        </div>
-    </section>
-</div>
+            <!-- Create forms to process when user clicks "Find Events" button and the "Support Us" button -->
+            <div class="buttons">
+                <form action="/find_events" method="POST">
+                    <button type="submit" class="mb-4 me-1 btn btn-outline-light btn-lg">Find Events</button>
+                </form>
+                <form action="/about">
+                    <button type="submit" class="mb-4 ms-1 btn btn-outline-light btn-lg">Support Us</button>
+                </form>
+            </div>
+        </section>
+    </div>
 
 <%- include('./partials/footer.ejs') %>

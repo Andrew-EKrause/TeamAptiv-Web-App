@@ -122,7 +122,7 @@
                                     <% // For now, do nothing. In the future, trigger a request so that the %>
                                     <% // event object ID is removed from the user's info in the database. %>
 
-                                <% // Check if the given event was cancelled by the admin. <-- !!! RILEY, THIS IS WHERE YOU CAN ADD DIFFERENT STYLES MAYBE !!! %>
+                                <% // Check if the given event was cancelled by the admin. %>
                                 <% } else if(event.eventActive == false) { %>
 
                                     <!-- Style the events that have been cancelled by the ADMIN differently -->
@@ -178,6 +178,7 @@
                                             <% return simplifiedDate; %>
                                         <% } %>
 
+                                        <!-- Display the event name and the word "Cancelled" next to it -->
                                         <h2><%= event.eventName %> (Cancelled)</h2>
 
                                         <ul class="mt-1">
@@ -310,7 +311,7 @@
                                                                 
                                                                 <% // Create variables to store the time attendance information: %>
                                                                 <% // The id attached to the time attendance and the time range itself. %>
-                                                                <% var timeAttendanceIentifier = timeAttendanceSplitTemp[3]; %> <% // --> MAY NOT NEED THIS!!! %>
+                                                                <% var timeAttendanceIentifier = timeAttendanceSplitTemp[3]; %>
                                                                 <% var timeAttendance = timeAttendanceSplitTemp[4] + " " + timeAttendanceSplitTemp[5] + " " + timeAttendanceSplitTemp[6] + " " + timeAttendanceSplitTemp[7] + " " + timeAttendanceSplitTemp[8]; %>
 
                                                                 <% // If the time being attended matches the event it was from, render it %>
