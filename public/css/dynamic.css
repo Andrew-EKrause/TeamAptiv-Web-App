@@ -10,7 +10,8 @@
  */
 
 /* Media query to shift to mobile view */
-@media (max-width: 50em) {
+/* @media (max-width: 50em) { */
+@media all and (max-width: 77.625rem) {
 
 /* ====================================================================
                             HOME.EJS STYLES
@@ -23,6 +24,7 @@
 
     .home-ejs .home-picture .buttons {
         justify-content: center;
+        size: 10rem !important;
     }
 
 /* ====================================================================
