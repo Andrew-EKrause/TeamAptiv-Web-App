@@ -10,11 +10,13 @@
  */
 
 /* Test widths for mobile view */
-/* @media (max-width: 50em) { */
-/* @media all and (max-width: 77.625rem) { */
-    
+/* @media all and (max-width: 50em) { */
+/* @media all and (max-width: 47.813rem) { */
+@media screen { .nomobile { display: block; } } /* desktops/laptops */
+@media handheld { .nomobile { display: none; } } /* mobile devices */
+
 /* Media query to shift to mobile view */
-@media all and (max-width: 47.813rem) {
+@media all and (max-width: 77.625rem) {
 
 /* ====================================================================
                             HOME.EJS STYLES
