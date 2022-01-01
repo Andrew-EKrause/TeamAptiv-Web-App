@@ -9,9 +9,12 @@
  * Date: 12/15/2021
  */
 
-/* Media query to shift to mobile view */
+/* Test widths for mobile view */
 /* @media (max-width: 50em) { */
-@media all and (max-width: 77.625rem) {
+/* @media all and (max-width: 77.625rem) { */
+    
+/* Media query to shift to mobile view */
+@media all and (max-width: 47.813rem) {
 
 /* ====================================================================
                             HOME.EJS STYLES
@@ -75,7 +78,6 @@
         margin-inline: auto;
         width: 100%;
     }
-
 
 /* ====================================================================
                             ABOUT.EJS STYLES
