@@ -1,6 +1,6 @@
 # **_Team Aptiv Web Application_**
 
-## **View the Project Here (Fix Google OAuth over winter break)**
+## **View the Project Here**
 
 ### **https://team-aptiv-project.herokuapp.com/**
 
