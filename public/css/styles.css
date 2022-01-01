@@ -766,6 +766,10 @@
                         EVENT_CREATION STYLES
  ==================================================================== */
 
+    .event-creation-ejs .background {
+        background-image: url("../images/Profile-Illustration.png");
+    }
+
     .event-creation-ejs .create-card {
         width: clamp(30em, 60vw, 60em); 
         position: relative;
