@@ -1,5 +1,5 @@
 # **_Team Aptiv Web Application_**
-## **[View the Project Here](https://team-aptiv-project.herokuapp.com/)**
+## **[View the Team Aptiv Project Here](https://team-aptiv-project.herokuapp.com/)**
 
 <p>&nbsp;</p>
 
