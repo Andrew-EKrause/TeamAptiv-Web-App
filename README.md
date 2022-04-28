@@ -87,8 +87,8 @@ If you decide to login as a user to further explore or test out the website, ple
 
 **_@Author: Riley Radle_** <br/>
 *GitHub:* https://github.com/19radleriley <br/>
-*Portfolio:* https://19radleriley.github.io/PortfolioSite/ <br/>
 *LinkedIn:* https://www.linkedin.com/in/rileyradle/ <br/>
+*Portfolio:* https://19radleriley.github.io/PortfolioSite/ <br/>
 *Instagram:* https://www.instagram.com/riley11radle/ <br/>
 *Facebook:* https://www.facebook.com/profile.php?id=100012265156601 <br/>
 
