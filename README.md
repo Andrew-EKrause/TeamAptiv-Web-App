@@ -81,11 +81,13 @@ If you decide to login as a user to further explore or test out the website, ple
 
 **_@Author: Andrew Krause (Owner of this repository)_** <br/>
 *LinkedIn:* https://www.linkedin.com/in/andrew-krause-b6aa21179/ <br/>
+*Portfolio:* https://andrewkrause.dev/ <br/>
 *Instagram:* https://www.instagram.com/aek.krause/ <br/>
 *Facebook:* https://www.facebook.com/andrew.krause.35325 <br/>
 
 **_@Author: Riley Radle_** <br/>
 *GitHub:* https://github.com/19radleriley <br/>
+*Portfolio* https://19radleriley.github.io/PortfolioSite/ <br/>
 *LinkedIn:* https://www.linkedin.com/in/rileyradle/ <br/>
 *Instagram:* https://www.instagram.com/riley11radle/ <br/>
 *Facebook:* https://www.facebook.com/profile.php?id=100012265156601 <br/>
