@@ -4,7 +4,7 @@
 <p>&nbsp;</p>
 
 ###### Home Page of Team Aptiv
-<img width="1087" alt="teamaptiv" src="https://user-images.githubusercontent.com/57727121/189040785-2550d337-f839-44bf-8b4c-f1073ef29389.png">
+<img width="1680" alt="Screen Shot 2022-09-08 at 12 24 14 AM" src="https://user-images.githubusercontent.com/57727121/189041018-425d41b8-1b38-4d4e-9df3-7ecd1610ea14.png">
 
 ## **Description**
 
