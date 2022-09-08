@@ -3,6 +3,9 @@
 
 <p>&nbsp;</p>
 
+###### Home Page of HabitHelper
+<img width="1522" alt="apppromotion" src="https://user-images.githubusercontent.com/57727121/189040196-eef7165e-ba6c-4785-963b-d1554b2af8c7.png">
+
 ## **Description**
 
 **_Collaborative Web Application Project Created for Aptiv in CS 341 Course_** <br/>
