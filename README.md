@@ -3,8 +3,8 @@
 
 <p>&nbsp;</p>
 
-###### Home Page of HabitHelper
-<img width="1522" alt="apppromotion" src="https://user-images.githubusercontent.com/57727121/189040196-eef7165e-ba6c-4785-963b-d1554b2af8c7.png">
+###### Home Page of Team Aptiv
+<img width="1087" alt="teamaptiv" src="https://user-images.githubusercontent.com/57727121/189040785-2550d337-f839-44bf-8b4c-f1073ef29389.png">
 
 ## **Description**
 
