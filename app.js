@@ -135,8 +135,33 @@ app.use(passport.session());
 
 /* SECTION: USER, PROGRAM, AND EVENTS FOR DATABASE VIA MONGOOSE AND MONGODB */
 
+// Create variables to store values for connecting to the MongoDB database.
+var mongodbUsername;
+var mongodbPassword;
+var mongodbDatabaseName;
+var mongodbUri;
+
+// If the Team Aptiv application is being hosted on Heroku or another
+// server platform, see if any of the following environment variables
+// exist.
+if(process.env.MONGODB_USERNAME &&
+   process.env.MONGODB_PASSWORD &&
+   process.env.MONGODB_DB_NAME) {
+
+    mongodbUsername = encodeURIComponent(process.env.MONGODB_USERNAME);
+    mongodbPassword = encodeURIComponent(process.env.MONGODB_PASSWORD);
+    mongodbDatabaseName = process.env.MONGODB_DB_NAME;
+    mongodbUri = `mongodb+srv://${mongodbUsername}:${mongodbPassword}@cluster1.vuowc.mongodb.net/${mongodbDatabaseName}?retryWrites=true&w=majority&appName=Cluster1`;
+
+// Otherwise, if the above if-statement does not evaluate to true,
+// assume the application is being run locally and use the local
+// connection string.
+} else {
+    mongodbUri = "mongodb://localhost:27017/aptivDB";
+}
+
 // Set up a connection to the database using mongoose.
-mongoose.connect("mongodb://localhost:27017/aptivDB", {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(mongodbUri, {useNewUrlParser: true, useUnifiedTopology: true});
 
 // Create a mongoose schema (blueprint) for the users in the database.
 const userSchema = new mongoose.Schema({
